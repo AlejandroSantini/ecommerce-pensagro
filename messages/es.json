@@ -1,0 +1,141 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito"
+  },
+  "nav": {
+    "products": "Productos",
+    "categories": "Categorías",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "search": "Buscar"
+  },
+  "header": {
+    "cart": "Carrito",
+    "user": "Usuario",
+    "login": "Iniciar Sesión",
+    "createAccount": "Crear Cuenta",
+    "myProfile": "Mi Perfil",
+    "myOrders": "Mis Pedidos",
+    "logout": "Cerrar Sesión",
+    "menu": "Menú"
+  },
+  "cart": {
+    "title": "Tu Carrito",
+    "itemsCount": "{count, plural, =0 {sin artículos} =1 {1 artículo} other {# artículos}}",
+    "empty": "Tu carrito está vacío",
+    "emptyDescription": "Agrega productos para comenzar tu compra",
+    "viewProducts": "Ver Productos",
+    "total": "Total",
+    "checkout": "Finalizar Compra",
+    "continueShopping": "Seguir Comprando",
+    "remove": "Eliminar",
+    "quantity": "Cantidad",
+    "inStock": "En stock: {stock}",
+    "outOfStock": "Sin stock"
+  },
+  "home": {
+    "hero": {
+      "title": "Productos Naturales y Sostenibles",
+      "description": "Descubre nuestra selección de productos orgánicos y comprometidos con el medio ambiente. Calidad que puedes sentir, sostenibilidad que puedes ver.",
+      "viewProducts": "Ver Productos",
+      "learnMore": "Conoce Más"
+    },
+    "features": {
+      "title": "¿Por qué elegirnos?",
+      "natural": {
+        "title": "100% Natural",
+        "description": "Todos nuestros productos son naturales y libres de químicos dañinos."
+      },
+      "sustainable": {
+        "title": "Sostenible",
+        "description": "Comprometidos con prácticas sostenibles y respeto al medio ambiente."
+      },
+      "quality": {
+        "title": "Calidad Premium",
+        "description": "Selección cuidadosa de los mejores productos para tu bienestar."
+      }
+    }
+  },
+  "products": {
+    "title": "Nuestros Productos",
+    "description": "Explora nuestra selección de productos naturales y sostenibles",
+    "searchPlaceholder": "Buscar productos...",
+    "filters": "Filtros",
+    "productsFound": "productos encontrados",
+    "noProducts": "No se encontraron productos",
+    "loading": "Cargando productos...",
+    "addToCart": "Agregar al Carrito",
+    "inStock": "En stock",
+    "outOfStock": "Sin stock",
+    "stock": "{count} disponibles"
+  },
+  "login": {
+    "title": "Iniciar Sesión",
+    "description": "Ingresa tus credenciales para acceder a tu cuenta",
+    "email": "Email",
+    "emailPlaceholder": "tu@email.com",
+    "password": "Contraseña",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "submit": "Iniciar Sesión",
+    "submitting": "Iniciando sesión...",
+    "noAccount": "¿No tienes cuenta?",
+    "createAccount": "Crear una cuenta nueva",
+    "success": "¡Inicio de sesión exitoso! Redirigiendo...",
+    "errors": {
+      "invalidCredentials": "Credenciales inválidas",
+      "generic": "Error al iniciar sesión. Por favor, intenta nuevamente.",
+      "emailRequired": "El email es requerido",
+      "emailInvalid": "Ingresa un email válido",
+      "passwordRequired": "La contraseña es requerida",
+      "passwordMinLength": "La contraseña debe tener al menos {min} caracteres",
+      "passwordMaxLength": "La contraseña es demasiado larga"
+    }
+  },
+  "register": {
+    "title": "Crear Cuenta",
+    "description": "Completa tus datos para registrarte",
+    "name": "Nombre completo",
+    "namePlaceholder": "Juan Pérez",
+    "email": "Email",
+    "emailPlaceholder": "tu@email.com",
+    "phone": "Teléfono",
+    "phoneOptional": "opcional",
+    "phonePlaceholder": "+1 234 567 890",
+    "password": "Contraseña",
+    "passwordPlaceholder": "••••••••",
+    "confirmPassword": "Confirmar contraseña",
+    "confirmPasswordPlaceholder": "••••••••",
+    "submit": "Crear cuenta",
+    "submitting": "Creando cuenta...",
+    "alreadyAccount": "¿Ya tienes cuenta?",
+    "login": "Iniciar sesión"
+  },
+  "footer": {
+    "about": {
+      "title": "Pensagro",
+      "description": "Productos naturales y sostenibles para un estilo de vida saludable. Comprometidos con la calidad y el medio ambiente."
+    },
+    "navigation": {
+      "title": "Navegación"
+    },
+    "help": {
+      "title": "Ayuda",
+      "faq": "Preguntas Frecuentes",
+      "shipping": "Envíos",
+      "returns": "Devoluciones",
+      "myAccount": "Mi Cuenta"
+    },
+    "contact": {
+      "title": "Contacto",
+      "address": "Av. Principal 123, Ciudad, Argentina",
+      "phone": "+54 9 123 456 7890",
+      "email": "info@pensagro.com"
+    },
+    "copyright": "© {year} Pensagro. Todos los derechos reservados.",
+    "terms": "Términos y Condiciones",
+    "privacy": "Política de Privacidad"
+  }
+}

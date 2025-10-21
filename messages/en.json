@@ -1,0 +1,39 @@
+{
+  "header": {
+    "user": "User",
+    "menu": "Menu",
+    "myOrders": "My Orders"
+  },
+  "nav": {
+    "products": "Products",
+    "categories": "Categories",
+    "about": "About",
+    "contact": "Contact",
+    "search": "Search"
+  },
+  "footer": {
+    "about": {
+      "title": "About Pensagro",
+      "description": "Premium agricultural products and sustainable farming solutions."
+    },
+    "navigation": {
+      "title": "Navigation"
+    },
+    "help": {
+      "title": "Help",
+      "faq": "FAQ",
+      "shipping": "Shipping Info",
+      "returns": "Returns",
+      "myAccount": "My Account"
+    },
+    "contact": {
+      "title": "Contact",
+      "address": "Buenos Aires, Argentina",
+      "phone": "+54 9 11 2345-6789",
+      "email": "info@pensagro.com"
+    },
+    "copyright": "© {year} Pensagro. All rights reserved.",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy"
+  }
+}
