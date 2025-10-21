@@ -31,7 +31,7 @@ export function Header() {
   }, []);
 
   const navLinks = [
-    { href: '/shop/products', label: tNav('products') },
+    { href: '/products', label: tNav('products') },
     { href: '/categories', label: tNav('categories') },
     { href: '/about', label: tNav('about') },
     { href: '/contact', label: tNav('contact') },
@@ -134,12 +134,12 @@ export function Header() {
                 ) : (
                   <>
                     <DropdownMenuItem asChild>
-                      <Link href="/account" className="cursor-pointer">
+                      <Link href="/login" className="cursor-pointer">
                         Sign In
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/account/register" className="cursor-pointer">
+                      <Link href="/register" className="cursor-pointer">
                         Create Account
                       </Link>
                     </DropdownMenuItem>

@@ -6,14 +6,14 @@ export class ApiError extends Error {
   constructor(
     public status: number,
     public statusText: string,
-    public data?: any
+    public data?: unknown
   ) {
     super(`API Error: ${status} ${statusText}`);
     this.name = 'ApiError';
   }
 }
 
-export async function fetchApi<T = any>(
+export async function fetchApi<T = unknown>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
@@ -27,13 +27,23 @@ export async function fetchApi<T = any>(
         ?.split('=')[1]
     : null;
 
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-    ...options.headers,
-  };
+  const headers = new Headers();
+  headers.set('Content-Type', 'application/json');
+
+  if (options.headers) {
+    if (options.headers instanceof Headers) {
+      options.headers.forEach((value, key) => headers.set(key, value));
+    } else if (Array.isArray(options.headers)) {
+      (options.headers as string[][]).forEach(([key, value]) => headers.set(key, value));
+    } else {
+      Object.entries(options.headers as Record<string, unknown>).forEach(([key, value]) =>
+        headers.set(key, String(value))
+      );
+    }
+  }
 
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    headers.set('Authorization', `Bearer ${token}`);
   }
 
   try {
