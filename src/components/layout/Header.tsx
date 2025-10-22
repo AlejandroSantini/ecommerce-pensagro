@@ -5,6 +5,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ShoppingCart, User, Menu, Search, LogOut, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
@@ -36,19 +37,23 @@ export function Header() {
     { href: '/about', label: tNav('about') },
     { href: '/contact', label: tNav('contact') },
   ];
+  
+  // Admin status is checked directly in the JSX
 
   return (
     <>
       <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-6">
+        <div className="container mx-auto flex h-15 items-center justify-between px-4 lg:px-6">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-[#2c5f2d]">
-              <span className="text-lg font-bold text-white">P</span>
-            </div>
-            <span className="hidden text-xl font-semibold tracking-tight text-gray-900 sm:inline-block">
-              Pensagro
-            </span>
+            <Image 
+              src="/Logo pensagro original.svg" 
+              alt="PensAgro Logo" 
+              width={600}
+              height={300}
+              className="h-24 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -85,7 +90,7 @@ export function Header() {
             >
               <ShoppingCart className="h-5 w-5" />
               {mounted && totalItems > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#2c5f2d] text-xs font-semibold text-white">
+                <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#003c6f] text-xs font-semibold text-white">
                   {totalItems > 99 ? '99+' : totalItems}
                 </span>
               )}
@@ -112,14 +117,15 @@ export function Header() {
                       {user?.email}
                     </div>
                     <DropdownMenuSeparator />
+
                     <DropdownMenuItem asChild>
                       <Link href="/account" className="cursor-pointer">
-                        My Account
+                        {t('myProfile')}
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/account/orders" className="cursor-pointer">
-                        My Orders
+                        {t('myOrders')}
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -128,19 +134,19 @@ export function Header() {
                       className="cursor-pointer text-red-600 focus:text-red-600"
                     >
                       <LogOut className="mr-2 h-4 w-4" />
-                      Sign Out
+                      {t('logout')}
                     </DropdownMenuItem>
                   </>
                 ) : (
                   <>
                     <DropdownMenuItem asChild>
                       <Link href="/login" className="cursor-pointer">
-                        Sign In
+                        {t('login')}
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/register" className="cursor-pointer">
-                        Create Account
+                        {t('createAccount')}
                       </Link>
                     </DropdownMenuItem>
                   </>
@@ -179,7 +185,7 @@ export function Header() {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <Search className="h-4 w-4" />
-                <span>Search</span>
+                <span>{tNav('search')}</span>
               </button>
             </nav>
           </div>

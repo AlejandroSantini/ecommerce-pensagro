@@ -1,0 +1,133 @@
+'use client';
+
+import { useState, useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import type { Product } from '@/types/product';
+
+interface ProductCarouselProps {
+  title: string;
+  products: Product[];
+}
+
+export function ProductCarousel({ title, products }: ProductCarouselProps) {
+  const t = useTranslations('home');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  useEffect(() => {
+    const checkScroll = () => {
+      const container = containerRef.current;
+      if (!container) return;
+      
+      setCanScrollLeft(container.scrollLeft > 0);
+      setCanScrollRight(
+        container.scrollLeft < container.scrollWidth - container.clientWidth - 10
+      );
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      checkScroll();
+      container.addEventListener('scroll', checkScroll);
+      window.addEventListener('resize', checkScroll);
+      
+      return () => {
+        container.removeEventListener('scroll', checkScroll);
+        window.removeEventListener('resize', checkScroll);
+      };
+    }
+  }, [products]);
+
+  const scroll = (direction: 'left' | 'right') => {
+    const container = containerRef.current;
+    if (!container) return;
+    
+    const scrollAmount = container.clientWidth * 0.75;
+    container.scrollTo({
+      left: container.scrollLeft + (direction === 'right' ? scrollAmount : -scrollAmount),
+      behavior: 'smooth',
+    });
+  };
+
+  if (!products.length) {
+    return null;
+  }
+
+  return (
+    <section className="py-8 relative">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold">{title}</h2>
+          <Link href="/products" className="text-sm text-[#003c6f] hover:underline">
+            {t('featuredProducts.viewAll')} →
+          </Link>
+        </div>
+        
+        <div className="relative">
+          {canScrollLeft && (
+            <button
+              onClick={() => scroll('left')}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow-md p-2 hover:bg-gray-100 -ml-3"
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </button>
+          )}
+          
+          <div
+            ref={containerRef}
+            className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide scroll-smooth"
+            style={{ scrollbarWidth: 'none' }}
+          >
+            {products.map(product => (
+              <div
+                key={product.id}
+                className="flex-none w-60 border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+              >
+                <div className="h-36 bg-gray-100 flex items-center justify-center">
+                  {product.imagen ? (
+                    <div className="relative w-full h-full">
+                      <img 
+                        src={product.imagen} 
+                        alt={product.nombre} 
+                        className="object-cover w-full h-full"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          e.currentTarget.parentElement!.innerHTML = '<span class="text-gray-400">Sin imagen</span>';
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <span className="text-gray-400">Sin imagen</span>
+                  )}
+                </div>
+                
+                <div className="p-4">
+                  <h3 className="font-medium text-sm mb-1 line-clamp-2 h-10">{product.nombre}</h3>
+                  <p className="text-lg font-semibold mb-2">${product.precio.toLocaleString()}</p>
+                  <Link 
+                    href={`/products/${product.id}`}
+                    className="block text-center px-4 py-2 bg-[#003c6f] text-white rounded-md hover:bg-[#002b50] transition-colors text-sm"
+                  >
+                    {t('featuredProducts.viewAll')}
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {canScrollRight && (
+            <button
+              onClick={() => scroll('right')}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow-md p-2 hover:bg-gray-100 -mr-3"
+            >
+              <ChevronRight className="h-6 w-6" />
+            </button>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}

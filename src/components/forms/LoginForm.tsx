@@ -57,7 +57,7 @@ export function LoginForm() {
       authLogin(response.token, response.user);
 
       // Redirigir al usuario a la página de productos
-      router.push('/productos');
+      router.push('/products');
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message || 'Failed to log in');
@@ -93,7 +93,7 @@ export function LoginForm() {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password" className="text-pensagro-dark">{t('password')}</Label>
-            <Link href="/recuperar-contrasena" className="text-xs text-pensagro-primary hover:underline">
+            <Link href="/forgot-password" className="text-xs text-[#003c6f] hover:underline">
               {t('forgotPassword')}
             </Link>
           </div>
@@ -127,8 +127,7 @@ export function LoginForm() {
         <Button
           type="submit"
           variant="default"
-          className="w-full"
-          style={{ background: '#2c5f2d', color: '#fff', border: '2px solid #2c5f2d', opacity: 1, visibility: 'visible' }}
+          className="w-full bg-[#003c6f] text-white border-2 border-[#003c6f] hover:bg-[#002b50]"
           disabled={isLoading}
         >
           {isLoading ? (
@@ -154,9 +153,9 @@ export function LoginForm() {
       <Button
         asChild
         variant="secondary"
-        className="w-full mt-2 border-pensagro-primary text-pensagro-primary hover:bg-pensagro-primary hover:text-white"
+        className="w-full mt-2 border border-[#003c6f] text-[#003c6f] hover:bg-[#003c6f] hover:text-white"
       >
-        <Link href="/registro">
+        <Link href="/register">
           {t('createAccount')}
         </Link>
       </Button>

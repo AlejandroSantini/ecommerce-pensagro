@@ -3,13 +3,9 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import Cookies from 'js-cookie';
 
-interface User {
-  id: number;
-  nombre: string;
-  apellido: string;
-  email: string;
-  telefono?: string;
-}
+import { User } from '@/types/user';
+
+// Interface is imported from types/user.ts
 
 interface AuthContextType {
   user: User | null;

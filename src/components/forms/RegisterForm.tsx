@@ -77,7 +77,7 @@ export function RegisterForm() {
       reset();
       
       // Redirigir al usuario a la página de productos
-      router.push('/productos');
+      router.push('/products');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al crear la cuenta.');
     } finally {
@@ -136,8 +136,7 @@ export function RegisterForm() {
         <Button
           type="submit"
           variant="default"
-          className="w-full"
-          style={{ background: '#2c5f2d', color: '#fff', border: '2px solid #2c5f2d', opacity: 1, visibility: 'visible' }}
+          className="w-full bg-[#003c6f] text-white border-2 border-[#003c6f] hover:bg-[#002b50]"
           disabled={isLoading}
         >
           {isLoading ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />{t('submitting')}</>) : (t('submit'))}
@@ -154,7 +153,7 @@ export function RegisterForm() {
       <Button
         asChild
         variant="secondary"
-        className="w-full mt-2 border-pensagro-primary text-pensagro-primary hover:bg-pensagro-primary hover:text-white"
+        className="w-full mt-2 border border-[#003c6f] text-[#003c6f] hover:bg-[#003c6f] hover:text-white"
       >
         <Link href="/login">
           {t('signin')}

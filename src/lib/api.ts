@@ -19,38 +19,45 @@ export async function fetchApi<T = unknown>(
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
 
-  // Obtener token de las cookies si existe
-  const token = typeof window !== 'undefined' 
-    ? document.cookie
-        .split('; ')
-        .find(row => row.startsWith('auth_token='))
-        ?.split('=')[1]
-    : null;
-
-  const headers = new Headers();
-  headers.set('Content-Type', 'application/json');
-
-  if (options.headers) {
-    if (options.headers instanceof Headers) {
-      options.headers.forEach((value, key) => headers.set(key, value));
-    } else if (Array.isArray(options.headers)) {
-      (options.headers as string[][]).forEach(([key, value]) => headers.set(key, value));
-    } else {
-      Object.entries(options.headers as Record<string, unknown>).forEach(([key, value]) =>
-        headers.set(key, String(value))
-      );
-    }
-  }
-
-  if (token) {
-    headers.set('Authorization', `Bearer ${token}`);
-  }
+  // Timeout para evitar esperas infinitas
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 segundos de timeout
 
   try {
+    // Obtener token de las cookies si existe (solo en cliente)
+    const token = typeof window !== 'undefined' 
+      ? document.cookie
+          .split('; ')
+          .find(row => row.startsWith('auth_token='))
+          ?.split('=')[1]
+      : null;
+
+    const headers = new Headers();
+    headers.set('Content-Type', 'application/json');
+
+    if (options.headers) {
+      if (options.headers instanceof Headers) {
+        options.headers.forEach((value, key) => headers.set(key, value));
+      } else if (Array.isArray(options.headers)) {
+        (options.headers as string[][]).forEach(([key, value]) => headers.set(key, value));
+      } else {
+        Object.entries(options.headers as Record<string, unknown>).forEach(([key, value]) =>
+          headers.set(key, String(value))
+        );
+      }
+    }
+
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+
     const response = await fetch(url, {
       ...options,
       headers,
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     // Si la respuesta no es OK, lanzar error
     if (!response.ok) {
@@ -67,6 +74,13 @@ export async function fetchApi<T = unknown>(
     const data = await response.json();
     return data as T;
   } catch (error) {
+    clearTimeout(timeoutId);
+    
+    // Si es AbortError, significa que se excedió el timeout
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      throw new Error('API request timed out. Please try again later.');
+    }
+    
     // Si es ApiError, re-lanzar
     if (error instanceof ApiError) {
       throw error;

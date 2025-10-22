@@ -43,19 +43,31 @@
       "learnMore": "Conoce Más"
     },
     "features": {
-      "title": "¿Por qué elegirnos?",
-      "natural": {
-        "title": "100% Natural",
-        "description": "Todos nuestros productos son naturales y libres de químicos dañinos."
+      "sectionTitle": "¿Por qué Elegirnos?",
+      "shipping": {
+        "title": "Envío Rápido",
+        "description": "Entrega rápida a tu puerta con seguimiento disponible"
       },
-      "sustainable": {
-        "title": "Sostenible",
-        "description": "Comprometidos con prácticas sostenibles y respeto al medio ambiente."
+      "security": {
+        "title": "Pagos Seguros",
+        "description": "Tus transacciones están protegidas con encriptación avanzada"
       },
-      "quality": {
-        "title": "Calidad Premium",
-        "description": "Selección cuidadosa de los mejores productos para tu bienestar."
+      "payment": {
+        "title": "Múltiples Opciones de Pago",
+        "description": "Elige entre varios métodos de pago para tu comodidad"
+      },
+      "support": {
+        "title": "Soporte 24/7",
+        "description": "Nuestro equipo está listo para ayudarte con cualquier duda"
       }
+    },
+    "featuredProducts": {
+      "title": "Productos Destacados",
+      "viewAll": "Ver Todos"
+    },
+    "categories": {
+      "title": "Explorar por Categoría",
+      "viewAll": "Ver Todas"
     }
   },
   "products": {
@@ -67,9 +79,11 @@
     "noProducts": "No se encontraron productos",
     "loading": "Cargando productos...",
     "addToCart": "Agregar al Carrito",
+    "addedToCart": "¡Producto agregado al carrito!",
     "inStock": "En stock",
     "outOfStock": "Sin stock",
-    "stock": "{count} disponibles"
+    "stock": "{count} disponibles",
+    "freeShipping": "Envío gratis"
   },
   "login": {
     "title": "Iniciar Sesión",

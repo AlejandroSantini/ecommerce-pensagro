@@ -2,7 +2,11 @@
   "header": {
     "user": "User",
     "menu": "Menu",
-    "myOrders": "My Orders"
+    "myOrders": "My Orders",
+    "login": "Sign In",
+    "createAccount": "Create Account",
+    "myProfile": "My Profile",
+    "logout": "Sign Out"
   },
   "nav": {
     "products": "Products",
@@ -10,6 +14,56 @@
     "about": "About",
     "contact": "Contact",
     "search": "Search"
+  },
+  "home": {
+    "hero": {
+      "title": "Natural and Sustainable Products",
+      "description": "Discover our selection of organic products committed to the environment. Quality you can feel, sustainability you can see.",
+      "viewProducts": "View Products",
+      "learnMore": "Learn More"
+    },
+    "features": {
+      "sectionTitle": "Why Choose Us",
+      "shipping": {
+        "title": "Fast Shipping",
+        "description": "Quick delivery to your doorstep with tracking available"
+      },
+      "security": {
+        "title": "Secure Payments",
+        "description": "Your transactions are protected with advanced encryption"
+      },
+      "payment": {
+        "title": "Multiple Payment Options",
+        "description": "Choose from various payment methods for your convenience"
+      },
+      "support": {
+        "title": "24/7 Support",
+        "description": "Our team is ready to assist you with any questions"
+      }
+    },
+    "featuredProducts": {
+      "title": "Featured Products",
+      "viewAll": "View All Products"
+    },
+    "categories": {
+      "title": "Browse By Category",
+      "viewAll": "View All Categories"
+    }
+  },
+  "products": {
+    "title": "Our Products",
+    "description": "Explore our selection of natural and sustainable products",
+    "searchPlaceholder": "Search products...",
+    "filters": "Filters",
+    "productsFound": "products found",
+    "noProducts": "No products found",
+    "loading": "Loading products...",
+    "addToCart": "Add to cart",
+    "addedToCart": "Product added to cart!",
+    "inStock": "In stock",
+    "outOfStock": "Out of stock",
+    "stock": "{count} available",
+    "freeShipping": "Free shipping"
   },
   "footer": {
     "about": {

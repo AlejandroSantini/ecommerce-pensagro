@@ -130,7 +130,7 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
               </div>
               <Link href="/checkout" onClick={() => onOpenChange(false)}>
                 <Button 
-                  className="w-full bg-[#2c5f2d] hover:bg-[#234d24] text-white"
+                  className="w-full bg-[#003c6f] hover:bg-[#002e54] text-white"
                   size="lg"
                 >
                   Proceed to Checkout
