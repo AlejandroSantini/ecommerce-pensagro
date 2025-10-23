@@ -1,9 +1,0 @@
-import { redirect } from 'next/navigation';
-
-export default function Home() {
-  // Redirect to the default locale (es)
-  redirect('/es');
-  
-  // This part will never be reached due to the redirect
-  return null;
-}

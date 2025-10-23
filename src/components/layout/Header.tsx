@@ -2,23 +2,18 @@
 // Header inspirado en Patagonia.com: limpio, minimalista, funcional
 // Sticky header con navegación simple, search, cart y user menu
 
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
 import { ShoppingCart, User, Menu, Search, LogOut, X } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { useCart } from '@/hooks/useCart';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
 import { CartDrawer } from './CartDrawer';
-import { LanguageSwitcher } from './LanguageSwitcher'
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export function Header() {
-  const t = useTranslations('header');
-  const tNav = useTranslations('nav');
   const { isAuthenticated, user, logout } = useAuth();
   
   const totalItems = useCart((state) => state.getTotalItems());
@@ -32,10 +27,10 @@ export function Header() {
   }, []);
 
   const navLinks = [
-    { href: '/products', label: tNav('products') },
-    { href: '/categories', label: tNav('categories') },
-    { href: '/about', label: tNav('about') },
-    { href: '/contact', label: tNav('contact') },
+    { href: '/productos', label: 'Productos' },
+    { href: '/categorias', label: 'Categorías' },
+    { href: '/nosotros', label: 'Nosotros' },
+    { href: '/contacto', label: 'Contacto' },
   ];
   
   // Admin status is checked directly in the JSX
@@ -120,12 +115,12 @@ export function Header() {
 
                     <DropdownMenuItem asChild>
                       <Link href="/account" className="cursor-pointer">
-                        {t('myProfile')}
+                        Mi Perfil
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/account/orders" className="cursor-pointer">
-                        {t('myOrders')}
+                        Mis Pedidos
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -134,19 +129,19 @@ export function Header() {
                       className="cursor-pointer text-red-600 focus:text-red-600"
                     >
                       <LogOut className="mr-2 h-4 w-4" />
-                      {t('logout')}
+                      Cerrar Sesión
                     </DropdownMenuItem>
                   </>
                 ) : (
                   <>
                     <DropdownMenuItem asChild>
                       <Link href="/login" className="cursor-pointer">
-                        {t('login')}
+                        Iniciar Sesión
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/register" className="cursor-pointer">
-                        {t('createAccount')}
+                        Crear Cuenta
                       </Link>
                     </DropdownMenuItem>
                   </>
@@ -188,7 +183,7 @@ export function Header() {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <Search className="h-4 w-4" />
-              <span>{tNav('search')}</span>
+              <span>Buscar</span>
             </button>
           </nav>
         </div>

@@ -1,10 +1,8 @@
 // LanguageSwitcher.tsx
 // Selector de idioma simple
 
-'use client';
-
 import { Globe } from 'lucide-react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 
@@ -16,13 +14,10 @@ const languages = [
 
 export function LanguageSwitcher() {
   const router = useRouter();
-  const pathname = usePathname();
+  const { pathname, asPath, query } = router;
 
   const handleLanguageChange = (locale: string) => {
-    // For now, just log the language change
-    // You'll need to implement the actual i18n routing logic
-    console.log('Language changed to:', locale);
-    // Example: router.push(`/${locale}${pathname}`);
+    router.push({ pathname, query }, asPath, { locale });
   };
 
   return (

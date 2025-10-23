@@ -1,12 +1,9 @@
-import { Suspense } from 'react';
-import { getTranslations } from 'next-intl/server';
-
 import { Hero } from '@/components/home/Hero';
 import { FeatureSection } from '@/components/home/FeatureSection';
 import { ProductCarousel } from '@/components/home/ProductCarousel';
 import { CategoryGrid } from '@/components/home/CategoryGrid';
 
-// Datos de muestra para productos
+// Datos de muestra para productos destacados
 const SAMPLE_PRODUCTS = [
   {
     id: 1,
@@ -63,6 +60,34 @@ const SAMPLE_PRODUCTS = [
     imagen: '/sample/product4.jpg',
     createdAt: '2023-01-01',
     updatedAt: '2023-01-01'
+  },
+  {
+    id: 5,
+    nombre: 'Kit de Análisis de Suelo',
+    descripcion: 'Análisis completo para optimizar tus cultivos',
+    precio: 4500,
+    sku: 'KIT-001',
+    stock: 45,
+    iva: 21,
+    destacado: true,
+    activo: true,
+    imagen: '/sample/product5.jpg',
+    createdAt: '2023-01-01',
+    updatedAt: '2023-01-01'
+  },
+  {
+    id: 6,
+    nombre: 'Sistema de Riego por Goteo',
+    descripcion: 'Sistema eficiente para ahorro de agua',
+    precio: 3800,
+    sku: 'RIE-001',
+    stock: 30,
+    iva: 21,
+    destacado: true,
+    activo: true,
+    imagen: '/sample/product6.jpg',
+    createdAt: '2023-01-01',
+    updatedAt: '2023-01-01'
   }
 ];
 
@@ -107,18 +132,32 @@ const SAMPLE_CATEGORIES = [
     orden: 4,
     createdAt: '2023-01-01',
     updatedAt: '2023-01-01'
+  },
+  {
+    id: 5,
+    nombre: 'Herramientas',
+    descripcion: 'Equipos y herramientas para el campo',
+    slug: 'herramientas',
+    activo: true,
+    orden: 5,
+    createdAt: '2023-01-01',
+    updatedAt: '2023-01-01'
+  },
+  {
+    id: 6,
+    nombre: 'Sistemas de Riego',
+    descripcion: 'Soluciones de irrigación eficientes',
+    slug: 'sistemas-riego',
+    activo: true,
+    orden: 6,
+    createdAt: '2023-01-01',
+    updatedAt: '2023-01-01'
   }
 ];
 
-async function HomePage() {
-  const t = await getTranslations('home');
-  
-  // Usar directamente los datos de muestra para garantizar que siempre haya contenido
+export default function Home() {
   const featuredProducts = SAMPLE_PRODUCTS;
-  const categories = SAMPLE_CATEGORIES;
-  
-  // Filtrar solo categorías activas
-  const activeCategories = categories.filter(cat => cat.activo);
+  const categories = SAMPLE_CATEGORIES.filter(cat => cat.activo);
 
   return (
     <div className="min-h-screen">
@@ -128,25 +167,17 @@ async function HomePage() {
       <div className="py-4 bg-gray-50">
         {featuredProducts.length > 0 && (
           <ProductCarousel 
-            title={t('featuredProducts.title')} 
+            title="Productos Destacados" 
             products={featuredProducts.slice(0, 12)} 
           />
         )}
         
         <div className="py-6">
-          {activeCategories.length > 0 && (
-            <CategoryGrid categories={activeCategories.slice(0, 6)} />
+          {categories.length > 0 && (
+            <CategoryGrid categories={categories.slice(0, 6)} />
           )}
         </div>
       </div>
     </div>
-  );
-}
-
-export default function Home() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <HomePage />
-    </Suspense>
   );
 }

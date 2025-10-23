@@ -1,17 +1,11 @@
 // Footer.tsx
 // Footer inspirado en Patagonia.com: limpio, informativo, bien organizado
 
-'use client';
-
 import Link from 'next/link';
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
 
 export function Footer() {
-  const t = useTranslations('footer');
-  const tNav = useTranslations('nav');
-  
   const [currentYear, setCurrentYear] = useState(2025);
   
   useEffect(() => {

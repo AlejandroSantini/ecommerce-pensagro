@@ -1,10 +1,8 @@
-'use client';
-
 import { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { Link } from '@/lib/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 import type { Product } from '@/types/product';
 
 interface ProductCarouselProps {
@@ -13,7 +11,6 @@ interface ProductCarouselProps {
 }
 
 export function ProductCarousel({ title, products }: ProductCarouselProps) {
-  const t = useTranslations('home');
   const containerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -62,19 +59,21 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">{title}</h2>
-          <Link href="/products" className="text-sm text-[#003c6f] hover:underline">
-            {t('featuredProducts.viewAll')} →
+          <Link href="/productos" className="text-sm text-[#003c6f] hover:underline">
+            Ver Todo →
           </Link>
         </div>
         
         <div className="relative">
           {canScrollLeft && (
-            <button
+            <Button
+              variant="outline"
+              size="icon"
               onClick={() => scroll('left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow-md p-2 hover:bg-gray-100 -ml-3"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 rounded-full shadow-md -ml-3 bg-white"
             >
               <ChevronLeft className="h-6 w-6" />
-            </button>
+            </Button>
           )}
           
           <div
@@ -117,24 +116,25 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
                 <div className="p-4">
                   <h3 className="font-medium text-sm mb-1 line-clamp-2 h-10">{product.nombre}</h3>
                   <p className="text-lg font-semibold mb-2">${product.precio.toLocaleString()}</p>
-                  <Link 
-                    href={`/products/${product.id}`}
-                    className="block text-center px-4 py-2 bg-[#003c6f] text-white rounded-md hover:bg-[#002b50] transition-colors text-sm"
-                  >
-                    {t('featuredProducts.viewAll')}
-                  </Link>
+                  <Button asChild className="w-full bg-[#003c6f] hover:bg-[#002b50]" size="sm">
+                    <Link href={`/productos/${product.id}`}>
+                      Ver Detalles
+                    </Link>
+                  </Button>
                 </div>
               </div>
             ))}
           </div>
           
           {canScrollRight && (
-            <button
+            <Button
+              variant="outline"
+              size="icon"
               onClick={() => scroll('right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow-md p-2 hover:bg-gray-100 -mr-3"
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 rounded-full shadow-md -mr-3 bg-white"
             >
               <ChevronRight className="h-6 w-6" />
-            </button>
+            </Button>
           )}
         </div>
       </div>

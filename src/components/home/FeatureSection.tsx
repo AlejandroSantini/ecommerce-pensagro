@@ -1,31 +1,26 @@
-'use client';
-
-import { useTranslations } from 'next-intl';
 import { Truck, ShieldCheck, CreditCard, LifeBuoy } from 'lucide-react';
 
 export function FeatureSection() {
-  const t = useTranslations('home.features');
-  
   const features = [
     {
       icon: <Truck className="h-10 w-10 text-[#003c6f]" />,
-      title: t('shipping.title'),
-      description: t('shipping.description'),
+      title: 'Envíos a Todo el País',
+      description: 'Entrega rápida y segura en toda Argentina',
     },
     {
       icon: <ShieldCheck className="h-10 w-10 text-[#003c6f]" />,
-      title: t('security.title'),
-      description: t('security.description'),
+      title: 'Compra Segura',
+      description: 'Tus datos siempre protegidos',
     },
     {
       icon: <CreditCard className="h-10 w-10 text-[#003c6f]" />,
-      title: t('payment.title'),
-      description: t('payment.description'),
+      title: 'Múltiples Formas de Pago',
+      description: 'Tarjetas, transferencias y más',
     },
     {
       icon: <LifeBuoy className="h-10 w-10 text-[#003c6f]" />,
-      title: t('support.title'),
-      description: t('support.description'),
+      title: 'Soporte 24/7',
+      description: 'Estamos para ayudarte siempre que lo necesites',
     },
   ];
 
@@ -33,7 +28,7 @@ export function FeatureSection() {
     <section className="py-12 bg-white">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
-          {t('sectionTitle')}
+          ¿Por Qué Elegirnos?
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
