@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
+import { Link } from '@/lib/navigation';
+import Image from 'next/image';
 import type { Product } from '@/types/product';
 
 interface ProductCarouselProps {
@@ -89,14 +90,23 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
                 <div className="h-36 bg-gray-100 flex items-center justify-center">
                   {product.imagen ? (
                     <div className="relative w-full h-full">
-                      <img 
+                      <Image 
                         src={product.imagen} 
                         alt={product.nombre} 
-                        className="object-cover w-full h-full"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          e.currentTarget.parentElement!.innerHTML = '<span class="text-gray-400">Sin imagen</span>';
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 240px"
+                        onError={() => {
+                          const imgElement = document.getElementById(`product-img-${product.id}`);
+                          if (imgElement) {
+                            imgElement.style.display = 'none';
+                            const parent = imgElement.parentElement;
+                            if (parent) {
+                              parent.innerHTML = '<span class="text-gray-400">Sin imagen</span>';
+                            }
+                          }
                         }}
+                        id={`product-img-${product.id}`}
                       />
                     </div>
                   ) : (

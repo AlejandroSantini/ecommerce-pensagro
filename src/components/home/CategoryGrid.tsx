@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import type { Category } from '@/types/category';
+import { CategoryCard } from './CategoryCard';
 
 interface CategoryGridProps {
   categories: Category[];
@@ -14,39 +14,25 @@ export function CategoryGrid({ categories }: CategoryGridProps) {
   return (
     <section className="py-8">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold mb-6">{t('categories.title')}</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categories.map((category) => (
-            <Link 
-              key={category.slug}
-              href={`/categories/${category.slug}`}
-              className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold">{t('categories.title')}</h2>
+          
+          {categories.length > 6 && (
+            <a 
+              href="/categories" 
+              className="text-sm text-[#003c6f] hover:underline flex items-center"
             >
-              <div className="aspect-[16/9] bg-gray-100 flex items-center justify-center relative">
-                {category.imagen ? (
-                  <div className="relative w-full h-full">
-                    <img 
-                      src={category.imagen} 
-                      alt={category.nombre} 
-                      className="object-cover w-full h-full"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                        e.currentTarget.parentElement!.innerHTML = '<span class="text-gray-400">Sin imagen</span>';
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <span className="text-gray-400">Sin imagen</span>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
-              
-              <div className="p-6">
-                <h3 className="font-semibold text-lg mb-2">{category.nombre}</h3>
-                <p className="text-gray-600 text-sm">{category.descripcion || ''}</p>
-              </div>
-            </Link>
+              {t('categories.viewAll')}
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7-7 7" />
+              </svg>
+            </a>
+          )}
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {categories.map((category) => (
+            <CategoryCard key={category.slug} category={category} />
           ))}
         </div>
       </div>

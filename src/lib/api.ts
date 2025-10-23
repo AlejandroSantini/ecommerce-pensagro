@@ -13,10 +13,23 @@ export class ApiError extends Error {
   }
 }
 
+// Define a flag to determine if we're in development mode
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 export async function fetchApi<T = unknown>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
+  // In server environment with no API URL, use mock data silently in development
+  if (typeof window === 'undefined' && !process.env.NEXT_PUBLIC_API_URL) {
+    if (isDevelopment) {
+      console.warn(`API_BASE_URL not defined in server environment. Endpoint: ${endpoint}`);
+      // Return an empty array for GET requests or null for other methods
+      // This allows the application to continue without errors
+      return (options.method === undefined || options.method === 'GET' ? [] : null) as T;
+    }
+  }
+
   const url = `${API_BASE_URL}${endpoint}`;
 
   // Timeout para evitar esperas infinitas

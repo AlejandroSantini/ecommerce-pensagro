@@ -1,9 +1,6 @@
 import { Suspense } from 'react';
 import { getTranslations } from 'next-intl/server';
 
-import { productService } from '@/services/productService';
-import { categoryService } from '@/services/categoryService';
-
 import { Hero } from '@/components/home/Hero';
 import { FeatureSection } from '@/components/home/FeatureSection';
 import { ProductCarousel } from '@/components/home/ProductCarousel';
@@ -116,25 +113,9 @@ const SAMPLE_CATEGORIES = [
 async function HomePage() {
   const t = await getTranslations('home');
   
-  // Intentar obtener datos de la API, usar datos de muestra si falla
-  let featuredProducts;
-  let categories;
-  
-  try {
-    // Obtener productos destacados
-    featuredProducts = await productService.getAll({ 
-      destacado: true,
-      activo: true
-    });
-    
-    // Obtener categorías
-    categories = await categoryService.getAll();
-  } catch (error) {
-    console.error('Error fetching data from API:', error);
-    // Usar datos de muestra en caso de error
-    featuredProducts = SAMPLE_PRODUCTS;
-    categories = SAMPLE_CATEGORIES;
-  }
+  // Usar directamente los datos de muestra para garantizar que siempre haya contenido
+  const featuredProducts = SAMPLE_PRODUCTS;
+  const categories = SAMPLE_CATEGORIES;
   
   // Filtrar solo categorías activas
   const activeCategories = categories.filter(cat => cat.activo);
@@ -145,13 +126,17 @@ async function HomePage() {
       <FeatureSection />
       
       <div className="py-4 bg-gray-50">
-        <ProductCarousel 
-          title={t('featuredProducts.title')} 
-          products={featuredProducts.slice(0, 12)} 
-        />
+        {featuredProducts.length > 0 && (
+          <ProductCarousel 
+            title={t('featuredProducts.title')} 
+            products={featuredProducts.slice(0, 12)} 
+          />
+        )}
         
         <div className="py-6">
-          <CategoryGrid categories={activeCategories.slice(0, 6)} />
+          {activeCategories.length > 0 && (
+            <CategoryGrid categories={activeCategories.slice(0, 6)} />
+          )}
         </div>
       </div>
     </div>

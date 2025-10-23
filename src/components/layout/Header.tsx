@@ -167,29 +167,31 @@ export function Header() {
         </div>
 
         {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="border-t bg-white md:hidden">
-            <nav className="container mx-auto flex flex-col space-y-1 px-4 py-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <button
-                className="flex items-center space-x-2 rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
+        <div 
+          className={`border-t bg-white md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+            isMobileMenuOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
+          <nav className="container mx-auto flex flex-col space-y-1 px-4 py-4">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <Search className="h-4 w-4" />
-                <span>{tNav('search')}</span>
-              </button>
-            </nav>
-          </div>
-        )}
+                {link.label}
+              </Link>
+            ))}
+            <button
+              className="flex items-center space-x-2 rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <Search className="h-4 w-4" />
+              <span>{tNav('search')}</span>
+            </button>
+          </nav>
+        </div>
       </header>
 
       <CartDrawer open={isCartOpen} onOpenChange={setIsCartOpen} />

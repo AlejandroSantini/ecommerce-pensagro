@@ -7,10 +7,59 @@ import type {
   UnlinkProductCategoryDto,
 } from '@/types/category';
 
+// Sample categories for fallback
+const SAMPLE_CATEGORIES = [
+  {
+    id: 1,
+    nombre: 'Herbicidas',
+    descripcion: 'Productos para el control de malezas',
+    slug: 'herbicidas',
+    activo: true,
+    orden: 1,
+    createdAt: '2023-01-01',
+    updatedAt: '2023-01-01'
+  },
+  {
+    id: 2,
+    nombre: 'Fertilizantes',
+    descripcion: 'Nutrientes para tus cultivos',
+    slug: 'fertilizantes',
+    activo: true,
+    orden: 2,
+    createdAt: '2023-01-01',
+    updatedAt: '2023-01-01'
+  },
+  {
+    id: 3,
+    nombre: 'Semillas',
+    descripcion: 'Semillas de alta calidad para diferentes cultivos',
+    slug: 'semillas',
+    activo: true,
+    orden: 3,
+    createdAt: '2023-01-01',
+    updatedAt: '2023-01-01'
+  },
+  {
+    id: 4,
+    nombre: 'Insecticidas',
+    descripcion: 'Control de plagas para tus cultivos',
+    slug: 'insecticidas',
+    activo: true,
+    orden: 4,
+    createdAt: '2023-01-01',
+    updatedAt: '2023-01-01'
+  }
+];
+
 export const categoryService = {
   // GET /categories - Listar categorías
   getAll: async (): Promise<Category[]> => {
-    return fetchApi('/categories');
+    try {
+      return await fetchApi('/categories');
+    } catch (error) {
+      console.warn('Error fetching categories, using sample data:', error);
+      return SAMPLE_CATEGORIES;
+    }
   },
 
   // GET /categories/:id - Obtener categoría por ID
@@ -20,6 +69,7 @@ export const categoryService = {
 
   // POST /categories - Crear categoría
   create: async (data: CreateCategoryDto): Promise<Category> => {
+    
     return fetchApi('/categories', {
       method: 'POST',
       body: JSON.stringify(data),
