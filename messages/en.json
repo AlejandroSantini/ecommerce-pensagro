@@ -1,5 +1,11 @@
 {
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  },
   "header": {
+    "cart": "Cart",
     "user": "User",
     "menu": "Menu",
     "myOrders": "My Orders",
@@ -52,10 +58,17 @@
   },
   "cart": {
     "title": "Shopping Cart",
+    "itemsCount": "{count, plural, =0 {no items} =1 {1 item} other {# items}}",
     "empty": "Your cart is empty",
+    "emptyDescription": "Add products to start shopping",
+    "viewProducts": "View Products",
     "total": "Total",
     "checkout": "Proceed to Checkout",
-    "continueShopping": "Continue Shopping"
+    "continueShopping": "Continue Shopping",
+    "remove": "Remove",
+    "quantity": "Quantity",
+    "inStock": "In stock: {stock}",
+    "outOfStock": "Out of stock"
   },
   "products": {
     "title": "Our Products",
@@ -152,7 +165,17 @@
     "submit": "Sign In",
     "submitting": "Signing in...",
     "noAccount": "Don't have an account?",
-    "createAccount": "Create a new account"
+    "createAccount": "Create a new account",
+    "success": "Login successful! Redirecting...",
+    "errors": {
+      "invalidCredentials": "Invalid credentials",
+      "generic": "Error logging in. Please try again.",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 6 characters",
+      "passwordMaxLength": "Password must be at most 100 characters"
+    }
   },
   "register": {
     "title": "Create Account",

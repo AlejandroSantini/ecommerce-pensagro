@@ -14,7 +14,7 @@ export function OrderSummary({ showTitle = true }: OrderSummaryProps) {
   const getTotal = useCart((state) => state.getTotal);
   
   const subtotal = getTotal();
-  const envio = 0; // Gratis por ahora, puede ser dinámico
+  const envio: number = 0; // Gratis por ahora, puede ser dinámico
   const total = subtotal + envio;
 
   return (
@@ -100,7 +100,5 @@ export function OrderSummary({ showTitle = true }: OrderSummaryProps) {
         </p>
       </div>
     </div>
-  );
-}
   );
 }

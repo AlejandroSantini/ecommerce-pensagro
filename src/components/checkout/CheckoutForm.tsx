@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useTranslation } from '@/hooks/useTranslation';
 
 interface CheckoutFormData {
   // Información de contacto
@@ -27,7 +26,6 @@ interface CheckoutFormProps {
 }
 
 export function CheckoutForm({ onSubmit, isLoading = false }: CheckoutFormProps) {
-  const { t } = useTranslation();
   const [formData, setFormData] = useState<CheckoutFormData>({
     email: '',
     telefono: '',

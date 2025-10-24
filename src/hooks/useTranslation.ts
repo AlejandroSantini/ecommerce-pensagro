@@ -4,7 +4,9 @@ import es from '../../messages/es.json';
 import en from '../../messages/en.json';
 import pt from '../../messages/pt.json';
 
-const messages: Record<string, any> = {
+type Messages = typeof es;
+
+const messages: Record<string, Messages> = {
   es,
   en,
   pt,
@@ -17,8 +19,9 @@ export function useTranslation() {
   const t = useMemo(() => {
     const translations = messages[locale] || messages.es;
 
-    return (key: string, params?: Record<string, any>): string => {
+    return (key: string, params?: Record<string, string | number>): string => {
       const keys = key.split('.');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let value: any = translations;
 
       for (const k of keys) {
