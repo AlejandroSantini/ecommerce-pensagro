@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { userService } from '@/services';
 import { useAuth } from '@/contexts/AuthContext';
-import { useTranslations } from 'next-intl';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const loginSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email format'),
@@ -24,7 +24,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 export function LoginForm() {
   const router = useRouter();
   const { login: authLogin } = useAuth();
-  const t = useTranslations('login');
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -72,17 +72,17 @@ export function LoginForm() {
   return (
     <div className="w-full max-w-md space-y-6 rounded-lg border bg-white p-8 shadow-sm">
       <div className="space-y-2 text-center">
-        <h1 className="text-2xl font-bold text-pensagro-dark">{t('title')}</h1>
-        <p className="text-sm text-gray-600">{t('description')}</p>
+        <h1 className="text-2xl font-bold text-pensagro-dark">{t('login.title')}</h1>
+        <p className="text-sm text-gray-600">{t('login.description')}</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-pensagro-dark">{t('email')}</Label>
+          <Label htmlFor="email" className="text-pensagro-dark">{t('login.email')}</Label>
           <Input 
             id="email" 
             type="email" 
-            placeholder={t('emailPlaceholder')} 
+            placeholder={t('login.emailPlaceholder')} 
             {...register('email')} 
             className={errors.email ? 'border-red-500' : ''} 
             disabled={isLoading}
@@ -92,16 +92,16 @@ export function LoginForm() {
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="password" className="text-pensagro-dark">{t('password')}</Label>
+            <Label htmlFor="password" className="text-pensagro-dark">{t('login.password')}</Label>
             <Link href="/forgot-password" className="text-xs text-[#003c6f] hover:underline">
-              {t('forgotPassword')}
+              {t('login.forgotPassword')}
             </Link>
           </div>
           <div className="relative">
             <Input 
               id="password" 
               type={showPassword ? 'text' : 'password'} 
-              placeholder={t('passwordPlaceholder')} 
+              placeholder={t('login.passwordPlaceholder')} 
               {...register('password')}
               className={errors.password ? 'border-red-500 pr-10' : 'pr-10'} 
               disabled={isLoading} 
@@ -133,10 +133,10 @@ export function LoginForm() {
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {t('submitting')}
+              {t('login.submitting')}
             </>
           ) : (
-            t('submit')
+            t('login.submit')
           )}
         </Button>
       </form>
@@ -146,7 +146,7 @@ export function LoginForm() {
           <div className="w-full border-t border-gray-300" />
         </div>
         <div className="relative flex justify-center text-xs">
-          <span className="bg-white px-2 text-gray-500">{t('noAccount')}</span>
+          <span className="bg-white px-2 text-gray-500">{t('login.noAccount')}</span>
         </div>
       </div>
       
@@ -156,7 +156,7 @@ export function LoginForm() {
         className="w-full mt-2 border border-[#003c6f] text-[#003c6f] hover:bg-[#003c6f] hover:text-white"
       >
         <Link href="/register">
-          {t('createAccount')}
+          {t('login.createAccount')}
         </Link>
       </Button>
     </div>

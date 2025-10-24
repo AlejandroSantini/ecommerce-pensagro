@@ -37,28 +37,28 @@
   },
   "home": {
     "hero": {
-      "title": "Productos Naturales y Sostenibles",
-      "description": "Descubre nuestra selección de productos orgánicos y comprometidos con el medio ambiente. Calidad que puedes sentir, sostenibilidad que puedes ver.",
+      "title": "Eficiencia Ganadera para tu Campo",
+      "description": "Electrificadores, alambrados y sistemas para el manejo eficiente de tu hacienda. Calidad PensAgro.",
       "viewProducts": "Ver Productos",
-      "learnMore": "Conoce Más"
+      "learnMore": "Conocé Más"
     },
     "features": {
-      "sectionTitle": "¿Por qué Elegirnos?",
+      "sectionTitle": "Más de 30 Años en el Agro Argentino",
       "shipping": {
-        "title": "Envío Rápido",
-        "description": "Entrega rápida a tu puerta con seguimiento disponible"
+        "title": "Envíos a Todo el País",
+        "description": "Entrega rápida y segura de productos ganaderos"
       },
-      "security": {
-        "title": "Pagos Seguros",
-        "description": "Tus transacciones están protegidas con encriptación avanzada"
+      "quality": {
+        "title": "Garantía de Calidad",
+        "description": "Productos certificados y respaldo PensAgro"
       },
       "payment": {
-        "title": "Múltiples Opciones de Pago",
-        "description": "Elige entre varios métodos de pago para tu comodidad"
+        "title": "Financiación Disponible",
+        "description": "Planes de pago para productores"
       },
       "support": {
-        "title": "Soporte 24/7",
-        "description": "Nuestro equipo está listo para ayudarte con cualquier duda"
+        "title": "Asesoramiento Técnico",
+        "description": "Expertos en eficiencia ganadera a tu disposición"
       }
     },
     "featuredProducts": {
@@ -80,10 +80,79 @@
     "loading": "Cargando productos...",
     "addToCart": "Agregar al Carrito",
     "addedToCart": "¡Producto agregado al carrito!",
+    "viewAll": "Ver Todo →",
+    "viewDetails": "Ver Detalles",
+    "noImage": "Sin imagen",
     "inStock": "En stock",
     "outOfStock": "Sin stock",
     "stock": "{count} disponibles",
     "freeShipping": "Envío gratis"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "backToStore": "Volver a la tienda",
+    "securePay": "Pago seguro",
+    "contactInfo": "Información de Contacto",
+    "shippingAddress": "Dirección de Envío",
+    "email": "Email",
+    "emailRequired": "Email *",
+    "emailPlaceholder": "tu@email.com",
+    "phone": "Teléfono",
+    "phoneRequired": "Teléfono *",
+    "phonePlaceholder": "+54 9 11 1234-5678",
+    "firstName": "Nombre",
+    "firstNameRequired": "Nombre *",
+    "firstNamePlaceholder": "Juan",
+    "lastName": "Apellido",
+    "lastNameRequired": "Apellido *",
+    "lastNamePlaceholder": "Pérez",
+    "address": "Dirección",
+    "addressRequired": "Dirección *",
+    "addressPlaceholder": "Av. Corrientes 1234",
+    "city": "Ciudad",
+    "cityRequired": "Ciudad *",
+    "cityPlaceholder": "Buenos Aires",
+    "province": "Provincia",
+    "provinceRequired": "Provincia *",
+    "provincePlaceholder": "CABA",
+    "zipCode": "Código Postal",
+    "zipCodeRequired": "Código Postal *",
+    "zipCodePlaceholder": "1234",
+    "notes": "Notas adicionales (opcional)",
+    "notesPlaceholder": "Información adicional sobre tu pedido...",
+    "placeOrder": "Finalizar Compra",
+    "terms": "Al hacer clic en 'Finalizar Compra' aceptás nuestros Términos y Condiciones.",
+    "orderSummary": "Resumen del Pedido",
+    "emptyCart": "No hay productos en el carrito",
+    "subtotal": "Subtotal",
+    "shipping": "Envío",
+    "free": "Gratis",
+    "total": "Total",
+    "paymentNote": "Nota: El método de pago se configurará en el siguiente paso con Mercado Pago.",
+    "benefits": {
+      "freeShipping": "Envío Gratis",
+      "freeShippingDesc": "En todos los pedidos",
+      "securePay": "Pago Seguro",
+      "securePayDesc": "Con Mercado Pago",
+      "fastShipping": "Envío Rápido",
+      "fastShippingDesc": "Recibí en 3-5 días hábiles"
+    }
+  },
+  "confirmation": {
+    "orderConfirmed": "¡Pedido Confirmado!",
+    "orderReceived": "Tu pedido ha sido recibido y está siendo procesado.",
+    "orderNumber": "Número de pedido",
+    "orderDetails": "Detalles del Pedido",
+    "shippingInfo": "Información de Envío",
+    "additionalNotes": "Notas adicionales:",
+    "whatNext": "¿Qué sigue?",
+    "step1": "Recibirás un email de confirmación con los detalles de tu pedido.",
+    "step2": "Te notificaremos cuando tu pedido sea enviado con el número de seguimiento.",
+    "step3": "Tu pedido llegará en 3-5 días hábiles.",
+    "backToHome": "Volver al inicio",
+    "continueShopping": "Seguir comprando",
+    "needHelp": "¿Necesitas ayuda con tu pedido?",
+    "contactUs": "Contáctanos en"
   },
   "login": {
     "title": "Iniciar Sesión",
@@ -111,13 +180,15 @@
   "register": {
     "title": "Crear Cuenta",
     "description": "Completa tus datos para registrarte",
-    "name": "Nombre completo",
-    "namePlaceholder": "Juan Pérez",
+    "name": "Nombre",
+    "namePlaceholder": "Juan",
+    "lastname": "Apellido",
+    "lastnamePlaceholder": "Pérez",
     "email": "Email",
     "emailPlaceholder": "tu@email.com",
     "phone": "Teléfono",
     "phoneOptional": "opcional",
-    "phonePlaceholder": "+1 234 567 890",
+    "phonePlaceholder": "+54 9 11 1234-5678",
     "password": "Contraseña",
     "passwordPlaceholder": "••••••••",
     "confirmPassword": "Confirmar contraseña",
@@ -129,26 +200,30 @@
   },
   "footer": {
     "about": {
-      "title": "Pensagro",
-      "description": "Productos naturales y sostenibles para un estilo de vida saludable. Comprometidos con la calidad y el medio ambiente."
+      "title": "Sobre PensAgro",
+      "description": "Más de 30 años brindando soluciones de eficiencia ganadera. Calidad y experiencia al servicio del campo argentino."
     },
-    "navigation": {
-      "title": "Navegación"
+    "shop": {
+      "title": "Productos",
+      "allProducts": "Todos los Productos",
+      "electrifiers": "Electrificadores",
+      "fencing": "Alambrados Eléctricos",
+      "accessories": "Accesorios Ganaderos"
     },
     "help": {
       "title": "Ayuda",
       "faq": "Preguntas Frecuentes",
-      "shipping": "Envíos",
-      "returns": "Devoluciones",
-      "myAccount": "Mi Cuenta"
+      "shipping": "Información de Envío",
+      "warranty": "Garantías",
+      "contact": "Contacto"
     },
     "contact": {
       "title": "Contacto",
-      "address": "Av. Principal 123, Ciudad, Argentina",
-      "phone": "+54 9 123 456 7890",
-      "email": "info@pensagro.com"
+      "address": "Buenos Aires, Argentina",
+      "phone": "+54 9 11 3456-7890",
+      "email": "ventas@pensagro.com"
     },
-    "copyright": "© {year} Pensagro. Todos los derechos reservados.",
+    "copyright": "© {year} PensAgro - Eficiencia Ganadera. Todos los derechos reservados.",
     "terms": "Términos y Condiciones",
     "privacy": "Política de Privacidad"
   }

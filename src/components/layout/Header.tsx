@@ -12,9 +12,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
 import { CartDrawer } from './CartDrawer';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export function Header() {
   const { isAuthenticated, user, logout } = useAuth();
+  const { t } = useTranslation();
   
   const totalItems = useCart((state) => state.getTotalItems());
   
@@ -27,10 +29,10 @@ export function Header() {
   }, []);
 
   const navLinks = [
-    { href: '/productos', label: 'Productos' },
-    { href: '/categorias', label: 'Categorías' },
-    { href: '/nosotros', label: 'Nosotros' },
-    { href: '/contacto', label: 'Contacto' },
+    { href: '/productos', labelKey: 'nav.products' },
+    { href: '/categorias', labelKey: 'nav.categories' },
+    { href: '/nosotros', labelKey: 'nav.about' },
+    { href: '/contacto', labelKey: 'nav.contact' },
   ];
   
   // Admin status is checked directly in the JSX
@@ -59,7 +61,7 @@ export function Header() {
                 href={link.href}
                 className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
               >
-                {link.label}
+                {t(link.labelKey)}
               </Link>
             ))}
           </nav>
@@ -115,12 +117,12 @@ export function Header() {
 
                     <DropdownMenuItem asChild>
                       <Link href="/account" className="cursor-pointer">
-                        Mi Perfil
+                        {t('header.myProfile')}
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/account/orders" className="cursor-pointer">
-                        Mis Pedidos
+                        {t('header.myOrders')}
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -129,19 +131,19 @@ export function Header() {
                       className="cursor-pointer text-red-600 focus:text-red-600"
                     >
                       <LogOut className="mr-2 h-4 w-4" />
-                      Cerrar Sesión
+                      {t('header.logout')}
                     </DropdownMenuItem>
                   </>
                 ) : (
                   <>
                     <DropdownMenuItem asChild>
                       <Link href="/login" className="cursor-pointer">
-                        Iniciar Sesión
+                        {t('header.login')}
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/register" className="cursor-pointer">
-                        Crear Cuenta
+                        {t('header.createAccount')}
                       </Link>
                     </DropdownMenuItem>
                   </>
@@ -175,7 +177,7 @@ export function Header() {
                 className="rounded-md px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                {link.label}
+                {t(link.labelKey)}
               </Link>
             ))}
             <button
@@ -183,7 +185,7 @@ export function Header() {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <Search className="h-4 w-4" />
-              <span>Buscar</span>
+              <span>{t('nav.search')}</span>
             </button>
           </nav>
         </div>

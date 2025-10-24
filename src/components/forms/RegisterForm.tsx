@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -10,7 +10,7 @@ import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useTranslations } from 'next-intl';
+import { useTranslation } from '@/hooks/useTranslation';
 import { userService } from '@/services';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -31,7 +31,7 @@ const registerSchema = z
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
-  const t = useTranslations('register');
+  const { t } = useTranslation();
   const router = useRouter();
   const { login: authLogin } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
@@ -88,34 +88,34 @@ export function RegisterForm() {
   return (
     <div className="w-full max-w-md space-y-6 rounded-lg border bg-white p-8 shadow-sm">
       <div className="space-y-2 text-center">
-        <h1 className="text-2xl font-bold text-pensagro-dark">{t('title')}</h1>
-        <p className="text-sm text-gray-600">{t('description')}</p>
+        <h1 className="text-2xl font-bold text-pensagro-dark">{t('register.title')}</h1>
+        <p className="text-sm text-gray-600">{t('register.description')}</p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="name" className="text-pensagro-dark">{t('name')}</Label>
-          <Input id="name" type="text" placeholder={t('namePlaceholder')} {...register('name')} className={errors.name ? 'border-red-500' : ''} disabled={isLoading} />
+          <Label htmlFor="name" className="text-pensagro-dark">{t('register.name')}</Label>
+          <Input id="name" type="text" placeholder={t('register.namePlaceholder')} {...register('name')} className={errors.name ? 'border-red-500' : ''} disabled={isLoading} />
           {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="lastname" className="text-pensagro-dark">{t('lastname')}</Label>
-          <Input id="lastname" type="text" placeholder={t('lastnamePlaceholder')} {...register('lastname')} className={errors.lastname ? 'border-red-500' : ''} disabled={isLoading} />
+          <Label htmlFor="lastname" className="text-pensagro-dark">{t('register.lastname')}</Label>
+          <Input id="lastname" type="text" placeholder={t('register.lastnamePlaceholder')} {...register('lastname')} className={errors.lastname ? 'border-red-500' : ''} disabled={isLoading} />
           {errors.lastname && <p className="text-sm text-red-600">{errors.lastname.message}</p>}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-pensagro-dark">{t('email')}</Label>
-          <Input id="email" type="email" placeholder={t('emailPlaceholder')} {...register('email')} className={errors.email ? 'border-red-500' : ''} disabled={isLoading} />
+          <Label htmlFor="email" className="text-pensagro-dark">{t('register.email')}</Label>
+          <Input id="email" type="email" placeholder={t('register.emailPlaceholder')} {...register('email')} className={errors.email ? 'border-red-500' : ''} disabled={isLoading} />
           {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="phone" className="text-pensagro-dark">{t('phone')} <span className="text-gray-500">({t('phoneOptional')})</span></Label>
-          <Input id="phone" type="tel" placeholder={t('phonePlaceholder')} {...register('phone')} className={errors.phone ? 'border-red-500' : ''} disabled={isLoading} />
+          <Label htmlFor="phone" className="text-pensagro-dark">{t('register.phone')} <span className="text-gray-500">({t('register.phoneOptional')})</span></Label>
+          <Input id="phone" type="tel" placeholder={t('register.phonePlaceholder')} {...register('phone')} className={errors.phone ? 'border-red-500' : ''} disabled={isLoading} />
           {errors.phone && <p className="text-sm text-red-600">{errors.phone.message}</p>}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="password" className="text-pensagro-dark">{t('password')}</Label>
+          <Label htmlFor="password" className="text-pensagro-dark">{t('register.password')}</Label>
           <div className="relative">
-            <Input id="password" type={showPassword ? 'text' : 'password'} placeholder={t('passwordPlaceholder')} {...register('password')} className={errors.password ? 'border-red-500 pr-10' : 'pr-10'} disabled={isLoading} />
+            <Input id="password" type={showPassword ? 'text' : 'password'} placeholder={t('register.passwordPlaceholder')} {...register('password')} className={errors.password ? 'border-red-500 pr-10' : 'pr-10'} disabled={isLoading} />
             <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700" tabIndex={-1}>
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
@@ -123,9 +123,9 @@ export function RegisterForm() {
           {errors.password && <p className="text-sm text-red-600">{errors.password.message}</p>}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword" className="text-pensagro-dark">{t('confirmPassword')}</Label>
+          <Label htmlFor="confirmPassword" className="text-pensagro-dark">{t('register.confirmPassword')}</Label>
           <div className="relative">
-            <Input id="confirmPassword" type={showConfirmPassword ? 'text' : 'password'} placeholder={t('confirmPasswordPlaceholder')} {...register('confirmPassword')} className={errors.confirmPassword ? 'border-red-500 pr-10' : 'pr-10'} disabled={isLoading} />
+            <Input id="confirmPassword" type={showConfirmPassword ? 'text' : 'password'} placeholder={t('register.confirmPasswordPlaceholder')} {...register('confirmPassword')} className={errors.confirmPassword ? 'border-red-500 pr-10' : 'pr-10'} disabled={isLoading} />
             <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700" tabIndex={-1}>
               {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
@@ -139,7 +139,7 @@ export function RegisterForm() {
           className="w-full bg-[#003c6f] text-white border-2 border-[#003c6f] hover:bg-[#002b50]"
           disabled={isLoading}
         >
-          {isLoading ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />{t('submitting')}</>) : (t('submit'))}
+          {isLoading ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />{t('register.submitting')}</>) : (t('register.submit'))}
         </Button>
       </form>
       <div className="relative mt-4">
@@ -147,7 +147,7 @@ export function RegisterForm() {
           <div className="w-full border-t border-gray-300" />
         </div>
         <div className="relative flex justify-center text-xs">
-          <span className="bg-white px-2 text-gray-500">{t('alreadyAccount')}</span>
+          <span className="bg-white px-2 text-gray-500">{t('register.alreadyAccount')}</span>
         </div>
       </div>
       <Button
@@ -156,7 +156,7 @@ export function RegisterForm() {
         className="w-full mt-2 border border-[#003c6f] text-[#003c6f] hover:bg-[#003c6f] hover:text-white"
       >
         <Link href="/login">
-          {t('signin')}
+          {t('register.login')}
         </Link>
       </Button>
     </div>

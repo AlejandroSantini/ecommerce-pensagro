@@ -17,28 +17,28 @@
   },
   "home": {
     "hero": {
-      "title": "Natural and Sustainable Products",
-      "description": "Discover our selection of organic products committed to the environment. Quality you can feel, sustainability you can see.",
+      "title": "Livestock Efficiency for Your Farm",
+      "description": "Electrifiers, electric fencing and systems for efficient livestock management. PensAgro Quality.",
       "viewProducts": "View Products",
       "learnMore": "Learn More"
     },
     "features": {
-      "sectionTitle": "Why Choose Us",
+      "sectionTitle": "Over 30 Years in Argentine Agriculture",
       "shipping": {
-        "title": "Fast Shipping",
-        "description": "Quick delivery to your doorstep with tracking available"
+        "title": "Nationwide Shipping",
+        "description": "Fast and secure delivery of livestock products"
       },
-      "security": {
-        "title": "Secure Payments",
-        "description": "Your transactions are protected with advanced encryption"
+      "quality": {
+        "title": "Quality Guarantee",
+        "description": "Certified products and PensAgro backing"
       },
       "payment": {
-        "title": "Multiple Payment Options",
-        "description": "Choose from various payment methods for your convenience"
+        "title": "Financing Available",
+        "description": "Payment plans for farmers"
       },
       "support": {
-        "title": "24/7 Support",
-        "description": "Our team is ready to assist you with any questions"
+        "title": "Technical Advisory",
+        "description": "Livestock efficiency experts at your service"
       }
     },
     "featuredProducts": {
@@ -50,6 +50,13 @@
       "viewAll": "View All Categories"
     }
   },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "total": "Total",
+    "checkout": "Proceed to Checkout",
+    "continueShopping": "Continue Shopping"
+  },
   "products": {
     "title": "Our Products",
     "description": "Explore our selection of natural and sustainable products",
@@ -60,33 +67,140 @@
     "loading": "Loading products...",
     "addToCart": "Add to cart",
     "addedToCart": "Product added to cart!",
+    "viewAll": "View All →",
+    "viewDetails": "View Details",
+    "noImage": "No image",
     "inStock": "In stock",
     "outOfStock": "Out of stock",
     "stock": "{count} available",
     "freeShipping": "Free shipping"
   },
+  "checkout": {
+    "title": "Checkout",
+    "backToStore": "Back to store",
+    "securePay": "Secure payment",
+    "contactInfo": "Contact Information",
+    "shippingAddress": "Shipping Address",
+    "email": "Email",
+    "emailRequired": "Email *",
+    "emailPlaceholder": "you@email.com",
+    "phone": "Phone",
+    "phoneRequired": "Phone *",
+    "phonePlaceholder": "+54 9 11 1234-5678",
+    "firstName": "First Name",
+    "firstNameRequired": "First Name *",
+    "firstNamePlaceholder": "John",
+    "lastName": "Last Name",
+    "lastNameRequired": "Last Name *",
+    "lastNamePlaceholder": "Doe",
+    "address": "Address",
+    "addressRequired": "Address *",
+    "addressPlaceholder": "123 Main St",
+    "city": "City",
+    "cityRequired": "City *",
+    "cityPlaceholder": "Buenos Aires",
+    "province": "Province",
+    "provinceRequired": "Province *",
+    "provincePlaceholder": "CABA",
+    "zipCode": "Zip Code",
+    "zipCodeRequired": "Zip Code *",
+    "zipCodePlaceholder": "1234",
+    "notes": "Additional notes (optional)",
+    "notesPlaceholder": "Additional information about your order...",
+    "placeOrder": "Place Order",
+    "terms": "By clicking 'Place Order' you agree to our Terms and Conditions.",
+    "orderSummary": "Order Summary",
+    "emptyCart": "No products in cart",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "free": "Free",
+    "total": "Total",
+    "paymentNote": "Note: Payment method will be configured in the next step with Mercado Pago.",
+    "benefits": {
+      "freeShipping": "Free Shipping",
+      "freeShippingDesc": "On all orders",
+      "securePay": "Secure Payment",
+      "securePayDesc": "With Mercado Pago",
+      "fastShipping": "Fast Shipping",
+      "fastShippingDesc": "Receive in 3-5 business days"
+    }
+  },
+  "confirmation": {
+    "orderConfirmed": "Order Confirmed!",
+    "orderReceived": "Your order has been received and is being processed.",
+    "orderNumber": "Order number",
+    "orderDetails": "Order Details",
+    "shippingInfo": "Shipping Information",
+    "additionalNotes": "Additional notes:",
+    "whatNext": "What's next?",
+    "step1": "You will receive a confirmation email with your order details.",
+    "step2": "We will notify you when your order is shipped with tracking number.",
+    "step3": "Your order will arrive in 3-5 business days.",
+    "backToHome": "Back to home",
+    "continueShopping": "Continue shopping",
+    "needHelp": "Need help with your order?",
+    "contactUs": "Contact us at"
+  },
+  "login": {
+    "title": "Sign In",
+    "description": "Enter your credentials to access your account",
+    "email": "Email",
+    "emailPlaceholder": "you@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "Forgot password?",
+    "submit": "Sign In",
+    "submitting": "Signing in...",
+    "noAccount": "Don't have an account?",
+    "createAccount": "Create a new account"
+  },
+  "register": {
+    "title": "Create Account",
+    "description": "Complete your information to register",
+    "name": "First Name",
+    "namePlaceholder": "John",
+    "lastname": "Last Name",
+    "lastnamePlaceholder": "Doe",
+    "email": "Email",
+    "emailPlaceholder": "you@email.com",
+    "phone": "Phone",
+    "phoneOptional": "optional",
+    "phonePlaceholder": "+54 9 11 1234-5678",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "confirmPassword": "Confirm password",
+    "confirmPasswordPlaceholder": "••••••••",
+    "submit": "Create account",
+    "submitting": "Creating account...",
+    "alreadyAccount": "Already have an account?",
+    "login": "Sign in"
+  },
   "footer": {
     "about": {
-      "title": "About Pensagro",
-      "description": "Premium agricultural products and sustainable farming solutions."
+      "title": "About PensAgro",
+      "description": "Over 30 years providing livestock efficiency solutions. Quality and experience serving Argentine farms."
     },
-    "navigation": {
-      "title": "Navigation"
+    "shop": {
+      "title": "Products",
+      "allProducts": "All Products",
+      "electrifiers": "Electrifiers",
+      "fencing": "Electric Fencing",
+      "accessories": "Livestock Accessories"
     },
     "help": {
       "title": "Help",
       "faq": "FAQ",
       "shipping": "Shipping Info",
-      "returns": "Returns",
-      "myAccount": "My Account"
+      "warranty": "Warranties",
+      "contact": "Contact"
     },
     "contact": {
       "title": "Contact",
       "address": "Buenos Aires, Argentina",
-      "phone": "+54 9 11 2345-6789",
-      "email": "info@pensagro.com"
+      "phone": "+54 9 11 3456-7890",
+      "email": "ventas@pensagro.com"
     },
-    "copyright": "© {year} Pensagro. All rights reserved.",
+    "copyright": "© {year} PensAgro - Livestock Efficiency. All rights reserved.",
     "terms": "Terms of Service",
     "privacy": "Privacy Policy"
   }

@@ -2,16 +2,17 @@ import { Hero } from '@/components/home/Hero';
 import { FeatureSection } from '@/components/home/FeatureSection';
 import { ProductCarousel } from '@/components/home/ProductCarousel';
 import { CategoryGrid } from '@/components/home/CategoryGrid';
+import { useTranslation } from '@/hooks/useTranslation';
 
 // Datos de muestra para productos destacados
 const SAMPLE_PRODUCTS = [
   {
     id: 1,
-    nombre: 'Herbicida Premium',
-    descripcion: 'Herbicida de alta calidad para control de malezas',
-    precio: 2500,
-    sku: 'HERB-001',
-    stock: 100,
+    nombre: 'Electrificador PEL 86.000W',
+    descripcion: 'Electrificador de alto rendimiento para alambrados ganaderos. Ideal para grandes extensiones.',
+    precio: 125000,
+    sku: 'PEL-86000',
+    stock: 15,
     iva: 21,
     destacado: true,
     activo: true,
@@ -21,11 +22,11 @@ const SAMPLE_PRODUCTS = [
   },
   {
     id: 2,
-    nombre: 'Fertilizante Orgánico',
-    descripcion: 'Fertilizante 100% orgánico para cultivos sustentables',
-    precio: 1800,
-    sku: 'FERT-001',
-    stock: 150,
+    nombre: 'Varillas Fibra de Vidrio 1.20mts',
+    descripcion: 'Varillas de fibra de vidrio 10mm. Resistentes y duraderas para cercados eléctricos.',
+    precio: 1200,
+    sku: 'VAR-120',
+    stock: 200,
     iva: 21,
     destacado: true,
     activo: true,
@@ -35,12 +36,12 @@ const SAMPLE_PRODUCTS = [
   },
   {
     id: 3,
-    nombre: 'Semilla de Maíz Híbrido',
-    descripcion: 'Semillas de maíz de alto rendimiento',
-    precio: 3200,
-    sku: 'SEM-001',
-    stock: 80,
-    iva: 10.5,
+    nombre: 'Control Remoto + Detector Fallas PEL',
+    descripcion: 'Control remoto con detector de fallas para electrificadores. Facilita el mantenimiento del alambrado.',
+    precio: 45000,
+    sku: 'CTRL-PEL',
+    stock: 25,
+    iva: 21,
     destacado: true,
     activo: true,
     imagen: '/sample/product3.jpg',
@@ -49,11 +50,11 @@ const SAMPLE_PRODUCTS = [
   },
   {
     id: 4,
-    nombre: 'Insecticida Biológico',
-    descripcion: 'Control de plagas respetuoso con el medio ambiente',
-    precio: 2100,
-    sku: 'INS-001',
-    stock: 120,
+    nombre: 'Carretel + Junta Carretel PensAgro',
+    descripcion: 'Sistema de carretel para alambrados móviles. Rentabilidad y simplicidad sin degradar el suelo.',
+    precio: 28000,
+    sku: 'CAR-PA',
+    stock: 35,
     iva: 21,
     destacado: true,
     activo: true,
@@ -63,10 +64,10 @@ const SAMPLE_PRODUCTS = [
   },
   {
     id: 5,
-    nombre: 'Kit de Análisis de Suelo',
-    descripcion: 'Análisis completo para optimizar tus cultivos',
-    precio: 4500,
-    sku: 'KIT-001',
+    nombre: 'Bebedero Plástico para Hacienda',
+    descripcion: 'Bebedero resistente para ganado con sistema de flotante. Durabilidad garantizada.',
+    precio: 15500,
+    sku: 'BEB-001',
     stock: 45,
     iva: 21,
     destacado: true,
@@ -77,11 +78,11 @@ const SAMPLE_PRODUCTS = [
   },
   {
     id: 6,
-    nombre: 'Sistema de Riego por Goteo',
-    descripcion: 'Sistema eficiente para ahorro de agua',
-    precio: 3800,
-    sku: 'RIE-001',
-    stock: 30,
+    nombre: 'Hilo Electro Trenzado 200mts',
+    descripcion: 'Hilo de alta conductividad para cercados eléctricos. Resistente a condiciones extremas.',
+    precio: 8900,
+    sku: 'HIL-200',
+    stock: 80,
     iva: 21,
     destacado: true,
     activo: true,
@@ -95,9 +96,9 @@ const SAMPLE_PRODUCTS = [
 const SAMPLE_CATEGORIES = [
   {
     id: 1,
-    nombre: 'Herbicidas',
-    descripcion: 'Productos para el control de malezas',
-    slug: 'herbicidas',
+    nombre: 'Electrificadores',
+    descripcion: 'Boyeros eléctricos de alta potencia para cercados ganaderos',
+    slug: 'electrificadores',
     activo: true,
     orden: 1,
     createdAt: '2023-01-01',
@@ -105,9 +106,9 @@ const SAMPLE_CATEGORIES = [
   },
   {
     id: 2,
-    nombre: 'Fertilizantes',
-    descripcion: 'Nutrientes para tus cultivos',
-    slug: 'fertilizantes',
+    nombre: 'Varillas y Postes',
+    descripcion: 'Varillas de fibra de vidrio y postes para alambrados eléctricos',
+    slug: 'varillas-postes',
     activo: true,
     orden: 2,
     createdAt: '2023-01-01',
@@ -115,9 +116,9 @@ const SAMPLE_CATEGORIES = [
   },
   {
     id: 3,
-    nombre: 'Semillas',
-    descripcion: 'Semillas de alta calidad para diferentes cultivos',
-    slug: 'semillas',
+    nombre: 'Alambrados Eléctricos',
+    descripcion: 'Hilos, cintas y cables conductores para cercados',
+    slug: 'alambrados',
     activo: true,
     orden: 3,
     createdAt: '2023-01-01',
@@ -125,9 +126,9 @@ const SAMPLE_CATEGORIES = [
   },
   {
     id: 4,
-    nombre: 'Insecticidas',
-    descripcion: 'Control de plagas para tus cultivos',
-    slug: 'insecticidas',
+    nombre: 'Accesorios y Herrajes',
+    descripcion: 'Aisladores, tensores, manijas y accesorios para alambrados',
+    slug: 'accesorios',
     activo: true,
     orden: 4,
     createdAt: '2023-01-01',
@@ -135,9 +136,9 @@ const SAMPLE_CATEGORIES = [
   },
   {
     id: 5,
-    nombre: 'Herramientas',
-    descripcion: 'Equipos y herramientas para el campo',
-    slug: 'herramientas',
+    nombre: 'Bebederos y Aguadas',
+    descripcion: 'Sistemas de agua para hacienda vacuna, ovina y equina',
+    slug: 'bebederos',
     activo: true,
     orden: 5,
     createdAt: '2023-01-01',
@@ -145,9 +146,9 @@ const SAMPLE_CATEGORIES = [
   },
   {
     id: 6,
-    nombre: 'Sistemas de Riego',
-    descripcion: 'Soluciones de irrigación eficientes',
-    slug: 'sistemas-riego',
+    nombre: 'Carretes Móviles',
+    descripcion: 'Sistemas de alambrado móvil para pastoreo rotativo',
+    slug: 'carretes',
     activo: true,
     orden: 6,
     createdAt: '2023-01-01',
@@ -156,6 +157,7 @@ const SAMPLE_CATEGORIES = [
 ];
 
 export default function Home() {
+  const { t } = useTranslation();
   const featuredProducts = SAMPLE_PRODUCTS;
   const categories = SAMPLE_CATEGORIES.filter(cat => cat.activo);
 
@@ -167,7 +169,7 @@ export default function Home() {
       <div className="py-4 bg-gray-50">
         {featuredProducts.length > 0 && (
           <ProductCarousel 
-            title="Productos Destacados" 
+            title={t('home.featuredProducts.title')} 
             products={featuredProducts.slice(0, 12)} 
           />
         )}

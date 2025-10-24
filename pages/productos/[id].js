@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useCart } from '@/hooks/useCart';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Minus, Plus } from 'lucide-react';
+import { ProductCarousel } from '@/components/home/ProductCarousel';
 
 // Datos de muestra
 const SAMPLE_PRODUCTS = [
@@ -61,6 +62,34 @@ const SAMPLE_PRODUCTS = [
     imagen: '/sample/product4.jpg',
     createdAt: '2023-01-01',
     updatedAt: '2023-01-01'
+  },
+  {
+    id: 5,
+    nombre: 'Kit de Análisis de Suelo',
+    descripcion: 'Análisis completo para optimizar tus cultivos',
+    precio: 4500,
+    sku: 'KIT-001',
+    stock: 45,
+    iva: 21,
+    destacado: true,
+    activo: true,
+    imagen: '/sample/product5.jpg',
+    createdAt: '2023-01-01',
+    updatedAt: '2023-01-01'
+  },
+  {
+    id: 6,
+    nombre: 'Sistema de Riego por Goteo',
+    descripcion: 'Sistema eficiente para ahorro de agua',
+    precio: 3800,
+    sku: 'RIE-001',
+    stock: 30,
+    iva: 21,
+    destacado: true,
+    activo: true,
+    imagen: '/sample/product6.jpg',
+    createdAt: '2023-01-01',
+    updatedAt: '2023-01-01'
   }
 ];
 
@@ -70,11 +99,16 @@ export default function ProductDetailPage() {
   const { addItem } = useCart();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
   useEffect(() => {
     if (id) {
       const foundProduct = SAMPLE_PRODUCTS.find(p => p.id === parseInt(id));
       setProduct(foundProduct);
+      
+      // Obtener productos relacionados (excluyendo el producto actual)
+      const related = SAMPLE_PRODUCTS.filter(p => p.id !== parseInt(id));
+      setRelatedProducts(related);
     }
   }, [id]);
 
@@ -135,11 +169,10 @@ export default function ProductDetailPage() {
           <p className="text-gray-700 mb-6">{product.descripcion}</p>
 
           <div className="bg-gray-50 p-4 rounded-lg mb-6">
-            <div className="flex items-baseline gap-2 mb-2">
+            <div className="mb-2">
               <span className="text-4xl font-bold text-green-600">
                 ${product.precio.toLocaleString('es-AR')}
               </span>
-              <span className="text-gray-500">+ IVA {product.iva}%</span>
             </div>
             <p className="text-sm text-gray-600">
               SKU: {product.sku}
@@ -147,10 +180,6 @@ export default function ProductDetailPage() {
           </div>
 
           <div className="mb-6">
-            <p className="text-sm text-gray-600 mb-2">
-              Stock disponible: <span className="font-semibold">{product.stock} unidades</span>
-            </p>
-            
             <div className="flex items-center gap-4 mb-4">
               <label className="text-sm font-medium">Cantidad:</label>
               <div className="flex items-center border rounded-md">
@@ -201,6 +230,16 @@ export default function ProductDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Productos Relacionados */}
+      {relatedProducts.length > 0 && (
+        <div className="mt-16 border-t pt-12">
+          <ProductCarousel 
+            title="Productos Relacionados" 
+            products={relatedProducts} 
+          />
+        </div>
+      )}
     </div>
   );
 }

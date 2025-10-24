@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from '@/hooks/useTranslation';
 import type { Product } from '@/types/product';
 
 interface ProductCarouselProps {
@@ -11,6 +12,7 @@ interface ProductCarouselProps {
 }
 
 export function ProductCarousel({ title, products }: ProductCarouselProps) {
+  const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -60,7 +62,7 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">{title}</h2>
           <Link href="/productos" className="text-sm text-[#003c6f] hover:underline">
-            Ver Todo →
+            {t('products.viewAll')}
           </Link>
         </div>
         
@@ -101,7 +103,7 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
                             imgElement.style.display = 'none';
                             const parent = imgElement.parentElement;
                             if (parent) {
-                              parent.innerHTML = '<span class="text-gray-400">Sin imagen</span>';
+                              parent.innerHTML = `<span class="text-gray-400">${t('products.noImage')}</span>`;
                             }
                           }
                         }}
@@ -109,7 +111,7 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
                       />
                     </div>
                   ) : (
-                    <span className="text-gray-400">Sin imagen</span>
+                    <span className="text-gray-400">{t('products.noImage')}</span>
                   )}
                 </div>
                 
@@ -118,7 +120,7 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
                   <p className="text-lg font-semibold mb-2">${product.precio.toLocaleString()}</p>
                   <Button asChild className="w-full bg-[#003c6f] hover:bg-[#002b50]" size="sm">
                     <Link href={`/productos/${product.id}`}>
-                      Ver Detalles
+                      {t('products.viewDetails')}
                     </Link>
                   </Button>
                 </div>

@@ -1,26 +1,29 @@
 import { Truck, ShieldCheck, CreditCard, LifeBuoy } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export function FeatureSection() {
+  const { t } = useTranslation();
+  
   const features = [
     {
       icon: <Truck className="h-10 w-10 text-[#003c6f]" />,
-      title: 'Envíos a Todo el País',
-      description: 'Entrega rápida y segura en toda Argentina',
+      titleKey: 'home.features.shipping.title',
+      descriptionKey: 'home.features.shipping.description',
     },
     {
       icon: <ShieldCheck className="h-10 w-10 text-[#003c6f]" />,
-      title: 'Compra Segura',
-      description: 'Tus datos siempre protegidos',
+      titleKey: 'home.features.quality.title',
+      descriptionKey: 'home.features.quality.description',
     },
     {
       icon: <CreditCard className="h-10 w-10 text-[#003c6f]" />,
-      title: 'Múltiples Formas de Pago',
-      description: 'Tarjetas, transferencias y más',
+      titleKey: 'home.features.payment.title',
+      descriptionKey: 'home.features.payment.description',
     },
     {
       icon: <LifeBuoy className="h-10 w-10 text-[#003c6f]" />,
-      title: 'Soporte 24/7',
-      description: 'Estamos para ayudarte siempre que lo necesites',
+      titleKey: 'home.features.support.title',
+      descriptionKey: 'home.features.support.description',
     },
   ];
 
@@ -28,7 +31,7 @@ export function FeatureSection() {
     <section className="py-12 bg-white">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
-          ¿Por Qué Elegirnos?
+          {t('home.features.sectionTitle')}
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -41,10 +44,10 @@ export function FeatureSection() {
                 {feature.icon}
               </div>
               <h3 className="text-xl font-semibold mb-2 text-gray-800">
-                {feature.title}
+                {t(feature.titleKey)}
               </h3>
               <p className="text-gray-600">
-                {feature.description}
+                {t(feature.descriptionKey)}
               </p>
             </div>
           ))}

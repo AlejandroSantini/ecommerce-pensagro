@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { ShoppingCart } from 'lucide-react';
+import { useCart } from '@/hooks/useCart';
 
 // Datos de muestra
 const SAMPLE_PRODUCTS = [
@@ -64,6 +66,17 @@ const SAMPLE_PRODUCTS = [
 
 export default function ProductsPage() {
   const [products] = useState(SAMPLE_PRODUCTS);
+  const { addItem } = useCart();
+
+  const handleAddToCart = (product) => {
+    addItem({
+      id: product.id,
+      nombre: product.nombre,
+      precio: product.precio,
+      imagen: product.imagen,
+      stock: product.stock
+    }, 1);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -71,7 +84,7 @@ export default function ProductsPage() {
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {products.map((product) => (
-          <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+          <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
             <div className="aspect-square bg-gray-100 relative">
               <img
                 src={product.imagen}
@@ -88,24 +101,31 @@ export default function ProductsPage() {
               )}
             </div>
             
-            <div className="p-4">
+            <div className="p-4 flex flex-col flex-grow">
               <h3 className="font-semibold text-lg mb-2 line-clamp-2">{product.nombre}</h3>
               <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.descripcion}</p>
               
-              <div className="flex items-center justify-between mb-3">
+              <div className="mb-3">
                 <span className="text-2xl font-bold text-green-600">
                   ${product.precio.toLocaleString('es-AR')}
                 </span>
-                <span className="text-sm text-gray-500">
-                  Stock: {product.stock}
-                </span>
               </div>
               
-              <Button asChild className="w-full bg-[#003c6f] hover:bg-[#002b50]">
-                <Link href={`/productos/${product.id}`}>
-                  Ver Detalles
-                </Link>
-              </Button>
+              <div className="mt-auto grid grid-cols-2 gap-2">
+                <Button 
+                  variant="outline" 
+                  className="border-[#003c6f] text-[#003c6f] hover:bg-[#003c6f] hover:text-white"
+                  onClick={() => handleAddToCart(product)}
+                >
+                  <ShoppingCart className="h-4 w-4 mr-1" />
+                  Agregar
+                </Button>
+                <Button asChild className="bg-[#003c6f] hover:bg-[#002b50]">
+                  <Link href={`/productos/${product.id}`}>
+                    Ver Detalles
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         ))}

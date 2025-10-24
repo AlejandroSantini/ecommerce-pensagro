@@ -4,9 +4,11 @@
 import Link from 'next/link';
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export function Footer() {
   const [currentYear, setCurrentYear] = useState(2025);
+  const { t } = useTranslation();
   
   useEffect(() => {
     setCurrentYear(new Date().getFullYear());
@@ -15,15 +17,13 @@ export function Footer() {
   return (
     <footer className="border-t bg-gray-50">
       <div className="container mx-auto px-4 py-12 lg:px-6">
-        {/* Main Grid */}
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {/* About Column */}
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-900">
-              About Pensagro
+              {t('footer.about.title')}
             </h3>
             <p className="text-sm leading-relaxed text-gray-600">
-              Premium agricultural products and sustainable farming solutions for a better tomorrow.
+              {t('footer.about.description')}
             </p>
             <div className="mt-6 flex space-x-4">
               <Link
@@ -56,138 +56,133 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Shop Column */}
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-900">
-              Shop
+              {t('footer.shop.title')}
             </h3>
             <ul className="space-y-2.5 text-sm">
               <li>
                 <Link
-                  href="/shop/products"
+                  href="/productos"
                   className="text-gray-600 transition-colors hover:text-gray-900"
                 >
-                  All Products
+                  {t('footer.shop.allProducts')}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/categories"
+                  href="/productos"
                   className="text-gray-600 transition-colors hover:text-gray-900"
                 >
-                  Categories
+                  {t('footer.shop.electrifiers')}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/shop/new"
+                  href="/productos"
                   className="text-gray-600 transition-colors hover:text-gray-900"
                 >
-                  New Arrivals
+                  {t('footer.shop.fencing')}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/shop/bestsellers"
+                  href="/productos"
                   className="text-gray-600 transition-colors hover:text-gray-900"
                 >
-                  Best Sellers
+                  {t('footer.shop.accessories')}
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Support Column */}
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-900">
-              Support
+              {t('footer.help.title')}
             </h3>
             <ul className="space-y-2.5 text-sm">
               <li>
                 <Link
-                  href="/help/faq"
+                  href="/ayuda"
                   className="text-gray-600 transition-colors hover:text-gray-900"
                 >
-                  FAQ
+                  {t('footer.help.faq')}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/help/shipping"
+                  href="/ayuda"
                   className="text-gray-600 transition-colors hover:text-gray-900"
                 >
-                  Shipping Info
+                  {t('footer.help.shipping')}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/help/returns"
+                  href="/ayuda"
                   className="text-gray-600 transition-colors hover:text-gray-900"
                 >
-                  Returns
+                  {t('footer.help.warranty')}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/contact"
+                  href="/contacto"
                   className="text-gray-600 transition-colors hover:text-gray-900"
                 >
-                  Contact Us
+                  {t('footer.help.contact')}
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact Column */}
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide text-gray-900">
-              Contact
+              {t('footer.contact.title')}
             </h3>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start space-x-2 text-gray-600">
                 <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-500" />
-                <span>Buenos Aires, Argentina</span>
+                <span>{t('footer.contact.address')}</span>
               </li>
               <li className="flex items-center space-x-2 text-gray-600">
                 <Phone className="h-4 w-4 flex-shrink-0 text-gray-500" />
                 <a
-                  href="tel:+5491234567890"
+                  href="tel:+5491134567890"
                   className="hover:text-gray-900 transition-colors"
                 >
-                  +54 9 11 2345-6789
+                  {t('footer.contact.phone')}
                 </a>
               </li>
               <li className="flex items-center space-x-2 text-gray-600">
                 <Mail className="h-4 w-4 flex-shrink-0 text-gray-500" />
                 <a
-                  href="mailto:info@pensagro.com"
+                  href="mailto:ventas@pensagro.com"
                   className="hover:text-gray-900 transition-colors"
                 >
-                  info@pensagro.com
+                  {t('footer.contact.email')}
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Divider */}
         <div className="my-8 border-t border-gray-200" />
 
-        {/* Bottom Bar */}
         <div className="flex flex-col items-center justify-between space-y-4 text-sm text-gray-600 sm:flex-row sm:space-y-0">
-          <p>© {currentYear} Pensagro. All rights reserved.</p>
+          <p>{t('footer.copyright', { year: currentYear })}</p>
           <div className="flex space-x-6">
             <Link
-              href="/legal/terms"
+              href="/terminos"
               className="hover:text-gray-900 transition-colors"
             >
-              Terms of Service
+              {t('footer.terms')}
             </Link>
             <Link
-              href="/legal/privacy"
+              href="/privacidad"
               className="hover:text-gray-900 transition-colors"
             >
-              Privacy Policy
+              {t('footer.privacy')}
             </Link>
           </div>
         </div>

@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useCart } from '@/hooks/useCart';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface CartDrawerProps {
   open: boolean;
@@ -20,6 +21,7 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
   const updateQuantity = useCart((state) => state.updateQuantity);
   const clearCart = useCart((state) => state.clearCart);
   const getTotal = useCart((state) => state.getTotal);
+  const { t } = useTranslation();
   
   const [mounted, setMounted] = useState(false);
   
@@ -52,7 +54,7 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
           <div className="flex items-center justify-between border-b px-6 py-4">
             <div className="flex items-center space-x-2">
               <ShoppingCart className="h-5 w-5" />
-              <h2 className="text-lg font-semibold">Shopping Cart</h2>
+              <h2 className="text-lg font-semibold">{t('cart.title')}</h2>
             </div>
             <button
               onClick={() => onOpenChange(false)}
@@ -68,7 +70,7 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
             {items.length === 0 ? (
               <div className="flex h-full flex-col items-center justify-center text-center">
                 <ShoppingCart className="h-12 w-12 text-gray-300 mb-4" />
-                <p className="text-gray-500">Your cart is empty</p>
+                <p className="text-gray-500">{t('cart.empty')}</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -125,7 +127,7 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
           {items.length > 0 && (
             <div className="border-t px-6 py-4 space-y-4">
               <div className="flex items-center justify-between text-lg font-semibold">
-                <span>Total</span>
+                <span>{t('cart.total')}</span>
                 <span>${total.toFixed(2)}</span>
               </div>
               <Link href="/checkout" onClick={() => onOpenChange(false)}>
@@ -133,14 +135,14 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
                   className="w-full bg-[#003c6f] hover:bg-[#002e54] text-white"
                   size="lg"
                 >
-                  Proceed to Checkout
+                  {t('cart.checkout')}
                 </Button>
               </Link>
               <button
                 onClick={clearCart}
                 className="w-full text-sm text-gray-500 hover:text-red-500 transition-colors"
               >
-                Clear Cart
+                {t('cart.continueShopping')}
               </button>
             </div>
           )}
