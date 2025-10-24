@@ -35,23 +35,20 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
 
   return (
     <>
-      {/* Backdrop */}
       {open && (
         <div 
-          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm"
           onClick={() => onOpenChange(false)}
         />
       )}
       
-      {/* Drawer */}
       <div
-        className={`fixed right-0 top-0 z-50 h-full w-full max-w-md transform bg-white shadow-2xl transition-transform duration-300 ease-in-out ${
+        className={`fixed right-0 top-0 z-[70] h-full w-full max-w-md transform bg-white shadow-2xl transition-transform duration-300 ease-in-out ${
           open ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         <div className="flex h-full flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between border-b px-6 py-4">
+          <div className="flex h-15 items-center justify-between border-b px-6">
             <div className="flex items-center space-x-2">
               <ShoppingCart className="h-5 w-5" />
               <h2 className="text-lg font-semibold">{t('cart.title')}</h2>
@@ -65,7 +62,6 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
             </button>
           </div>
 
-          {/* Cart Items */}
           <div className="flex-1 overflow-y-auto px-6 py-4">
             {items.length === 0 ? (
               <div className="flex h-full flex-col items-center justify-center text-center">
@@ -123,7 +119,6 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
             )}
           </div>
 
-          {/* Footer */}
           {items.length > 0 && (
             <div className="border-t px-6 py-4 space-y-4">
               <div className="flex items-center justify-between text-lg font-semibold">
