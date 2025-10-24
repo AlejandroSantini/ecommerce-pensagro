@@ -35,12 +35,12 @@ export function OrderSummary({ showTitle = true }: OrderSummaryProps) {
         ) : (
           items.map((item) => (
             <div key={item.id} className="flex space-x-4">
-              <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border bg-white">
+              <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border bg-white flex items-center justify-center">
                 {item.imagen && (
                   <img
                     src={item.imagen}
                     alt={item.nombre}
-                    className="h-full w-full object-cover"
+                    className="w-full h-full object-cover"
                   />
                 )}
                 {/* Badge de cantidad */}

@@ -72,12 +72,12 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
               <div className="space-y-4">
                 {items.map((item) => (
                   <div key={item.id} className="flex space-x-4 border-b pb-4">
-                    <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border bg-gray-100">
+                    <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border bg-white flex items-center justify-center">
                       {item.imagen && (
                         <img
                           src={item.imagen}
                           alt={item.nombre}
-                          className="h-full w-full object-cover"
+                          className="w-full h-full object-cover"
                         />
                       )}
                     </div>

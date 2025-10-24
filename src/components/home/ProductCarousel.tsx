@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from '@/hooks/useTranslation';
 import type { Product } from '@/types/product';
@@ -88,28 +87,20 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
                 key={product.id}
                 className="flex-none w-60 border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
               >
-                <div className="h-36 bg-gray-100 flex items-center justify-center">
+                <div className="w-full h-48 bg-white flex items-center justify-center overflow-hidden">
                   {product.imagen ? (
-                    <div className="relative w-full h-full">
-                      <Image 
-                        src={product.imagen} 
-                        alt={product.nombre} 
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 240px"
-                        onError={() => {
-                          const imgElement = document.getElementById(`product-img-${product.id}`);
-                          if (imgElement) {
-                            imgElement.style.display = 'none';
-                            const parent = imgElement.parentElement;
-                            if (parent) {
-                              parent.innerHTML = `<span class="text-gray-400">${t('products.noImage')}</span>`;
-                            }
-                          }
-                        }}
-                        id={`product-img-${product.id}`}
-                      />
-                    </div>
+                    <img 
+                      src={product.imagen} 
+                      alt={product.nombre}
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const parent = e.currentTarget.parentElement;
+                        if (parent) {
+                          parent.innerHTML = `<span class="text-gray-400">${t('products.noImage')}</span>`;
+                        }
+                      }}
+                    />
                   ) : (
                     <span className="text-gray-400">{t('products.noImage')}</span>
                   )}

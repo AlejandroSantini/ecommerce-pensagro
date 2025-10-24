@@ -47,16 +47,13 @@ export function LoginForm() {
     setIsLoading(true);
 
     try {
-      // Llamar al endpoint de login usando userService
       const response = await userService.login({
         email: data.email,
         password: data.password,
       });
 
-      // Guardar el token y los datos del usuario usando el contexto de autenticación
       authLogin(response.token, response.user);
 
-      // Redirigir al usuario a la página de productos
       router.push('/products');
     } catch (err: unknown) {
       if (err instanceof Error) {

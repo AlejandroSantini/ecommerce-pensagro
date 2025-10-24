@@ -68,12 +68,12 @@ export default function ConfirmacionPage() {
           <div className="space-y-4 mb-6 pb-6 border-b">
             {order.items.map((item) => (
               <div key={item.id} className="flex items-center space-x-4">
-                <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border bg-gray-50">
+                <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border bg-white flex items-center justify-center">
                   {item.imagen && (
                     <img
                       src={item.imagen}
                       alt={item.nombre}
-                      className="h-full w-full object-cover"
+                      className="w-full h-full object-cover"
                     />
                   )}
                   <div className="absolute -top-2 -right-2 bg-[#003c6f] text-white text-xs font-semibold rounded-full h-6 w-6 flex items-center justify-center">
