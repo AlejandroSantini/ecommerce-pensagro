@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Sparkles } from 'lucide-react';
-import { BlogCard } from '@/components/blog/BlogCard';
+import BlogCard from '@/components/blog/BlogCard';
 import { BlogFilters } from '@/components/blog/BlogFilters';
 import { useTranslation } from '@/hooks/useTranslation';
 
