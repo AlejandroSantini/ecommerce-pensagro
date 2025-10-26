@@ -103,6 +103,14 @@ export function Footer() {
             <ul className="space-y-2.5 text-sm">
               <li>
                 <Link
+                  href="/nosotros"
+                  className="text-gray-600 transition-colors hover:text-gray-900"
+                >
+                  {t('footer.help.aboutUs')}
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/ayuda"
                   className="text-gray-600 transition-colors hover:text-gray-900"
                 >

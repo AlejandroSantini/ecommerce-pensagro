@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Card, CardImage, CardContent } from '@/components/ui/card';
 import { ShoppingCart, Filter } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
 import { ProductFilters } from '@/components/productos/ProductFilters';
@@ -382,8 +383,8 @@ export default function ProductsPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
-                <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
-                  <div className="w-full h-64 bg-white relative flex items-center justify-center overflow-hidden">
+                <Card key={product.id} className="flex flex-col h-full">
+                  <CardImage className="aspect-[4/3]">
                     <img
                       src={product.imagen}
                       alt={product.nombre}
@@ -393,20 +394,22 @@ export default function ProductsPage() {
                       }}
                     />
                     {product.destacado && (
-                      <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 px-2 py-1 rounded text-xs font-semibold">
+                      <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 px-2 py-1 rounded text-xs font-semibold z-10">
                         Destacado
                       </span>
                     )}
                     {product.isCombo && (
-                      <span className="absolute top-2 left-2 bg-[#003c6f] text-white px-2 py-1 rounded text-xs font-semibold">
+                      <span className="absolute top-2 left-2 bg-[#003c6f] text-white px-2 py-1 rounded text-xs font-semibold z-10">
                         Combo
                       </span>
                     )}
-                  </div>
+                    {/* Blue top line */}
+                    <div className="absolute top-0 left-0 w-full h-1 bg-[#003c6f]"></div>
+                  </CardImage>
                   
-                  <div className="p-4 flex flex-col flex-grow">
-                    <h3 className="font-semibold text-lg mb-2 line-clamp-2">{product.nombre}</h3>
-                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.descripcion}</p>
+                  <CardContent className="flex flex-col flex-grow">
+                    <h3 className="font-medium text-lg text-gray-800 mb-2 line-clamp-2">{product.nombre}</h3>
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-2 flex-grow">{product.descripcion}</p>
                     
                     <div className="mb-3">
                       <span className="text-2xl font-bold text-green-600">
@@ -414,7 +417,7 @@ export default function ProductsPage() {
                       </span>
                     </div>
                     
-                    <div className="mt-auto grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-2">
                       <Button 
                         variant="outline" 
                         className="border-[#003c6f] text-[#003c6f] hover:bg-[#003c6f] hover:text-white"
@@ -429,8 +432,8 @@ export default function ProductsPage() {
                         </Link>
                       </Button>
                     </div>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           )}

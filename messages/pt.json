@@ -7,6 +7,7 @@
   "nav": {
     "products": "Produtos",
     "categories": "Categorias",
+    "blog": "Novidades",
     "about": "Sobre Nós",
     "contact": "Contato",
     "search": "Buscar"
@@ -41,6 +42,22 @@
       "description": "Eletrificadores, cercas elétricas e sistemas para o manejo eficiente do seu gado. Qualidade PensAgro.",
       "viewProducts": "Ver Produtos",
       "learnMore": "Saiba Mais"
+    },
+    "welcomeModal": {
+      "experience": "🌟 8 anos de experiência",
+      "tagline": "Tecnologia Agropecuária",
+      "title": "Junte-se à Comunidade Pensagro!",
+      "description": "Receba um {discount} para sua próxima compra e tenha acesso a conteúdo exclusivo sobre pecuária, boas práticas e nossos produtos.",
+      "discountAmount": "cupom de 10% de desconto",
+      "emailLabel": "Endereço de e-mail",
+      "emailPlaceholder": "seu@email.com",
+      "submitButton": "Obter meu desconto",
+      "submitting": "Enviando...",
+      "privacy": "Não compartilharemos suas informações. Você pode cancelar a qualquer momento.",
+      "success": {
+        "title": "Bem-vindo!",
+        "message": "Verifique seu e-mail para obter seu cupom de desconto de 10%"
+      }
     },
     "features": {
       "sectionTitle": "Mais de 30 Anos no Agro Argentino",
@@ -212,8 +229,9 @@
     },
     "help": {
       "title": "Ajuda",
+      "aboutUs": "Sobre Nós",
       "faq": "Perguntas Frequentes",
-      "shipping": "Informação de Envio",
+      "shipping": "Informações de Envio",
       "warranty": "Garantias",
       "contact": "Contato"
     },
@@ -221,10 +239,70 @@
       "title": "Contato",
       "address": "Buenos Aires, Argentina",
       "phone": "+54 9 11 3456-7890",
-      "email": "ventas@pensagro.com"
+      "email": "vendas@pensagro.com"
     },
     "copyright": "© {year} PensAgro - Eficiência Pecuária. Todos os direitos reservados.",
     "terms": "Termos e Condições",
     "privacy": "Política de Privacidade"
+  },
+  "contact": {
+    "title": "Contato",
+    "subtitle": "Estamos aqui para ajudá-lo. Entre em contato conosco!",
+    "ourInfo": "Nossa Informação",
+    "sendMessage": "Envie-nos uma Mensagem",
+    "address": "Endereço",
+    "phone": "Telefone",
+    "email": "Email",
+    "hours": "Horário de Atendimento",
+    "weekdays": "Segunda a Sexta",
+    "weekend": "Sábado e Domingo",
+    "closed": "Fechado",
+    "viewOnMaps": "Ver localização no Google Maps",
+    "name": "Nome",
+    "namePlaceholder": "Seu nome completo",
+    "emailPlaceholder": "seu@email.com",
+    "message": "Mensagem",
+    "messagePlaceholder": "Escreva sua consulta aqui...",
+    "sendButton": "Enviar Mensagem",
+    "sending": "Enviando...",
+    "successMessage": "Mensagem enviada com sucesso! Responderemos em breve."
+  },
+  "about": {
+    "title": "Nossa História",
+    "subtitle": "Nascemos da necessidade, crescemos com a inovação e olhamos para o futuro com um compromisso: regenerar o campo.",
+    "inventorsTitle": "Invenções por e para Pecuaristas",
+    "inventorsText1": "Pensagro nasceu da experiência direta no campo. Nosso fundador, Pablo Etcheverry, enfrentava os mesmos desafios diários que qualquer produtor em sua Estância Santa Marta. A necessidade de otimizar o tempo e melhorar a eficiência o levou a criar suas próprias soluções.",
+    "inventorsText2": "Desde porteiras automáticas que economizam incontáveis horas até seringas telescópicas que facilitam o manejo sanitário, cada um de nossos produtos surge de um problema real. Esta é nossa garantia: criamos ferramentas funcionais, duráveis e práticas porque vivemos e entendemos a realidade do trabalho rural.",
+    "talkToUs": "Fale conosco",
+    "mission": "Missão",
+    "missionText": "Desenvolver, produzir e comercializar produtos inovadores para o setor pecuário, gerando impacto positivo nos sistemas de trabalho e colaborando na melhoria dos custos operacionais da atividade.",
+    "vision": "Visão",
+    "visionText": "Contribuir nos avanços da pecuária, fazendo ênfase na 'Conservação dos Recursos' e nas 'Boas Práticas Pecuárias', buscando a eficiência e a redução de custos ao simplificar as tarefas rurais.",
+    "values": "Valores",
+    "valuesText": "Oferecer produtos inovadores sob padrões de comércio justo, ter consciência sobre as práticas rurais, o respeito pelo meio ambiente e o compromisso de toda nossa equipe com estes princípios.",
+    "philosophyTitle": "Nossa Filosofia: Rumo a um Futuro Regenerativo",
+    "philosophyText": "Acreditamos que a pecuária pode e deve ser uma força para a regeneração de nossos ecossistemas. Mais que um fornecedor, queremos ser seu aliado integral no campo. Nossa visão é eliminar as barreiras para que você possa adotar práticas regenerativas de maneira simples, rentável e eficiente, construindo juntos um legado sustentável.",
+    "expertSupport": "Acompanhamento Especializado",
+    "expertSupportText": "Guiamos você passo a passo na transição para um modelo de negócio mais rentável e sustentável.",
+    "practicalKnowledge": "Conhecimento Prático",
+    "practicalKnowledgeText": "Compartilhamos ferramentas e capacitações para que você domine as novas tecnologias e otimize seu manejo.",
+    "validateEffort": "Validamos seu Esforço",
+    "validateEffortText": "Ajudamos você a certificar suas boas práticas para que seu trabalho seja reconhecido e você acesse novos mercados.",
+    "growTogether": "Crescemos Juntos",
+    "growTogetherText": "Fomentamos uma comunidade de produtores inovadores para compartilhar experiências e fortalecer o setor.",
+    "ctaTitle": "Pronto para transformar seu campo?",
+    "ctaText": "Junte-se a centenas de produtores que já estão trabalhando de forma mais eficiente e sustentável com Pensagro.",
+    "viewProducts": "Ver Produtos",
+    "contactNow": "Contatar Agora"
+  },
+  "blog": {
+    "title": "Novidades Pensagro",
+    "subtitle": "Guias especializados, conselhos práticos e as últimas inovações para impulsionar a eficiência em seu campo.",
+    "searchPlaceholder": "Buscar por título...",
+    "allCategories": "Todas as Categorias",
+    "resultsCount": "{count} {count, plural, =1 {artigo} other {artigos}}",
+    "noResults": "Nenhum artigo encontrado correspondente à sua pesquisa.",
+    "readMore": "Ler artigo completo"
   }
 }
+

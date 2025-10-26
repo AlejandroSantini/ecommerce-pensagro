@@ -7,6 +7,7 @@
   "nav": {
     "products": "Productos",
     "categories": "Categorías",
+    "blog": "Novedades",
     "about": "Nosotros",
     "contact": "Contacto",
     "search": "Buscar"
@@ -41,6 +42,22 @@
       "description": "Electrificadores, alambrados y sistemas para el manejo eficiente de tu hacienda. Calidad PensAgro.",
       "viewProducts": "Ver Productos",
       "learnMore": "Conocé Más"
+    },
+    "welcomeModal": {
+      "experience": "🌟 8 años de experiencia",
+      "tagline": "Tecnología Agropecuaria",
+      "title": "¡Únete a la Comunidad Pensagro!",
+      "description": "Recibe un {discount} para tu próxima compra y accede a contenido exclusivo sobre ganadería, buenas prácticas y nuestros productos.",
+      "discountAmount": "cupón del 10% de descuento",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "tu@email.com",
+      "submitButton": "Obtener mi descuento",
+      "submitting": "Enviando...",
+      "privacy": "No compartiremos tu información. Puedes darte de baja en cualquier momento.",
+      "success": {
+        "title": "¡Bienvenido!",
+        "message": "Revisa tu correo para obtener tu cupón de descuento del 10%"
+      }
     },
     "features": {
       "sectionTitle": "Más de 30 Años en el Agro Argentino",
@@ -212,6 +229,7 @@
     },
     "help": {
       "title": "Ayuda",
+      "aboutUs": "Sobre Nosotros",
       "faq": "Preguntas Frecuentes",
       "shipping": "Información de Envío",
       "warranty": "Garantías",
@@ -226,5 +244,65 @@
     "copyright": "© {year} PensAgro - Eficiencia Ganadera. Todos los derechos reservados.",
     "terms": "Términos y Condiciones",
     "privacy": "Política de Privacidad"
+  },
+  "contact": {
+    "title": "Contacto",
+    "subtitle": "Estamos aquí para ayudarte. ¡Ponte en contacto con nosotros!",
+    "ourInfo": "Nuestra Información",
+    "sendMessage": "Envíanos un Mensaje",
+    "address": "Dirección",
+    "phone": "Teléfono",
+    "email": "Email",
+    "hours": "Horarios de Atención",
+    "weekdays": "Lunes a Viernes",
+    "weekend": "Sábado y Domingo",
+    "closed": "Cerrado",
+    "viewOnMaps": "Ver ubicación en Google Maps",
+    "name": "Nombre",
+    "namePlaceholder": "Tu nombre completo",
+    "emailPlaceholder": "tu@email.com",
+    "message": "Mensaje",
+    "messagePlaceholder": "Escribe tu consulta aquí...",
+    "sendButton": "Enviar Mensaje",
+    "sending": "Enviando...",
+    "successMessage": "¡Mensaje enviado con éxito! Te responderemos pronto."
+  },
+  "about": {
+    "title": "Nuestra Historia",
+    "subtitle": "Nacimos de la necesidad, crecimos con la innovación y miramos al futuro con un compromiso: regenerar el campo.",
+    "inventorsTitle": "Inventos por y para Ganaderos",
+    "inventorsText1": "Pensagro nació de la experiencia directa en el campo. Nuestro fundador, Pablo Etcheverry, enfrentaba los mismos desafíos diarios que cualquier productor en su Estancia Santa Marta. La necesidad de optimizar el tiempo y mejorar la eficiencia lo llevó a crear sus propias soluciones.",
+    "inventorsText2": "Desde tranqueras automáticas que ahorran incontables horas hasta jeringas telescópicas que facilitan el manejo sanitario, cada uno de nuestros productos surge de un problema real. Esta es nuestra garantía: creamos herramientas funcionales, duraderas y prácticas porque vivimos y entendemos la realidad del trabajo rural.",
+    "talkToUs": "Habla con nosotros",
+    "mission": "Misión",
+    "missionText": "Desarrollar, producir y comercializar productos innovadores para el sector ganadero, generando impacto positivo en los sistemas de trabajo y colaborando en la mejora de costos operativos de la actividad.",
+    "vision": "Visión",
+    "visionText": "Contribuir en los avances de la ganadería, haciendo énfasis en la 'Conservación de los Recursos' y las 'Buenas Prácticas Ganaderas', buscando la eficiencia y la reducción de costos al simplificar las tareas rurales.",
+    "values": "Valores",
+    "valuesText": "Ofrecer productos innovadores bajo estándares de comercio justo, tenener conciencia sobre las prácticas rurales, el respeto por el medio ambiente y el compromiso de todo nuestro equipo con estos principios.",
+    "philosophyTitle": "Nuestra Filosofía: Hacia un Futuro Regenerativo",
+    "philosophyText": "Creemos que la ganadería puede y debe ser una fuerza para la regeneración de nuestros ecosistemas. Más que un proveedor, queremos ser tu aliado integral en el campo. Nuestra visión es eliminar las barreras para que puedas adoptar prácticas regenerativas de manera simple, rentable y eficiente, construyendo juntos un legado sostenible.",
+    "expertSupport": "Acompañamiento Experto",
+    "expertSupportText": "Te guiamos paso a paso en la transición hacia un modelo de negocio más rentable y sostenible.",
+    "practicalKnowledge": "Conocimiento Práctico",
+    "practicalKnowledgeText": "Compartimos herramientas y capacitaciones para que domines las nuevas tecnologías y optimices tu manejo.",
+    "validateEffort": "Validamos tu Esfuerzo",
+    "validateEffortText": "Te ayudamos a certificar tus buenas prácticas para que tu trabajo sea reconocido y accedas a nuevos mercados.",
+    "growTogether": "Crecemos Juntos",
+    "growTogetherText": "Fomentamos una comunidad de productores innovadores para compartir experiencias y fortalecer el sector.",
+    "ctaTitle": "¿Listo para transformar tu campo?",
+    "ctaText": "Únete a cientos de productores que ya están trabajando de manera más eficiente y sostenible con Pensagro.",
+    "viewProducts": "Ver Productos",
+    "contactNow": "Contactar Ahora"
+  },
+  "blog": {
+    "title": "Novedades Pensagro",
+    "subtitle": "Guías expertas, consejos prácticos y las últimas innovaciones para potenciar la eficiencia en tu campo.",
+    "searchPlaceholder": "Buscar por título...",
+    "allCategories": "Todas las categorías",
+    "resultsCount": "{count} {count, plural, =1 {artículo} other {artículos}}",
+    "noResults": "No se encontraron artículos que coincidan con tu búsqueda.",
+    "readMore": "Leer artículo completo"
   }
 }
+

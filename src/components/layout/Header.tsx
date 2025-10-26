@@ -1,7 +1,3 @@
-// Header.tsx
-// Header inspirado en Patagonia.com: limpio, minimalista, funcional
-// Sticky header con navegación simple, search, cart y user menu
-
 import Link from 'next/link';
 import Image from 'next/image';
 import { ShoppingCart, User, Menu, Search, LogOut, X } from 'lucide-react';
@@ -30,7 +26,7 @@ export function Header() {
 
   const navLinks = [
     { href: '/productos', labelKey: 'nav.products' },
-    { href: '/categorias', labelKey: 'nav.categories' },
+    { href: '/novedades', labelKey: 'nav.blog' },
     { href: '/nosotros', labelKey: 'nav.about' },
     { href: '/contacto', labelKey: 'nav.contact' },
   ];

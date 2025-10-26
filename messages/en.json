@@ -17,6 +17,7 @@
   "nav": {
     "products": "Products",
     "categories": "Categories",
+    "blog": "News",
     "about": "About",
     "contact": "Contact",
     "search": "Search"
@@ -27,6 +28,22 @@
       "description": "Electrifiers, electric fencing and systems for efficient livestock management. PensAgro Quality.",
       "viewProducts": "View Products",
       "learnMore": "Learn More"
+    },
+    "welcomeModal": {
+      "experience": "🌟 8 years of experience",
+      "tagline": "Agricultural Technology",
+      "title": "Join the Pensagro Community!",
+      "description": "Receive a {discount} for your next purchase and get access to exclusive content about livestock, best practices and our products.",
+      "discountAmount": "10% discount coupon",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "your@email.com",
+      "submitButton": "Get my discount",
+      "submitting": "Sending...",
+      "privacy": "We won't share your information. You can unsubscribe at any time.",
+      "success": {
+        "title": "Welcome!",
+        "message": "Check your email to get your 10% discount coupon"
+      }
     },
     "features": {
       "sectionTitle": "Over 30 Years in Argentine Agriculture",
@@ -212,8 +229,9 @@
     },
     "help": {
       "title": "Help",
+      "aboutUs": "About Us",
       "faq": "FAQ",
-      "shipping": "Shipping Info",
+      "shipping": "Shipping Information",
       "warranty": "Warranties",
       "contact": "Contact"
     },
@@ -221,10 +239,70 @@
       "title": "Contact",
       "address": "Buenos Aires, Argentina",
       "phone": "+54 9 11 3456-7890",
-      "email": "ventas@pensagro.com"
+      "email": "sales@pensagro.com"
     },
     "copyright": "© {year} PensAgro - Livestock Efficiency. All rights reserved.",
-    "terms": "Terms of Service",
+    "terms": "Terms and Conditions",
     "privacy": "Privacy Policy"
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "We're here to help you. Get in touch with us!",
+    "ourInfo": "Our Information",
+    "sendMessage": "Send us a Message",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "hours": "Business Hours",
+    "weekdays": "Monday to Friday",
+    "weekend": "Saturday and Sunday",
+    "closed": "Closed",
+    "viewOnMaps": "View location on Google Maps",
+    "name": "Name",
+    "namePlaceholder": "Your full name",
+    "emailPlaceholder": "your@email.com",
+    "message": "Message",
+    "messagePlaceholder": "Write your inquiry here...",
+    "sendButton": "Send Message",
+    "sending": "Sending...",
+    "successMessage": "Message sent successfully! We'll respond soon."
+  },
+  "about": {
+    "title": "Our Story",
+    "subtitle": "Born from necessity, grown with innovation, and looking to the future with a commitment: to regenerate the countryside.",
+    "inventorsTitle": "Inventions by and for Ranchers",
+    "inventorsText1": "Pensagro was born from direct experience in the field. Our founder, Pablo Etcheverry, faced the same daily challenges as any producer at his Estancia Santa Marta. The need to optimize time and improve efficiency led him to create his own solutions.",
+    "inventorsText2": "From automatic gates that save countless hours to telescopic syringes that facilitate sanitary management, each of our products arises from a real problem. This is our guarantee: we create functional, durable and practical tools because we live and understand the reality of rural work.",
+    "talkToUs": "Talk to us",
+    "mission": "Mission",
+    "missionText": "Develop, produce and market innovative products for the livestock sector, generating positive impact on work systems and collaborating in improving operational costs of the activity.",
+    "vision": "Vision",
+    "visionText": "Contribute to advances in livestock farming, emphasizing 'Resource Conservation' and 'Good Livestock Practices', seeking efficiency and cost reduction by simplifying rural tasks.",
+    "values": "Values",
+    "valuesText": "Offer innovative products under fair trade standards, have awareness of rural practices, respect for the environment and the commitment of our entire team with these principles.",
+    "philosophyTitle": "Our Philosophy: Towards a Regenerative Future",
+    "philosophyText": "We believe that livestock farming can and should be a force for the regeneration of our ecosystems. More than a supplier, we want to be your integral ally in the field. Our vision is to eliminate barriers so you can adopt regenerative practices in a simple, profitable and efficient way, building together a sustainable legacy.",
+    "expertSupport": "Expert Support",
+    "expertSupportText": "We guide you step by step in the transition to a more profitable and sustainable business model.",
+    "practicalKnowledge": "Practical Knowledge",
+    "practicalKnowledgeText": "We share tools and training so you master new technologies and optimize your management.",
+    "validateEffort": "We Validate Your Effort",
+    "validateEffortText": "We help you certify your good practices so your work is recognized and you access new markets.",
+    "growTogether": "We Grow Together",
+    "growTogetherText": "We foster a community of innovative producers to share experiences and strengthen the sector.",
+    "ctaTitle": "Ready to transform your farm?",
+    "ctaText": "Join hundreds of producers who are already working more efficiently and sustainably with Pensagro.",
+    "viewProducts": "View Products",
+    "contactNow": "Contact Now"
+  },
+  "blog": {
+    "title": "Pensagro News",
+    "subtitle": "Expert guides, practical tips and the latest innovations to boost efficiency on your farm.",
+    "searchPlaceholder": "Search by title...",
+    "allCategories": "All Categories",
+    "resultsCount": "{count} {count, plural, =1 {article} other {articles}}",
+    "noResults": "No articles found matching your search.",
+    "readMore": "Read full article"
   }
 }
+

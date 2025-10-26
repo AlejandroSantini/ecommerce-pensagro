@@ -2,6 +2,7 @@ import { Hero } from '@/components/home/Hero';
 import { FeatureSection } from '@/components/home/FeatureSection';
 import { ProductCarousel } from '@/components/home/ProductCarousel';
 import { CategoryGrid } from '@/components/home/CategoryGrid';
+import { WelcomeModal } from '@/components/home/WelcomeModal';
 import { useTranslation } from '@/hooks/useTranslation';
 
 // Datos de muestra para productos destacados
@@ -197,6 +198,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
+      <WelcomeModal />
       <Hero />
       <FeatureSection />
       
