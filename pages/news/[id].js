@@ -5,7 +5,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import { useTranslation } from '@/hooks/useTranslation';
 
-// Mock blog posts data (same as in index)
 const BLOG_POSTS = [
   {
     id: 'guia-cerca-electrica',
@@ -14,7 +13,7 @@ const BLOG_POSTS = [
     author: 'Equipo Pensagro',
     date: '15 de Enero, 2025',
     readTime: '8 min',
-    image: '/mock/pel 418.png',
+    image: '/mock/pel%20418.png',
     category: 'Instalación',
     tags: ['instalación', 'principiantes', 'electrificadores', '+1'],
     content: `
@@ -74,7 +73,7 @@ const BLOG_POSTS = [
     author: 'Juan Carlos Rivas',
     date: '10 de Enero, 2025',
     readTime: '6 min',
-    image: '/mock/PEL S1000.png',
+    image: '/mock/PEL%20S1000%20(F).png',
     category: 'Destacado',
     tags: ['energía solar', 'electrificadores', 'sostenibilidad', '+1'],
     content: `
@@ -116,7 +115,7 @@ const BLOG_POSTS = [
     author: 'Equipo Pensagro',
     date: '5 de Enero, 2025',
     readTime: '7 min',
-    image: '/mock/86000 w portada.png',
+    image: '/mock/86000%20w%20portada.png',
     category: 'Destacado',
     tags: ['pesaje', 'ganado', 'tecnología', '+1'],
     content: `
@@ -171,7 +170,6 @@ const BLOG_POSTS = [
       <p>Invertir en un buen sistema de pesaje es invertir en información, y la información es poder en la ganadería moderna. Elige un sistema que se ajuste a tu escala de operación y verás resultados positivos en tu rentabilidad en el corto plazo.</p>
     `,
   },
-  // Más posts pueden agregarse aquí
 ];
 
 export default function BlogArticlePage() {
@@ -179,21 +177,19 @@ export default function BlogArticlePage() {
   const { id } = router.query;
   const { t } = useTranslation();
 
-  // Buscar el artículo por ID
   const article = BLOG_POSTS.find(post => post.id === id);
 
-  // Artículos relacionados (excluye el actual)
   const relatedArticles = BLOG_POSTS.filter(post => post.id !== id).slice(0, 3);
 
   if (!article) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Artículo no encontrado</h1>
-          <Link href="/novedades">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">{t('blog.articleNotFound')}</h1>
+          <Link href="/news">
             <Button className="bg-[#003c6f] hover:bg-[#002b50]">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Volver a Novedades
+              {t('blog.backToNews')}
             </Button>
           </Link>
         </div>
@@ -205,19 +201,16 @@ export default function BlogArticlePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-ç
       <div className="bg-white border-b">
         <div className="container mx-auto px-4 py-4">
-          <Link href="/novedades">
+          <Link href="/news">
             <Button variant="ghost" className="text-gray-600 hover:text-gray-900">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Volver a Novedades
+              {t('blog.backToNews')}
             </Button>
           </Link>
         </div>
-      </div>
-
-      <div className="bg-white border-b">
+      </div>      <div className="bg-white border-b">
         <div className="container mx-auto px-4 py-12 max-w-4xl">
           <div className="mb-4">
             <span className="bg-cyan-500 text-white text-sm font-semibold px-3 py-1 rounded-full">
@@ -240,7 +233,7 @@ export default function BlogArticlePage() {
             </div>
             <div className="flex items-center gap-2">
               <Clock className="h-5 w-5" />
-              <span>{article.readTime} de lectura</span>
+              <span>{article.readTime} {t('blog.readingTime')}</span>
             </div>
             <div>
               <span>{article.date}</span>
@@ -261,7 +254,7 @@ export default function BlogArticlePage() {
           <div className="flex items-center gap-3 pb-8 border-b">
             <span className="text-gray-600 font-medium flex items-center gap-2">
               <Share2 className="h-5 w-5" />
-              Compartir:
+              {t('blog.share')}
             </span>
             <Button
               variant="outline"
@@ -291,7 +284,6 @@ export default function BlogArticlePage() {
         </div>
       </div>
 
-      {/* Featured Image */}
       <div className="bg-gray-100">
         <div className="container mx-auto px-4 py-8 max-w-4xl">
           <div className="relative aspect-video rounded-lg overflow-hidden">
@@ -316,10 +308,10 @@ export default function BlogArticlePage() {
 
         {relatedArticles.length > 0 && (
           <div className="mt-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">Artículos Relacionados</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-8">{t('blog.relatedArticles')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedArticles.map((post) => (
-                <Link key={post.id} href={`/novedades/${post.id}`}>
+                <Link key={post.id} href={`/news/${post.id}`}>
                   <Card className="group h-full cursor-pointer">
                     <div className="relative aspect-video overflow-hidden">
                       <img

@@ -4,7 +4,6 @@ import BlogCard from '@/components/blog/BlogCard';
 import { BlogFilters } from '@/components/blog/BlogFilters';
 import { useTranslation } from '@/hooks/useTranslation';
 
-// Mock blog posts data
 const BLOG_POSTS = [
   {
     id: 'guia-cerca-electrica',
@@ -13,7 +12,7 @@ const BLOG_POSTS = [
     author: 'Equipo Pensagro',
     date: '15 de Enero, 2025',
     readTime: '8 min',
-    image: '/mock/pel 418.png',
+    image: '/mock/pel%20418.png',
     category: 'Instalación',
     tags: ['instalación', 'principiantes', 'electrificadores', '+1'],
   },
@@ -24,7 +23,7 @@ const BLOG_POSTS = [
     author: 'Juan Carlos Rivas',
     date: '10 de Enero, 2025',
     readTime: '6 min',
-    image: '/mock/PEL S1000.png',
+    image: '/mock/PEL%20S1000%20(F).png',
     category: 'Destacado',
     tags: ['energía solar', 'electrificadores', 'sostenibilidad', '+1'],
   },
@@ -35,7 +34,7 @@ const BLOG_POSTS = [
     author: 'Equipo Pensagro',
     date: '5 de Enero, 2025',
     readTime: '7 min',
-    image: '/mock/86000 w portada.png',
+    image: '/mock/86000%20w%20portada.png',
     category: 'Destacado',
     tags: ['pesaje', 'ganado', 'tecnología', '+1'],
   },
@@ -57,7 +56,7 @@ const BLOG_POSTS = [
     author: 'Dr. Carlos Mendoza',
     date: '20 de Diciembre, 2024',
     readTime: '12 min',
-    image: '/mock/carrretel con manija.png',
+    image: '/mock/carrretel%20con%20manija.png',
     category: 'Destacado',
     tags: ['sanidad', 'protocolos', 'jeringas', '+1'],
   },
@@ -76,7 +75,7 @@ const BLOG_POSTS = [
 
 const CATEGORIES = ['Instalación', 'Destacado'];
 
-export default function NovedadesPage() {
+export default function NewsPage() {
   const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -93,7 +92,6 @@ export default function NovedadesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
       <section className="relative h-[300px] bg-gradient-to-r from-[#003c6f] to-[#005a9c] overflow-hidden">
         <div className="absolute inset-0 bg-[url('/mock/pel\ 418.png')] bg-cover bg-center opacity-10" />
         <div className="relative container mx-auto px-4 h-full flex flex-col justify-center items-center text-center text-white">
@@ -120,7 +118,7 @@ export default function NovedadesPage() {
           <div className="mb-6">
             <p className="text-gray-600">
               <span className="font-semibold">{filteredPosts.length}</span>{' '}
-              {filteredPosts.length === 1 ? t('blog.resultsCount', { count: 1 }).split(' ')[1] : t('blog.resultsCount', { count: filteredPosts.length }).split(' ')[1]}
+              {filteredPosts.length === 1 ? t('blog.resultsSingle') : t('blog.resultsPlural')}
             </p>
           </div>
 

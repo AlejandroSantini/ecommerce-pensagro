@@ -296,13 +296,20 @@
     "contactNow": "Contatar Agora"
   },
   "blog": {
-    "title": "Novidades Pensagro",
-    "subtitle": "Guias especializados, conselhos práticos e as últimas inovações para impulsionar a eficiência em seu campo.",
+    "title": "Novidades PensAgro",
+    "subtitle": "Guias especializados, conselhos práticos e as últimas inovações para aumentar a eficiência na sua fazenda.",
     "searchPlaceholder": "Buscar por título...",
-    "allCategories": "Todas as Categorias",
+    "allCategories": "Todas as categorias",
     "resultsCount": "{count} {count, plural, =1 {artigo} other {artigos}}",
-    "noResults": "Nenhum artigo encontrado correspondente à sua pesquisa.",
-    "readMore": "Ler artigo completo"
+    "resultsSingle": "artigo",
+    "resultsPlural": "artigos",
+    "noResults": "Nenhum artigo encontrado para sua busca.",
+    "readMore": "Ler artigo completo",
+    "articleNotFound": "Artigo não encontrado",
+    "backToNews": "Voltar para Novidades",
+    "readingTime": "de leitura",
+    "share": "Compartilhar:",
+    "relatedArticles": "Artigos Relacionados"
   }
 }
 

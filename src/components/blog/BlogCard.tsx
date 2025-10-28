@@ -29,7 +29,7 @@ export default function BlogCard({
   const { t } = useTranslation();
 
   return (
-    <Link href={`/novedades/${id}`} className="block">
+    <Link href={`/news/${id}`} className="block">
       <Card className="group h-full cursor-pointer">
         <div className="absolute top-0 left-0 w-full h-1 bg-[#003c6f] z-10"></div>
 

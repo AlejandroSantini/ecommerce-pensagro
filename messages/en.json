@@ -296,13 +296,20 @@
     "contactNow": "Contact Now"
   },
   "blog": {
-    "title": "Pensagro News",
-    "subtitle": "Expert guides, practical tips and the latest innovations to boost efficiency on your farm.",
+    "title": "PensAgro News",
+    "subtitle": "Expert guides, practical advice and the latest innovations to boost efficiency on your farm.",
     "searchPlaceholder": "Search by title...",
-    "allCategories": "All Categories",
+    "allCategories": "All categories",
     "resultsCount": "{count} {count, plural, =1 {article} other {articles}}",
+    "resultsSingle": "article",
+    "resultsPlural": "articles",
     "noResults": "No articles found matching your search.",
-    "readMore": "Read full article"
+    "readMore": "Read full article",
+    "articleNotFound": "Article not found",
+    "backToNews": "Back to News",
+    "readingTime": "reading time",
+    "share": "Share:",
+    "relatedArticles": "Related Articles"
   }
 }
 

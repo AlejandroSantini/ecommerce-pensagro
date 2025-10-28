@@ -301,8 +301,15 @@
     "searchPlaceholder": "Buscar por título...",
     "allCategories": "Todas las categorías",
     "resultsCount": "{count} {count, plural, =1 {artículo} other {artículos}}",
+    "resultsSingle": "artículo",
+    "resultsPlural": "artículos",
     "noResults": "No se encontraron artículos que coincidan con tu búsqueda.",
-    "readMore": "Leer artículo completo"
+    "readMore": "Leer artículo completo",
+    "articleNotFound": "Artículo no encontrado",
+    "backToNews": "Volver a Novedades",
+    "readingTime": "de lectura",
+    "share": "Compartir:",
+    "relatedArticles": "Artículos Relacionados"
   }
 }
 
