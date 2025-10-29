@@ -9,6 +9,7 @@ export default function ConfirmacionPage() {
   const { orderId } = router.query;
   const [order, setOrder] = useState(null);
   const [mounted, setMounted] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setMounted(true);
@@ -16,21 +17,50 @@ export default function ConfirmacionPage() {
 
   useEffect(() => {
     if (mounted && orderId) {
-      const orders = JSON.parse(localStorage.getItem('pensagro-orders') || '[]');
-      const foundOrder = orders.find(o => o.id === parseInt(orderId));
+      console.log('🔍 Buscando orden con ID:', orderId);
       
-      if (foundOrder) {
-        setOrder(foundOrder);
-      } else {
-        router.push('/');
+      try {
+        const ordersString = localStorage.getItem('pensagro-orders');
+        
+        const orders = JSON.parse(ordersString || '[]');
+        
+        const foundOrder = orders.find(o => o.id === parseInt(orderId));
+        
+        if (foundOrder) {
+          setOrder(foundOrder);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error('❌ Error loading order:', error);
+        setLoading(false);
       }
+    } else if (mounted && !orderId) {
+      setLoading(false);
     }
-  }, [mounted, orderId, router]);
+  }, [mounted, orderId]);
 
-  if (!mounted || !order) {
+  if (!mounted || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#003c6f]"></div>
+      </div>
+    );
+  }
+
+  if (!order) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center bg-white rounded-lg shadow-sm p-8 max-w-md">
+          <p className="text-gray-900 font-semibold text-lg mb-2">No se encontró el pedido</p>
+          <p className="text-gray-600 mb-4">
+            El pedido #{orderId || 'desconocido'} no pudo ser cargado.
+          </p>
+          <Link href="/">
+            <Button className="bg-[#003c6f] hover:bg-[#002b50]">
+              Volver al inicio
+            </Button>
+          </Link>
+        </div>
       </div>
     );
   }
@@ -106,28 +136,59 @@ export default function ConfirmacionPage() {
           </div>
 
           <div className="space-y-4">
-            <div className="flex items-start space-x-3">
-              <MapPin className="h-5 w-5 text-gray-400 mt-0.5" />
-              <div>
-                <p className="text-sm font-medium text-gray-900">
-                  {order.nombre} {order.apellido}
+            {/* Tipo de envío */}
+            <div className="bg-gray-50 rounded-lg p-4 mb-4">
+              <p className="text-sm font-medium text-gray-900 mb-1">Tipo de envío</p>
+              <p className="text-sm text-gray-600">
+                {order.shippingMethod === 'pickup' ? '🏪 Retiro en Sucursal' : '🚚 Envío a Domicilio'}
+              </p>
+            </div>
+
+            {order.shippingMethod !== 'pickup' && (
+              <>
+                <div className="flex items-start space-x-3">
+                  <MapPin className="h-5 w-5 text-gray-400 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">
+                      {order.nombre} {order.apellido}
+                    </p>
+                    <p className="text-sm text-gray-600">{order.direccion}</p>
+                    <p className="text-sm text-gray-600">
+                      {order.ciudad}, {order.provincia} {order.codigoPostal}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <Mail className="h-5 w-5 text-gray-400" />
+                  <p className="text-sm text-gray-600">{order.email}</p>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <Phone className="h-5 w-5 text-gray-400" />
+                  <p className="text-sm text-gray-600">{order.telefono}</p>
+                </div>
+              </>
+            )}
+
+            {order.shippingMethod === 'pickup' && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-sm text-yellow-800 mb-2">
+                  <strong>Importante:</strong> Recordá pasar a retirar tu pedido por nuestra sucursal:
                 </p>
-                <p className="text-sm text-gray-600">{order.direccion}</p>
-                <p className="text-sm text-gray-600">
-                  {order.ciudad}, {order.provincia} {order.codigoPostal}
-                </p>
+                <div className="flex items-start space-x-2 mt-2">
+                  <MapPin className="h-4 w-4 text-yellow-700 mt-0.5 flex-shrink-0" />
+                  <div className="text-sm text-yellow-800">
+                    <p className="font-medium">Cochabamba 3236</p>
+                    <p>Martínez, Provincia de Buenos Aires</p>
+                    <p>Argentina</p>
+                    <p className="mt-2">
+                      <strong>Horario:</strong> Lunes a Viernes de 08:00 a 16:00
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <Mail className="h-5 w-5 text-gray-400" />
-              <p className="text-sm text-gray-600">{order.email}</p>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <Phone className="h-5 w-5 text-gray-400" />
-              <p className="text-sm text-gray-600">{order.telefono}</p>
-            </div>
+            )}
 
             {order.notas && (
               <div className="mt-4 pt-4 border-t">

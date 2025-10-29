@@ -4,9 +4,7 @@ import es from '../../messages/es.json';
 import en from '../../messages/en.json';
 import pt from '../../messages/pt.json';
 
-type Messages = typeof es;
-
-const messages: Record<string, Messages> = {
+const messages: Record<string, unknown> = {
   es,
   en,
   pt,

@@ -2,6 +2,7 @@ import { Hero } from '@/components/home/Hero';
 import { FeatureSection } from '@/components/home/FeatureSection';
 import { ProductCarousel } from '@/components/home/ProductCarousel';
 import { CategoryGrid } from '@/components/home/CategoryGrid';
+import { BlogCarousel } from '@/components/home/BlogCarousel';
 import { WelcomeModal } from '@/components/home/WelcomeModal';
 import { useTranslation } from '@/hooks/useTranslation';
 
@@ -191,16 +192,63 @@ const SAMPLE_CATEGORIES = [
   }
 ];
 
+const SAMPLE_BLOG_POSTS = [
+  {
+    id: 'guia-cerca-electrica',
+    title: 'Guía completa para instalar tu primera cerca eléctrica',
+    excerpt: 'Instalar una cerca eléctrica puede parecer complicado, pero con la guía correcta es un proceso sencillo. Aprende paso a paso cómo hacerlo de manera segura y eficiente.',
+    author: 'Equipo Pensagro',
+    date: '15 de Enero, 2025',
+    readTime: '8 min',
+    image: '/mock/pel%20418.png',
+    category: 'Instalación',
+    tags: ['instalación', 'principiantes', 'electrificadores', '+1'],
+  },
+  {
+    id: 'ventajas-electrificadores-solares',
+    title: '5 ventajas de usar electrificadores solares en tu campo',
+    excerpt: 'La energía solar está revolucionando el agro. Descubre por qué un electrificador solar no solo es una opción ecológica, sino también más rentable y eficiente.',
+    author: 'Juan Carlos Rivas',
+    date: '10 de Enero, 2025',
+    readTime: '6 min',
+    image: '/mock/PEL%20S1000%20(F).png',
+    category: 'Destacado',
+    tags: ['energía solar', 'electrificadores', 'sostenibilidad', '+1'],
+  },
+  {
+    id: 'sistema-pesaje-ganado',
+    title: 'Cómo elegir el sistema de pesaje adecuado para tu ganado',
+    excerpt: 'Pesar tu ganado es clave para la rentabilidad. Un buen sistema de pesaje te permite tomar decisiones informadas sobre nutrición, salud y ventas.',
+    author: 'Equipo Pensagro',
+    date: '5 de Enero, 2025',
+    readTime: '7 min',
+    image: '/mock/86000%20w%20portada.png',
+    category: 'Destacado',
+    tags: ['pesaje', 'ganado', 'tecnología', '+1'],
+  },
+  {
+    id: 'rentabilidad-cerca-electrica',
+    title: 'Cómo calcular la rentabilidad de tu cerca eléctrica',
+    excerpt: 'Una cerca eléctrica es una inversión que debe justificarse económicamente. Aprende a calcular el retorno de inversión y optimizar tus costos.',
+    author: 'María Elena Rodríguez',
+    date: '28 de Diciembre, 2024',
+    readTime: '10 min',
+    image: '/mock/varillas_12.png',
+    category: 'Destacado',
+    tags: ['rentabilidad', 'ROI', 'costos', '+1'],
+  }
+];
+
 export default function Home() {
   const { t } = useTranslation();
   const featuredProducts = SAMPLE_PRODUCTS;
   const categories = SAMPLE_CATEGORIES.filter(cat => cat.activo);
+  const blogPosts = SAMPLE_BLOG_POSTS;
 
   return (
     <div className="min-h-screen">
       <WelcomeModal />
       <Hero />
-      <FeatureSection />
       
       <div className="py-4 bg-gray-50">
         {featuredProducts.length > 0 && (
@@ -216,6 +264,12 @@ export default function Home() {
           )}
         </div>
       </div>
+      
+      {blogPosts.length > 0 && (
+        <BlogCarousel posts={blogPosts} />
+      )}
+      
+      <FeatureSection />
     </div>
   );
 }

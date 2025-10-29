@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, X, Package, Filter, Layers } from 'lucide-react';
+import { ChevronDown, X, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface Category {
   id: number;
@@ -37,6 +38,7 @@ export function ProductFilters({
   isOpen = false,
   onClose,
 }: ProductFiltersProps) {
+  const { t } = useTranslation();
   const [expandedCategories, setExpandedCategories] = useState<number[]>(selectedCategories);
 
   const toggleCategoryExpansion = (categoryId: number) => {
@@ -105,13 +107,13 @@ export function ProductFilters({
             <Filter className="h-5 w-5 text-[#003c6f]" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">Filtros</h2>
+            <h2 className="text-lg font-semibold text-gray-900">{t('products.filters')}</h2>
             {hasActiveFilters && (
               <p className="text-xs text-gray-500">{
                 (showCombos ? 1 : 0) + 
                 selectedCategories.length + 
                 selectedSubcategories.length
-              } activos</p>
+              } {t('filters.active')}</p>
             )}
           </div>
         </div>
@@ -122,7 +124,7 @@ export function ProductFilters({
             onClick={onClearFilters}
             className="text-xs text-gray-500 hover:text-[#003c6f] h-8"
           >
-            Limpiar todo
+            {t('filters.clearAll')}
           </Button>
         )}
       </div>
@@ -131,28 +133,21 @@ export function ProductFilters({
       <div>
         <button
           onClick={() => onCombosChange(!showCombos)}
-          className={`w-full group relative overflow-hidden rounded-xl p-4 transition-all duration-300 ${
+          className={`w-full group relative overflow-hidden rounded-xl p-4 transition-all duration-300 text-left ${
             showCombos
               ? 'bg-gradient-to-br from-[#003c6f] to-[#004d8f] text-white shadow-lg scale-[1.02]'
               : 'bg-gradient-to-br from-gray-50 to-gray-100 text-gray-700 hover:from-gray-100 hover:to-gray-200'
           }`}
         >
           <div className="flex items-center justify-between relative z-10">
-            <div className="flex items-center space-x-3">
-              <div className={`p-2 rounded-lg transition-colors ${
-                showCombos ? 'bg-white/20' : 'bg-white'
-              }`}>
-                <Package className={`h-5 w-5 ${showCombos ? 'text-white' : 'text-[#003c6f]'}`} />
-              </div>
-              <div className="text-left">
-                <div className="font-semibold">Combos y Ofertas</div>
-                <div className={`text-xs ${showCombos ? 'text-white/80' : 'text-gray-500'}`}>
-                  Ver paquetes especiales
-                </div>
+            <div>
+              <div className="font-semibold">{t('filters.combos')}</div>
+              <div className={`text-xs ${showCombos ? 'text-white/80' : 'text-gray-500'}`}>
+                {t('filters.combosDescription')}
               </div>
             </div>
             {showCombos && (
-              <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
+              <div className="h-2 w-2 rounded-full bg-white animate-pulse flex-shrink-0" />
             )}
           </div>
         </button>
@@ -165,7 +160,7 @@ export function ProductFilters({
         </div>
         <div className="relative flex justify-center">
           <span className="bg-white px-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Categorías
+            {t('nav.categories')}
           </span>
         </div>
       </div>
@@ -199,38 +194,23 @@ export function ProductFilters({
                   )}
                 </button>
 
-                {/* Botón de categoría */}
                 <button
-                  onClick={() => hasSubcategories && toggleCategoryExpansion(category.id)}
-                  className={`flex-1 group flex items-center justify-between p-3 rounded-xl transition-all duration-200 ${
+                  onClick={() => hasSubcategories ? toggleCategoryExpansion(category.id) : handleCategoryToggle(category.id)}
+                  className={`flex-1 group flex items-center justify-between p-3 rounded-xl transition-all duration-200 text-left ${
                     isSelected || hasSelectedSubcategories
                       ? 'bg-[#003c6f]/5 text-[#003c6f]'
                       : 'hover:bg-gray-50 text-gray-700'
                   }`}
                 >
-                  <div className="flex items-center space-x-3">
-                    <div className={`p-1.5 rounded-lg transition-colors ${
-                      isSelected || hasSelectedSubcategories
-                        ? 'bg-[#003c6f]/10'
-                        : 'bg-gray-100 group-hover:bg-gray-200'
-                    }`}>
-                      <Layers className={`h-4 w-4 ${
-                        isSelected || hasSelectedSubcategories
-                          ? 'text-[#003c6f]'
-                          : 'text-gray-600'
-                      }`} />
-                    </div>
-                    <span className="font-medium text-sm">{category.nombre}</span>
-                  </div>
+                  <span className="font-medium text-sm">{category.nombre}</span>
                   {hasSubcategories && (
-                    <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${
+                    <ChevronDown className={`h-4 w-4 transition-transform duration-200 flex-shrink-0 ${
                       isExpanded ? 'rotate-180' : ''
                     }`} />
                   )}
                 </button>
               </div>
 
-              {/* Subcategorías */}
               {hasSubcategories && isExpanded && (
                 <div className="ml-7 pl-4 border-l-2 border-gray-100 space-y-1 pt-1">
                   {category.subcategorias!.map((subcategory) => {
@@ -253,7 +233,6 @@ export function ProductFilters({
                           )}
                         </button>
 
-                        {/* Subcategoría */}
                         <button
                           onClick={() => handleSubcategoryToggle(category.id, subcategory.id)}
                           className={`flex-1 text-left px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
@@ -277,12 +256,11 @@ export function ProductFilters({
       {/* Filtros Activos - Chips */}
       {hasActiveFilters && (
         <div className="pt-4 border-t border-gray-100">
-          <div className="text-xs font-medium text-gray-500 mb-3">FILTROS APLICADOS</div>
+          <div className="text-xs font-medium text-gray-500 mb-3">{t('filters.applied').toUpperCase()}</div>
           <div className="flex flex-wrap gap-2">
             {showCombos && (
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-[#003c6f] to-[#004d8f] text-white">
-                <Package className="h-3 w-3" />
-                Combos
+                {t('filters.combos')}
                 <button
                   onClick={() => onCombosChange(false)}
                   className="ml-1 hover:bg-white/20 rounded-full p-0.5"
@@ -360,10 +338,10 @@ export function ProductFilters({
                 <Filter className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">Filtros</h2>
+                <h2 className="text-lg font-semibold text-gray-900">{t('products.filters')}</h2>
                 {hasActiveFilters && (
                   <p className="text-xs text-gray-500">
-                    {(showCombos ? 1 : 0) + selectedCategories.length + selectedSubcategories.length} activos
+                    {(showCombos ? 1 : 0) + selectedCategories.length + selectedSubcategories.length} {t('filters.active')}
                   </p>
                 )}
               </div>
@@ -389,7 +367,7 @@ export function ProductFilters({
               className="w-full bg-gradient-to-r from-[#003c6f] to-[#004d8f] hover:from-[#002b50] hover:to-[#003c6f] text-white shadow-lg"
               size="lg"
             >
-              Ver Productos
+              {t('filters.viewProducts')}
               {hasActiveFilters && (
                 <span className="ml-2 px-2 py-0.5 bg-white/20 rounded-full text-xs">
                   {(showCombos ? 1 : 0) + selectedCategories.length + selectedSubcategories.length}

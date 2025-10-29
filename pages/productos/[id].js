@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { useCart } from '@/hooks/useCart';
+import { useTranslation } from '@/hooks/useTranslation';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Minus, Plus } from 'lucide-react';
 import { ProductCarousel } from '@/components/home/ProductCarousel';
@@ -179,10 +180,11 @@ const SAMPLE_PRODUCTS = [
   },
 ];
 
-export default function ProductDetailPage() {
+export default function ProductDetail() {
   const router = useRouter();
   const { id } = router.query;
   const { addItem } = useCart();
+  const { t } = useTranslation();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -212,25 +214,27 @@ export default function ProductDetailPage() {
 
   if (!product) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <p className="text-center text-gray-500">Cargando producto...</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">{t('productDetail.loading')}</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Button
-        variant="ghost"
-        onClick={() => router.back()}
-        className="mb-6"
-      >
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Volver
-      </Button>
+              <Button
+          variant="ghost"
+          onClick={() => router.back()}
+          className="mb-8 flex items-center gap-2 hover:bg-gray-100"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          {t('productDetail.back')}
+        </Button>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Imagen del producto */}
         <div className="w-full h-96 bg-white rounded-lg overflow-hidden flex items-center justify-center">
           <img
             src={product.imagen}
@@ -242,17 +246,14 @@ export default function ProductDetailPage() {
           />
         </div>
 
-        {/* Detalles del producto */}
         <div>
           <h1 className="text-3xl font-bold mb-4">{product.nombre}</h1>
           
           {product.destacado && (
             <span className="inline-block bg-yellow-400 text-yellow-900 px-3 py-1 rounded text-sm font-semibold mb-4">
-              Producto Destacado
+              {t('productDetail.featured')}
             </span>
           )}
-
-          <p className="text-gray-700 mb-6">{product.descripcion}</p>
 
           <div className="bg-gray-50 p-4 rounded-lg mb-6">
             <div className="mb-2">
@@ -267,7 +268,7 @@ export default function ProductDetailPage() {
 
           <div className="mb-6">
             <div className="flex items-center gap-4 mb-4">
-              <label className="text-sm font-medium">Cantidad:</label>
+              <label className="text-sm font-medium">{t('productDetail.quantity')}:</label>
               <div className="flex items-center border rounded-md">
                 <Button
                   variant="ghost"
@@ -302,26 +303,30 @@ export default function ProductDetailPage() {
               size="lg"
               disabled={product.stock === 0}
             >
-              {product.stock > 0 ? 'Agregar al Carrito' : 'Sin Stock'}
+              {product.stock > 0 ? t('productDetail.addToCart') : t('productDetail.outOfStock')}
             </Button>
           </div>
 
-          <div className="border-t pt-6">
-            <h3 className="font-semibold mb-2">Información adicional</h3>
-            <ul className="space-y-1 text-sm text-gray-600">
-              <li>• Entrega estimada: 3-5 días hábiles</li>
-              <li>• Garantía de calidad</li>
-              <li>• Asesoramiento técnico incluido</li>
-            </ul>
-          </div>
         </div>
       </div>
 
-      {/* Productos Relacionados */}
+      <div className="mt-8 bg-white p-6 rounded-lg border">
+        <h2 className="text-2xl font-bold mb-4">{t('productDetail.description')}</h2>
+        <p className="text-gray-700 leading-relaxed">{product.descripcion}</p>
+        <div className="border-t pt-6 mt-6">
+          <h3 className="font-semibold mb-2">{t('productDetail.additionalInfo')}</h3>
+          <ul className="space-y-1 text-sm text-gray-600">
+            <li>• {t('productDetail.estimatedDelivery')}</li>
+            <li>• {t('productDetail.qualityGuarantee')}</li>
+            <li>• {t('productDetail.technicalSupport')}</li>
+          </ul>
+        </div>
+      </div>
+
       {relatedProducts.length > 0 && (
         <div className="mt-16 border-t pt-12">
           <ProductCarousel 
-            title="Productos Relacionados" 
+            title={t('productDetail.related')}
             products={relatedProducts} 
           />
         </div>

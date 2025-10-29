@@ -7,7 +7,6 @@ export function Hero() {
 
   return (
     <section className="relative bg-[#f8f9fa] overflow-hidden">
-      {/* Imagen de fondo */}
       <div className="absolute inset-0 z-0">
         <img 
           src="/origen-carne-angus-prueba.jpg" 
@@ -16,7 +15,6 @@ export function Hero() {
         />
       </div>
       
-      {/* Gradiente overlay - del color sólido a transparente */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#003c6f] via-[#003c6f]/80 to-transparent z-10" />
       
       <div className="relative h-96 md:h-[500px] flex items-center z-20">

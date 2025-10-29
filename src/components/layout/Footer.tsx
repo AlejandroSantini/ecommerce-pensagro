@@ -3,16 +3,11 @@
 
 import Link from 'next/link';
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react';
-import { useState, useEffect } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 
 export function Footer() {
-  const [currentYear, setCurrentYear] = useState(2025);
+  const currentYear = new Date().getFullYear();
   const { t } = useTranslation();
-  
-  useEffect(() => {
-    setCurrentYear(new Date().getFullYear());
-  }, []);
 
   return (
     <footer className="border-t bg-gray-50">
@@ -156,7 +151,7 @@ export function Footer() {
               <li className="flex items-center space-x-2 text-gray-600">
                 <Phone className="h-4 w-4 flex-shrink-0 text-gray-500" />
                 <a
-                  href="tel:+5491134567890"
+                  href="tel:+5491156063806"
                   className="hover:text-gray-900 transition-colors"
                 >
                   {t('footer.contact.phone')}
@@ -165,7 +160,7 @@ export function Footer() {
               <li className="flex items-center space-x-2 text-gray-600">
                 <Mail className="h-4 w-4 flex-shrink-0 text-gray-500" />
                 <a
-                  href="mailto:ventas@pensagro.com"
+                  href="mailto:ventas@pensagro.com.ar"
                   className="hover:text-gray-900 transition-colors"
                 >
                   {t('footer.contact.email')}

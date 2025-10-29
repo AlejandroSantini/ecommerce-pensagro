@@ -3,9 +3,10 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { ArrowLeft, Lock } from 'lucide-react';
 import { useCart } from '../../src/hooks/useCart';
-import { CheckoutForm } from '../../src/components/checkout/CheckoutForm';
+import { CheckoutSteps } from '../../src/components/checkout/CheckoutSteps';
 import { OrderSummary } from '../../src/components/checkout/OrderSummary';
 import { Button } from '../../src/components/ui/button';
+import { useTranslation } from '../../src/hooks/useTranslation';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -13,27 +14,32 @@ export default function CheckoutPage() {
   const clearCart = useCart((state) => state.clearCart);
   const [isLoading, setIsLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [shippingCost, setShippingCost] = useState(null);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
-    if (mounted && items.length === 0) {
+    if (mounted && items.length === 0 && !isCheckingOut) {
       router.push('/');
     }
-  }, [mounted, items, router]);
+  }, [mounted, items, isCheckingOut, router]);
 
-  const handleCheckout = async (formData) => {
+  const handleCheckout = async (checkoutData) => {
     setIsLoading(true);
+    setIsCheckingOut(true); // Indicar que estamos procesando el checkout
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const finalTotal = items.reduce((sum, item) => sum + (item.precio * item.quantity), 0) + (checkoutData.shippingCost || 0);
       
       const orderData = {
-        ...formData,
+        ...checkoutData,
         items: items,
-        total: items.reduce((sum, item) => sum + (item.precio * item.quantity), 0),
+        subtotal: items.reduce((sum, item) => sum + (item.precio * item.quantity), 0),
+        total: finalTotal,
         fecha: new Date().toISOString(),
         estado: 'pendiente',
       };
@@ -43,13 +49,15 @@ export default function CheckoutPage() {
       orders.push({ id: orderId, ...orderData });
       localStorage.setItem('pensagro-orders', JSON.stringify(orders));
 
+      // Limpiar el carrito
       clearCart();
 
-      // Redirigir a confirmación
-      router.push(`/checkout/confirmacion?orderId=${orderId}`);
+      // Redirigir inmediatamente
+      window.location.href = `/checkout/confirmacion?orderId=${orderId}`;
     } catch (error) {
       console.error('Error al procesar el pedido:', error);
-      alert('Hubo un error al procesar tu pedido. Por favor, intenta nuevamente.');
+      alert(t('checkout.errors.processingOrder') || 'Hubo un error al procesar tu pedido. Por favor, intenta nuevamente.');
+      setIsCheckingOut(false); // Resetear en caso de error
     } finally {
       setIsLoading(false);
     }
@@ -64,58 +72,43 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-50">
       {/* Header del checkout */}
-      <div className="bg-gray-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="bg-white border-b sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Link href="/">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Volver a la tienda
+                  {t('checkout.backToStore')}
                 </Button>
               </Link>
               <div className="hidden sm:block h-6 w-px bg-gray-300" />
-              <h1 className="hidden sm:block text-2xl font-bold text-gray-900">Checkout</h1>
+              <h1 className="hidden sm:block text-xl font-bold text-gray-900">{t('checkout.title')}</h1>
             </div>
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <Lock className="h-4 w-4" />
-              <span>Pago seguro</span>
+              <span className="hidden sm:inline">{t('checkout.securePay')}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          <div className="lg:pr-8">
-            <CheckoutForm onSubmit={handleCheckout} isLoading={isLoading} />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Content - Checkout Steps */}
+          <div className="lg:col-span-2">
+            <CheckoutSteps 
+              onComplete={handleCheckout} 
+              isLoading={isLoading}
+              onShippingChange={(data) => setShippingCost(data.shippingCost)}
+            />
           </div>
 
-          <div className="lg:pl-8 border-t lg:border-t-0 lg:border-l pt-8 lg:pt-0">
-            <OrderSummary />
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-gray-50 border-t mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-2xl mb-2">🚚</div>
-              <h3 className="font-semibold text-gray-900 mb-1">Envío Gratis</h3>
-              <p className="text-sm text-gray-600">En todos los pedidos</p>
-            </div>
-            <div>
-              <div className="text-2xl mb-2">🔒</div>
-              <h3 className="font-semibold text-gray-900 mb-1">Pago Seguro</h3>
-              <p className="text-sm text-gray-600">Con Mercado Pago</p>
-            </div>
-            <div>
-              <div className="text-2xl mb-2">📦</div>
-              <h3 className="font-semibold text-gray-900 mb-1">Envío Rápido</h3>
-              <p className="text-sm text-gray-600">Recibí en 3-5 días hábiles</p>
+          <div className="lg:col-span-1">
+            <div className="lg:sticky lg:top-24">
+              <OrderSummary compact shippingCost={shippingCost} />
             </div>
           </div>
         </div>

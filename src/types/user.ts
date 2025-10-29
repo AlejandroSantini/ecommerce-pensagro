@@ -5,6 +5,10 @@ export interface User {
   apellido: string;
   email: string;
   telefono?: string;
+  direccion?: string;
+  ciudad?: string;
+  provincia?: string;
+  codigoPostal?: string;
   rol: 'admin' | 'cliente';
   estado: 'activo' | 'inactivo';
   createdAt: string;

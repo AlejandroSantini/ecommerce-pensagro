@@ -49,7 +49,6 @@ export function Header() {
             />
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden flex-1 md:flex md:items-center md:justify-center md:space-x-8">
             {navLinks.map((link) => (
               <Link

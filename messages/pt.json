@@ -85,6 +85,11 @@
     "categories": {
       "title": "Explorar por Categoria",
       "viewAll": "Ver Todas"
+    },
+    "blog": {
+      "title": "Últimas Novidades",
+      "subtitle": "Dicas, guias e novidades do setor agropecuário",
+      "viewAll": "Ver todos os artigos"
     }
   },
   "products": {
@@ -104,6 +109,14 @@
     "outOfStock": "Sem estoque",
     "stock": "{count} disponíveis",
     "freeShipping": "Frete grátis"
+  },
+  "filters": {
+    "active": "ativos",
+    "clearAll": "Limpar tudo",
+    "combos": "Combos e Ofertas",
+    "combosDescription": "Ver pacotes especiais",
+    "applied": "Filtros aplicados",
+    "viewProducts": "Ver Produtos"
   },
   "checkout": {
     "title": "Finalizar Compra",
@@ -310,6 +323,20 @@
     "readingTime": "de leitura",
     "share": "Compartilhar:",
     "relatedArticles": "Artigos Relacionados"
+  },
+  "productDetail": {
+    "loading": "Carregando produto...",
+    "back": "Voltar",
+    "featured": "Produto Destacado",
+    "quantity": "Quantidade",
+    "addToCart": "Adicionar ao Carrinho",
+    "outOfStock": "Sem Estoque",
+    "description": "Descrição do Produto",
+    "related": "Produtos Relacionados",
+    "additionalInfo": "Informações adicionais",
+    "estimatedDelivery": "Entrega estimada: 3-5 dias úteis",
+    "qualityGuarantee": "Garantia de qualidade",
+    "technicalSupport": "Assessoria técnica incluída"
   }
 }
 

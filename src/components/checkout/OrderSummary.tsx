@@ -6,16 +6,63 @@ import { ShoppingBag, Truck } from 'lucide-react';
 
 interface OrderSummaryProps {
   showTitle?: boolean;
+  compact?: boolean;
+  shippingCost?: number | null;
 }
 
-export function OrderSummary({ showTitle = true }: OrderSummaryProps) {
+export function OrderSummary({ showTitle = true, compact = false, shippingCost = null }: OrderSummaryProps) {
   const { t } = useTranslation();
   const items = useCart((state) => state.items);
   const getTotal = useCart((state) => state.getTotal);
   
   const subtotal = getTotal();
-  const envio: number = 0; // Gratis por ahora, puede ser dinámico
+  const envio: number = shippingCost || 0;
   const total = subtotal + envio;
+
+  if (compact) {
+    return (
+      <div className="bg-white rounded-lg border p-4 lg:sticky lg:top-24">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('checkout.summary')}</h2>
+        
+        <div className="space-y-2 mb-4">
+          {items.map((item) => (
+            <div key={item.id} className="flex items-center justify-between text-sm">
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <span className="font-medium text-gray-600">{item.quantity}x</span>
+                <span className="text-gray-900 truncate">{item.nombre}</span>
+              </div>
+              <span className="font-medium text-gray-900 ml-2">
+                ${(item.precio * item.quantity).toLocaleString('es-AR')}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div className="border-t border-gray-200 my-3" />
+
+        <div className="space-y-2">
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">{t('checkout.subtotal')}</span>
+            <span className="font-medium text-gray-900">${subtotal.toLocaleString('es-AR')}</span>
+          </div>
+          
+          <div className="flex justify-between text-sm">
+            <span className="text-gray-600">{t('checkout.shipping')}</span>
+            <span className={`font-medium ${envio === 0 ? 'text-green-600' : 'text-gray-900'}`}>
+              {shippingCost === null ? t('checkout.toCalculate') : envio === 0 ? t('checkout.free') : `$${envio.toLocaleString('es-AR')}`}
+            </span>
+          </div>
+
+          <div className="border-t border-gray-200 pt-2 mt-2" />
+
+          <div className="flex justify-between text-base font-semibold">
+            <span className="text-gray-900">{t('checkout.total')}</span>
+            <span className="text-[#003c6f]">${total.toLocaleString('es-AR')}</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-50 rounded-lg p-6 lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
@@ -26,7 +73,6 @@ export function OrderSummary({ showTitle = true }: OrderSummaryProps) {
         </div>
       )}
 
-      {/* Lista de productos */}
       <div className="space-y-4 mb-6">
         {items.length === 0 ? (
           <p className="text-sm text-gray-500 text-center py-8">
@@ -43,7 +89,6 @@ export function OrderSummary({ showTitle = true }: OrderSummaryProps) {
                     className="w-full h-full object-cover"
                   />
                 )}
-                {/* Badge de cantidad */}
                 <div className="absolute -top-2 -right-2 bg-[#003c6f] text-white text-xs font-semibold rounded-full h-6 w-6 flex items-center justify-center">
                   {item.quantity}
                 </div>
@@ -64,10 +109,8 @@ export function OrderSummary({ showTitle = true }: OrderSummaryProps) {
         )}
       </div>
 
-      {/* Divider */}
       <div className="border-t border-gray-200 my-6" />
 
-      {/* Totales */}
       <div className="space-y-3">
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">{t('checkout.subtotal')}</span>
@@ -79,12 +122,11 @@ export function OrderSummary({ showTitle = true }: OrderSummaryProps) {
             <Truck className="h-4 w-4 text-gray-500" />
             <span className="text-gray-600">{t('checkout.shipping')}</span>
           </div>
-          <span className="font-medium text-green-600">
-            {envio === 0 ? t('checkout.free') : `$${envio.toFixed(2)}`}
+          <span className={`font-medium ${envio === 0 ? 'text-green-600' : 'text-gray-900'}`}>
+            {shippingCost === null ? t('checkout.toCalculate') : envio === 0 ? t('checkout.free') : `$${envio.toFixed(2)}`}
           </span>
         </div>
 
-        {/* Divider */}
         <div className="border-t border-gray-200 pt-3" />
 
         <div className="flex justify-between text-lg font-semibold">
@@ -93,10 +135,9 @@ export function OrderSummary({ showTitle = true }: OrderSummaryProps) {
         </div>
       </div>
 
-      {/* Información adicional */}
       <div className="mt-6 bg-white rounded-md p-4 border border-gray-200">
         <p className="text-xs text-gray-600">
-          <span className="font-semibold">Nota:</span> {t('checkout.paymentNote')}
+          <span className="font-semibold">{t('checkout.note')}:</span> {t('checkout.paymentNote')}
         </p>
       </div>
     </div>
