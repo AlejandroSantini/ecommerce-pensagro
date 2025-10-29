@@ -172,7 +172,7 @@
     "bankTransfer": "Bank Transfer",
     "bankTransferDescription": "Transfer from your bank",
     "mercadoPago": "Mercado Pago",
-    "mercadoPagoDescription": "Credit or debit card",
+    "mercadoPagoDescription": "Account, credit or debit card",
     "cash": "Cash",
     "cashDescription": "Pay when you receive your order",
     "selectAccount": "Select the account to transfer to",

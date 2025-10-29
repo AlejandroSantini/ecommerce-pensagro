@@ -172,7 +172,7 @@
     "bankTransfer": "Transferencia Bancaria",
     "bankTransferDescription": "Transferí desde tu banco",
     "mercadoPago": "Mercado Pago",
-    "mercadoPagoDescription": "Tarjeta de crédito o débito",
+    "mercadoPagoDescription": "Cuenta, tarjeta de crédito o débito",
     "cash": "Efectivo",
     "cashDescription": "Pagá al recibir tu pedido",
     "selectAccount": "Seleccioná la cuenta para transferir",

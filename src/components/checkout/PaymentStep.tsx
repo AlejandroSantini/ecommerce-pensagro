@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Building2, CreditCard, Banknote, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Building2, Wallet, Banknote, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from '@/hooks/useTranslation';
 
@@ -26,7 +26,6 @@ export function PaymentStep({ onNext, onBack, initialData, isLoading = false }: 
     initialData?.paymentMethod || 'mercadopago'
   );
   const [selectedCBU, setSelectedCBU] = useState<string>('');
-  const [mpPaymentType, setMpPaymentType] = useState<'credit' | 'debit'>('credit');
 
   const paymentMethods = [
     {
@@ -40,7 +39,7 @@ export function PaymentStep({ onNext, onBack, initialData, isLoading = false }: 
       id: 'mercadopago',
       name: t('checkout.mercadoPago'),
       description: t('checkout.mercadoPagoDescription'),
-      icon: CreditCard,
+      icon: Wallet,
       discount: null,
     },
     {
@@ -65,8 +64,6 @@ export function PaymentStep({ onNext, onBack, initialData, isLoading = false }: 
 
     if (selectedMethod === 'transfer') {
       paymentData.paymentDetails!.cbuSelected = selectedCBU;
-    } else if (selectedMethod === 'mercadopago') {
-      paymentData.paymentDetails!.mpPaymentType = mpPaymentType;
     }
 
     onNext(paymentData);
@@ -86,7 +83,6 @@ export function PaymentStep({ onNext, onBack, initialData, isLoading = false }: 
         <p className="text-gray-600">{t('checkout.paymentMethodDescription')}</p>
       </div>
 
-      {/* Payment Methods */}
       <div className="space-y-3">
         {paymentMethods.map((method) => {
           const Icon = method.icon;
@@ -164,43 +160,8 @@ export function PaymentStep({ onNext, onBack, initialData, isLoading = false }: 
       )}
 
       {selectedMethod === 'mercadopago' && (
-        <div className="space-y-3 pt-4 border-t">
-          <h3 className="font-semibold text-gray-900 mb-2">{t('checkout.mpPaymentType')}</h3>
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              onClick={() => setMpPaymentType('credit')}
-              className={`p-4 rounded-lg border-2 transition-all ${
-                mpPaymentType === 'credit'
-                  ? 'border-[#003c6f] bg-[#003c6f]/5'
-                  : 'border-gray-200 hover:border-gray-300'
-              }`}
-            >
-              <div className="text-center">
-                <CreditCard className={`w-8 h-8 mx-auto mb-2 ${
-                  mpPaymentType === 'credit' ? 'text-[#003c6f]' : 'text-gray-600'
-                }`} />
-                <div className="font-semibold text-sm">{t('checkout.credit')}</div>
-                <div className="text-xs text-gray-600 mt-1">{t('checkout.creditInstallments')}</div>
-              </div>
-            </button>
-            <button
-              onClick={() => setMpPaymentType('debit')}
-              className={`p-4 rounded-lg border-2 transition-all ${
-                mpPaymentType === 'debit'
-                  ? 'border-[#003c6f] bg-[#003c6f]/5'
-                  : 'border-gray-200 hover:border-gray-300'
-              }`}
-            >
-              <div className="text-center">
-                <CreditCard className={`w-8 h-8 mx-auto mb-2 ${
-                  mpPaymentType === 'debit' ? 'text-[#003c6f]' : 'text-gray-600'
-                }`} />
-                <div className="font-semibold text-sm">{t('checkout.debit')}</div>
-                <div className="text-xs text-gray-600 mt-1">{t('checkout.debitSingle')}</div>
-              </div>
-            </button>
-          </div>
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-4">
+        <div className="pt-4 border-t">
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
             <p className="text-sm text-gray-700">
               {t('checkout.mpRedirect')}
             </p>
