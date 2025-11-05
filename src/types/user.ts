@@ -16,12 +16,11 @@ export interface User {
 }
 
 export interface RegisterUserDto {
-  nombre: string;
-  apellido: string;
+  name: string;
   email: string;
   password: string;
-  telefono?: string;
-  rol?: 'admin' | 'cliente';
+  phone: string;
+  dni: string;
 }
 
 export interface LoginDto {

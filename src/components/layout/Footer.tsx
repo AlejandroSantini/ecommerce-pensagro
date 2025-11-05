@@ -58,7 +58,7 @@ export function Footer() {
             <ul className="space-y-2.5 text-sm">
               <li>
                 <Link
-                  href="/productos"
+                  href="/products"
                   className="text-gray-600 transition-colors hover:text-gray-900"
                 >
                   {t('footer.shop.allProducts')}
@@ -66,7 +66,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/productos"
+                  href="/products"
                   className="text-gray-600 transition-colors hover:text-gray-900"
                 >
                   {t('footer.shop.electrifiers')}
@@ -74,7 +74,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/productos"
+                  href="/products"
                   className="text-gray-600 transition-colors hover:text-gray-900"
                 >
                   {t('footer.shop.fencing')}
@@ -82,7 +82,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/productos"
+                  href="/products"
                   className="text-gray-600 transition-colors hover:text-gray-900"
                 >
                   {t('footer.shop.accessories')}
@@ -98,7 +98,7 @@ export function Footer() {
             <ul className="space-y-2.5 text-sm">
               <li>
                 <Link
-                  href="/nosotros"
+                  href="/about"
                   className="text-gray-600 transition-colors hover:text-gray-900"
                 >
                   {t('footer.help.aboutUs')}
@@ -130,7 +130,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/contacto"
+                  href="/contact"
                   className="text-gray-600 transition-colors hover:text-gray-900"
                 >
                   {t('footer.help.contact')}

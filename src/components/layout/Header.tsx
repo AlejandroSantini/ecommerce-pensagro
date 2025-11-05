@@ -25,10 +25,10 @@ export function Header() {
   }, []);
 
   const navLinks = [
-    { href: '/productos', labelKey: 'nav.products' },
+    { href: '/products', labelKey: 'nav.products' },
     { href: '/news', labelKey: 'nav.blog' },
-    { href: '/nosotros', labelKey: 'nav.about' },
-    { href: '/contacto', labelKey: 'nav.contact' },
+    { href: '/about', labelKey: 'nav.about' },
+    { href: '/contact', labelKey: 'nav.contact' },
   ];
   
   // Admin status is checked directly in the JSX

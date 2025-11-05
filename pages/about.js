@@ -45,7 +45,7 @@ export default function AboutPage() {
               <p className="text-gray-700 mb-6 text-lg leading-relaxed">
                 {t('about.inventorsText2')}
               </p>
-              <Link href="/contacto">
+              <Link href="/contact">
                 <Button className="bg-[#003c6f] hover:bg-[#002b50] text-white px-8 py-6 text-lg">
                   {t('about.talkToUs')}
                 </Button>
@@ -171,12 +171,12 @@ export default function AboutPage() {
             {t('about.ctaText')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/productos">
+            <Link href="/products">
               <Button className="bg-[#003c6f] hover:bg-[#002b50] text-white px-8 py-6 text-lg">
                 {t('about.viewProducts')}
               </Button>
             </Link>
-            <Link href="/contacto">
+            <Link href="/contact">
               <Button variant="outline" className="border-[#003c6f] text-[#003c6f] hover:bg-[#003c6f] hover:text-white px-8 py-6 text-lg">
                 {t('about.contactNow')}
               </Button>

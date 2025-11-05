@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardImage, CardContent } from '@/components/ui/card';
 import { ShoppingCart, Filter } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
-import { ProductFilters } from '@/components/productos/ProductFilters';
+import { ProductFilters } from '@/components/products/ProductFilters';
 
 // Categorías con subcategorías - Sector Agro
 const CATEGORIES = [
@@ -427,7 +427,7 @@ export default function ProductsPage() {
                         Agregar
                       </Button>
                       <Button asChild className="bg-[#003c6f] hover:bg-[#002b50]">
-                        <Link href={`/productos/${product.id}`}>
+                        <Link href={`/products/${product.id}`}>
                           Ver Detalles
                         </Link>
                       </Button>

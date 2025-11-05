@@ -28,12 +28,12 @@ export function Hero() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button asChild size="lg" variant="default" className="bg-white text-[#003c6f] hover:bg-gray-100">
-                <Link href="/productos">
+                <Link href="/products">
                   {t('home.hero.viewProducts')}
                 </Link>
               </Button>
               <Button asChild size="lg" variant="secondary" className="bg-white/20 backdrop-blur-sm text-white border-white/40 hover:bg-white/30">
-                <Link href="/nosotros">
+                <Link href="/about">
                   {t('home.hero.learnMore')}
                 </Link>
               </Button>

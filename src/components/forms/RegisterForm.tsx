@@ -15,11 +15,10 @@ import { userService } from '@/services';
 import { useAuth } from '@/contexts/AuthContext';
 
 const registerSchema = z.object({
-  name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres').max(100, 'El nombre es demasiado largo'),
-  lastname: z.string().min(2, 'El apellido debe tener al menos 2 caracteres').max(100, 'El apellido es demasiado largo'),
+  fullName: z.string().min(2, 'El nombre completo debe tener al menos 2 caracteres').max(200, 'El nombre es demasiado largo'),
   email: z.string().min(1, 'El email es requerido').email('Ingresa un email válido'),
   password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres').max(100, 'La contraseña es demasiado larga'),
-  cuitDni: z.string().min(7, 'El CUIT/DNI debe tener al menos 7 caracteres').max(20, 'El CUIT/DNI es demasiado largo'),
+  dni: z.string().min(7, 'El DNI debe tener al menos 7 caracteres').max(20, 'El DNI es demasiado largo'),
   phone: z.string().min(1, 'El teléfono es requerido').refine((val) => /^[\d\s\-\+\(\)]+$/.test(val), 'Ingresa un teléfono válido'),
 });
 
@@ -43,11 +42,10 @@ export function RegisterForm() {
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      name: '',
-      lastname: '',
+      fullName: '',
       email: '',
       password: '',
-      cuitDni: '',
+      dni: '',
       phone: '',
     },
   });
@@ -56,23 +54,18 @@ export function RegisterForm() {
     setIsLoading(true);
     setError(null);
     try {
-      // Llamar al endpoint de registro usando userService
       const response = await userService.register({
-        nombre: data.name,
-        apellido: data.lastname,
+        name: data.fullName,
         email: data.email,
         password: data.password,
-        telefono: data.phone,
-        rol: 'cliente',
+        phone: data.phone,
+        dni: data.dni,
       });
       
-      // Guardar el token y los datos del usuario usando el contexto de autenticación
       authLogin(response.token, response.user);
       
-      // Limpiar formulario
       reset();
       
-      // Redirigir al usuario a la página de productos
       router.push('/products');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al crear la cuenta.');
@@ -160,43 +153,30 @@ export function RegisterForm() {
         {currentStep === 2 && (
           <>
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-pensagro-dark">{t('register.name')}</Label>
+              <Label htmlFor="fullName" className="text-pensagro-dark">Nombre Completo</Label>
               <Input 
-                id="name" 
+                id="fullName" 
                 type="text" 
-                placeholder={t('register.namePlaceholder')} 
-                {...register('name')} 
-                className={errors.name ? 'border-red-500' : ''} 
+                placeholder="Alexis Huck" 
+                {...register('fullName')} 
+                className={errors.fullName ? 'border-red-500' : ''} 
                 disabled={isLoading}
                 autoFocus
               />
-              {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
+              {errors.fullName && <p className="text-sm text-red-600">{errors.fullName.message}</p>}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="lastname" className="text-pensagro-dark">{t('register.lastname')}</Label>
+              <Label htmlFor="dni" className="text-pensagro-dark">DNI</Label>
               <Input 
-                id="lastname" 
+                id="dni" 
                 type="text" 
-                placeholder={t('register.lastnamePlaceholder')} 
-                {...register('lastname')} 
-                className={errors.lastname ? 'border-red-500' : ''} 
+                placeholder="42123737" 
+                {...register('dni')} 
+                className={errors.dni ? 'border-red-500' : ''} 
                 disabled={isLoading} 
               />
-              {errors.lastname && <p className="text-sm text-red-600">{errors.lastname.message}</p>}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="cuitDni" className="text-pensagro-dark">CUIT/DNI</Label>
-              <Input 
-                id="cuitDni" 
-                type="text" 
-                placeholder="20-12345678-9 o 12345678" 
-                {...register('cuitDni')} 
-                className={errors.cuitDni ? 'border-red-500' : ''} 
-                disabled={isLoading} 
-              />
-              {errors.cuitDni && <p className="text-sm text-red-600">{errors.cuitDni.message}</p>}
+              {errors.dni && <p className="text-sm text-red-600">{errors.dni.message}</p>}
             </div>
 
             <div className="space-y-2">

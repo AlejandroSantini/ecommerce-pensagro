@@ -60,7 +60,7 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">{title}</h2>
-          <Link href="/productos" className="text-sm text-[#003c6f] hover:underline">
+          <Link href="/products" className="text-sm text-[#003c6f] hover:underline">
             {t('products.viewAll')}
           </Link>
         </div>
@@ -110,7 +110,7 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
                   <h3 className="font-medium text-sm mb-1 line-clamp-2 h-10">{product.nombre}</h3>
                   <p className="text-lg font-semibold mb-2">${product.precio.toLocaleString()}</p>
                   <Button asChild className="w-full bg-[#003c6f] hover:bg-[#002b50]" size="sm">
-                    <Link href={`/productos/${product.id}`}>
+                    <Link href={`/products/${product.id}`}>
                       {t('products.viewDetails')}
                     </Link>
                   </Button>

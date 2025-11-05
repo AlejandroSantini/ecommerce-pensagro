@@ -227,7 +227,7 @@ export default function ConfirmacionPage() {
               Volver al inicio
             </Button>
           </Link>
-          <Link href="/productos" className="flex-1">
+          <Link href="/products" className="flex-1">
             <Button 
               className="w-full bg-[#003c6f] hover:bg-[#002b50]"
               size="lg"
