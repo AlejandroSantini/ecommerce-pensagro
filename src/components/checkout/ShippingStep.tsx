@@ -75,8 +75,9 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
   ];
 
   useEffect(() => {
-    const hasAddress = user?.direccion && user?.ciudad && user?.provincia;
-    if (!hasAddress && selectedMethod !== 'pickup') {
+    // TODO: Implementar validación de dirección cuando se complete el User type
+    // const hasAddress = user?.direccion && user?.ciudad && user?.provincia;
+    if (selectedMethod !== 'pickup') {
       setNeedsAddress(true);
     } else {
       setNeedsAddress(false);
@@ -140,17 +141,7 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
       shippingMethod: selectedMethod,
       shippingAddress: needsAddress 
         ? addressData 
-        : (user && user.direccion && user.ciudad && user.provincia && user.codigoPostal
-            ? {
-                nombre: user.nombre || '',
-                apellido: user.apellido || '',
-                direccion: user.direccion,
-                ciudad: user.ciudad,
-                provincia: user.provincia,
-                codigoPostal: user.codigoPostal,
-                telefono: user.telefono || '',
-              }
-            : undefined),
+        : undefined, // TODO: Usar dirección del usuario cuando esté disponible
       shippingCost: selectedMethod === 'standard' ? (shippingCost ?? undefined) : 0,
     });
   };

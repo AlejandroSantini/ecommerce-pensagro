@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -10,7 +9,6 @@ import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { userService } from '@/services';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from '@/hooks/useTranslation';
 
@@ -22,8 +20,7 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
-  const router = useRouter();
-  const { login: authLogin } = useAuth();
+  const { login: authLogin, isLoading } = useAuth();
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,29 +37,23 @@ export function LoginForm() {
     },
   });
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const onSubmit = async (data: LoginFormData) => {
     setError(null);
-    setIsLoading(true);
 
     try {
-      const response = await userService.login({
-        email: data.email,
-        password: data.password,
-      });
-
-      authLogin(response.token, response.user);
-
-      router.push('/products');
+      await authLogin(data.email, data.password);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setError(err.message || 'Failed to log in');
+        if (err.message.includes('401') || err.message.includes('Unauthorized')) {
+          setError('Email o contraseña incorrectos');
+        } else if (err.message.includes('Network') || err.message.includes('conexión')) {
+          setError('Error de conexión. Verifica tu internet.');
+        } else {
+          setError(err.message || 'Error al iniciar sesión');
+        }
       } else {
-        setError('An unexpected error occurred');
+        setError('Error inesperado. Inténtalo de nuevo.');
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 

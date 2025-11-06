@@ -1,44 +1,27 @@
-import { fetchApi } from '@/lib/api';
+import { api } from '@/lib/api';
 import type {
   User,
-  RegisterUserDto,
-  LoginDto,
-  LoginResponse,
   UpdateUserDto,
 } from '@/types/user';
 
 export const userService = {
-  // POST /users/register - Crear usuario
-  register: async (data: RegisterUserDto): Promise<LoginResponse> => {
-    return fetchApi('/users/register', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-  },
-
-  // POST /users/login - Login y obtención de token
-  login: async (data: LoginDto): Promise<LoginResponse> => {
-    return fetchApi('/users/login', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-  },
-
-  // GET /users - Listar todos los usuarios
+  // GET /users - Listar todos los usuarios (protegida)
   getAll: async (): Promise<User[]> => {
-    return fetchApi('/users');
+    return api.get<User[]>('/users');
   },
 
-  // GET /users/:id - Obtener usuario por ID
+  // GET /users/:id - Obtener usuario por ID (protegida)
   getById: async (id: number): Promise<User> => {
-    return fetchApi(`/users/${id}`);
+    return api.get<User>(`/users/${id}`);
   },
 
-  // PUT /users/:id - Actualizar datos de usuario
+  // PUT /users/:id - Actualizar datos de usuario (protegida)
   update: async (id: number, data: UpdateUserDto): Promise<User> => {
-    return fetchApi(`/users/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
+    return api.put<User>(`/users/${id}`, data);
+  },
+
+  // DELETE /users/:id - Eliminar usuario (protegida)
+  delete: async (id: number): Promise<void> => {
+    return api.delete<void>(`/users/${id}`);
   },
 };

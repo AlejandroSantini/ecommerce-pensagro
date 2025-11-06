@@ -103,7 +103,7 @@ export function Header() {
                 {isAuthenticated ? (
                   <>
                     <div className="px-2 py-1.5 text-sm font-medium text-gray-900">
-                      {user?.nombre} {user?.apellido}
+                      {user?.name}
                     </div>
                     <div className="px-2 py-1.5 text-xs text-gray-500">
                       {user?.email}

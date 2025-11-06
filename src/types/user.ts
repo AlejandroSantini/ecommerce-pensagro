@@ -1,18 +1,15 @@
 // User Types
 export interface User {
-  id: number;
-  nombre: string;
-  apellido: string;
+  id: string;
+  name: string;
   email: string;
-  telefono?: string;
-  direccion?: string;
-  ciudad?: string;
-  provincia?: string;
-  codigoPostal?: string;
-  rol: 'admin' | 'cliente';
-  estado: 'activo' | 'inactivo';
-  createdAt: string;
-  updatedAt: string;
+  phone?: string;
+  role?: string;
+}
+
+export interface AuthResponse {
+  user: User;
+  token: string;
 }
 
 export interface RegisterUserDto {

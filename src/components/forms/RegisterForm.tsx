@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -11,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTranslation } from '@/hooks/useTranslation';
-import { userService } from '@/services';
 import { useAuth } from '@/contexts/AuthContext';
 
 const registerSchema = z.object({
@@ -26,11 +24,9 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
   const { t } = useTranslation();
-  const router = useRouter();
-  const { login: authLogin } = useAuth();
+  const { register: authRegister, isLoading } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const {
@@ -50,11 +46,12 @@ export function RegisterForm() {
     },
   });
 
-  const onSubmit = async (data: RegisterFormData) => {
-    setIsLoading(true);
+  const onSubmit = async (data: RegisterFormData, e?: React.BaseSyntheticEvent) => {
+    e?.preventDefault();
     setError(null);
+    
     try {
-      const response = await userService.register({
+      await authRegister({
         name: data.fullName,
         email: data.email,
         password: data.password,
@@ -62,15 +59,20 @@ export function RegisterForm() {
         dni: data.dni,
       });
       
-      authLogin(response.token, response.user);
-      
       reset();
-      
-      router.push('/products');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear la cuenta.');
-    } finally {
-      setIsLoading(false);
+    } catch (error) {
+      console.error('Error en registro:', error);
+      if (error instanceof Error) {
+        if (error.message.includes('email') && error.message.includes('already')) {
+          setError('Este email ya está registrado');
+        } else if (error.message.includes('Network') || error.message.includes('conexión')) {
+          setError('Error de conexión. Verifica tu internet.');
+        } else {
+          setError(error.message || 'Error al crear la cuenta.');
+        }
+      } else {
+        setError('Error inesperado. Inténtalo de nuevo.');
+      }
     }
   };
 
@@ -99,7 +101,7 @@ export function RegisterForm() {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         {currentStep === 1 && (
           <>
             <div className="space-y-2">
@@ -157,7 +159,7 @@ export function RegisterForm() {
               <Input 
                 id="fullName" 
                 type="text" 
-                placeholder="Alexis Huck" 
+                placeholder="Full Name" 
                 {...register('fullName')} 
                 className={errors.fullName ? 'border-red-500' : ''} 
                 disabled={isLoading}
@@ -171,7 +173,7 @@ export function RegisterForm() {
               <Input 
                 id="dni" 
                 type="text" 
-                placeholder="42123737" 
+                placeholder="12345678" 
                 {...register('dni')} 
                 className={errors.dni ? 'border-red-500' : ''} 
                 disabled={isLoading} 

@@ -3,182 +3,10 @@ import { useState, useEffect } from 'react';
 import { useCart } from '@/hooks/useCart';
 import { useTranslation } from '@/hooks/useTranslation';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Minus, Plus } from 'lucide-react';
+import { ArrowLeft, Minus, Plus, Loader2 } from 'lucide-react';
 import { ProductCarousel } from '@/components/home/ProductCarousel';
-
-// Datos de muestra - Sincronizados con la página de productos
-const SAMPLE_PRODUCTS = [
-  {
-    id: 1,
-    nombre: 'Boyero Electrificador PEL 418',
-    descripcion: 'Boyero eléctrico de alto rendimiento para cercas de hasta 200km',
-    precio: 85000,
-    sku: 'BOY-418',
-    stock: 15,
-    iva: 21,
-    destacado: true,
-    activo: true,
-    imagen: '/mock/pel 418.png',
-    categoryId: 2,
-    subcategoryId: null,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 2,
-    nombre: 'Boyero Electrificador PEL S1000',
-    descripcion: 'Boyero eléctrico solar de alta potencia para cercas extensas',
-    precio: 125000,
-    sku: 'BOY-S1000',
-    stock: 10,
-    iva: 21,
-    destacado: true,
-    activo: true,
-    imagen: '/mock/PEL S1000 (F).png',
-    categoryId: 2,
-    subcategoryId: null,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 3,
-    nombre: 'Boyero Electrificador 86000W',
-    descripcion: 'Boyero de máxima potencia para cercas de gran extensión',
-    precio: 180000,
-    sku: 'BOY-86000',
-    stock: 8,
-    iva: 21,
-    destacado: true,
-    activo: true,
-    imagen: '/mock/86000 w portada.png',
-    categoryId: 2,
-    subcategoryId: null,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 4,
-    nombre: 'Varillas Fibra de Vidrio x12',
-    descripcion: 'Pack de 12 varillas de fibra de vidrio para sostén de cerca eléctrica',
-    precio: 28000,
-    sku: 'VAR-12',
-    stock: 40,
-    iva: 21,
-    destacado: false,
-    activo: true,
-    imagen: '/mock/varillas_12.png',
-    categoryId: 1,
-    subcategoryId: 17,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 5,
-    nombre: 'Carretel Standard con Manija',
-    descripcion: 'Carretel portátil para enrollar y transportar cable de cerca',
-    precio: 15500,
-    sku: 'CARR-001',
-    stock: 25,
-    iva: 21,
-    destacado: false,
-    activo: true,
-    imagen: '/mock/carrretel con manija.png',
-    categoryId: 1,
-    subcategoryId: 12,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 6,
-    nombre: 'Carretel Standard con Alambre',
-    descripcion: 'Carretel con alambre conductor incluido para cerca eléctrica',
-    precio: 22500,
-    sku: 'CARR-002',
-    stock: 20,
-    iva: 21,
-    destacado: false,
-    activo: true,
-    imagen: '/mock/Carretel_foto_alambre_1.jpg',
-    categoryId: 1,
-    subcategoryId: 12,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 7,
-    nombre: 'Control Remoto para Boyero',
-    descripcion: 'Control remoto inalámbrico para activar/desactivar boyero a distancia',
-    precio: 35000,
-    sku: 'REM-001',
-    stock: 15,
-    iva: 21,
-    destacado: false,
-    activo: true,
-    imagen: '/mock/PEL_REMOTE_YELLOW_A_JPG_BLANCO.jpg',
-    categoryId: 9,
-    subcategoryId: null,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 8,
-    nombre: 'Manija Aislante para Cerca',
-    descripcion: 'Manija con mango aislante para apertura segura de cerca eléctrica',
-    precio: 4500,
-    sku: 'MAN-001',
-    stock: 50,
-    iva: 21,
-    destacado: false,
-    activo: true,
-    imagen: '/mock/manija .jpg',
-    categoryId: 1,
-    subcategoryId: 14,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 9,
-    nombre: 'Punta para Varilla',
-    descripcion: 'Punta metálica para varillas de cerca eléctrica',
-    precio: 2500,
-    sku: 'PUN-001',
-    stock: 100,
-    iva: 21,
-    destacado: false,
-    activo: true,
-    imagen: '/mock/punta varilla.webp',
-    categoryId: 1,
-    subcategoryId: 17,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 10,
-    nombre: 'Super Kit Jeringa Telescópica',
-    descripcion: 'Kit completo de jeringa telescópica para tratamiento veterinario',
-    precio: 48000,
-    sku: 'JER-001',
-    stock: 12,
-    iva: 21,
-    destacado: true,
-    activo: true,
-    imagen: '/mock/Super_Kit_Jeringa_Telescopica.jpg',
-    categoryId: 6,
-    subcategoryId: null,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-];
+import { ProductImageCarousel } from '@/components/products/ProductImageCarousel';
+import { productService } from '@/services/productService';
 
 export default function ProductDetail() {
   const router = useRouter();
@@ -188,16 +16,59 @@ export default function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (id) {
-      const foundProduct = SAMPLE_PRODUCTS.find(p => p.id === parseInt(id));
-      setProduct(foundProduct);
+    const loadProduct = async () => {
+      if (!id || typeof id !== 'string') return;
       
-      // Obtener productos relacionados (excluyendo el producto actual)
-      const related = SAMPLE_PRODUCTS.filter(p => p.id !== parseInt(id));
-      setRelatedProducts(related);
-    }
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Cargar el producto desde la API
+        const productData = await productService.getById(parseInt(id));
+        setProduct(productData);
+        
+        // Cargar productos relacionados
+        if (productData.related_products && productData.related_products.length > 0) {
+          // Si el producto tiene productos relacionados definidos, usar esos
+          const relatedIds = productData.related_products.map(rp => rp.id);
+          const relatedPromises = relatedIds.map(relatedId => productService.getById(relatedId));
+          const relatedProductsData = await Promise.allSettled(relatedPromises);
+          
+          const validRelatedProducts = relatedProductsData
+            .filter(result => result.status === 'fulfilled')
+            .map(result => result.value)
+            .slice(0, 6); // Limitar a 6 productos relacionados
+          
+          setRelatedProducts(validRelatedProducts);
+        } else {
+          // Si no tiene productos relacionados, obtener productos similares
+          const allProducts = await productService.getAll({ activo: true });
+          const similar = allProducts
+            .filter(p => p.id !== parseInt(id))
+            .slice(0, 6);
+          setRelatedProducts(similar);
+        }
+      } catch (err) {
+        console.error('Error loading product:', err);
+        setError('Error al cargar el producto');
+        
+        // Fallback a datos de muestra
+        const foundProduct = SAMPLE_PRODUCTS.find(p => p.id === parseInt(id));
+        if (foundProduct) {
+          setProduct(foundProduct);
+          const related = SAMPLE_PRODUCTS.filter(p => p.id !== parseInt(id)).slice(0, 6);
+          setRelatedProducts(related);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProduct();
   }, [id]);
 
   const handleAddToCart = () => {
@@ -211,6 +82,46 @@ export default function ProductDetail() {
       }, quantity);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-[#003c6f]" />
+          <p className="text-gray-600">{t('productDetail.loading')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center bg-red-50 p-8 rounded-lg border border-red-200 max-w-md">
+          <div className="text-red-400 mb-4">
+            <ArrowLeft className="h-16 w-16 mx-auto" />
+          </div>
+          <h2 className="text-xl font-semibold text-red-700 mb-2">Error al cargar producto</h2>
+          <p className="text-red-600 mb-4">{error}</p>
+          <div className="space-x-4">
+            <Button
+              onClick={() => router.back()}
+              variant="outline"
+              className="border-red-600 text-red-600 hover:bg-red-50"
+            >
+              Volver
+            </Button>
+            <Button
+              onClick={() => window.location.reload()}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              Reintentar
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -235,16 +146,11 @@ export default function ProductDetail() {
         </Button>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="w-full h-96 bg-white rounded-lg overflow-hidden flex items-center justify-center">
-          <img
-            src={product.imagen}
-            alt={product.nombre}
-            className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
-            onError={(e) => {
-              e.target.src = 'https://via.placeholder.com/600x600?text=Producto';
-            }}
-          />
-        </div>
+        <ProductImageCarousel 
+          images={product.imagenes || []}
+          productName={product.nombre}
+          mainImage={product.imagen}
+        />
 
         <div>
           <h1 className="text-3xl font-bold mb-4">{product.nombre}</h1>

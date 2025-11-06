@@ -54,16 +54,13 @@ export function ProductFilters({
     const category = categories.find(c => c.id === categoryId);
     
     if (isSelected) {
-      // Deseleccionar categoría y sus subcategorías
       onCategoriesChange(selectedCategories.filter(id => id !== categoryId));
       if (category?.subcategorias) {
         const subcategoryIds = category.subcategorias.map(s => s.id);
         onSubcategoriesChange(selectedSubcategories.filter(id => !subcategoryIds.includes(id)));
       }
     } else {
-      // Seleccionar categoría
       onCategoriesChange([...selectedCategories, categoryId]);
-      // Expandir si tiene subcategorías
       if (category?.subcategorias && category.subcategorias.length > 0) {
         if (!expandedCategories.includes(categoryId)) {
           setExpandedCategories([...expandedCategories, categoryId]);
@@ -76,10 +73,8 @@ export function ProductFilters({
     const isSelected = selectedSubcategories.includes(subcategoryId);
     
     if (isSelected) {
-      // Deseleccionar subcategoría
       onSubcategoriesChange(selectedSubcategories.filter(id => id !== subcategoryId));
     } else {
-      // Seleccionar subcategoría y asegurar que la categoría padre esté seleccionada
       if (!selectedCategories.includes(categoryId)) {
         onCategoriesChange([...selectedCategories, categoryId]);
       }
@@ -89,7 +84,6 @@ export function ProductFilters({
 
   const hasActiveFilters = selectedCategories.length > 0 || selectedSubcategories.length > 0 || showCombos;
   
-  // Obtener objetos seleccionados para mostrar chips
   const selectedCategoryObjs = categories.filter(c => 
     selectedCategories.includes(c.id) && 
     !c.subcategorias?.some(s => selectedSubcategories.includes(s.id))
@@ -100,7 +94,6 @@ export function ProductFilters({
 
   const FilterContent = () => (
     <div className="space-y-6">
-      {/* Header con contador de filtros activos */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <div className="p-2 bg-[#003c6f]/10 rounded-lg">
@@ -129,7 +122,6 @@ export function ProductFilters({
         )}
       </div>
 
-      {/* Combos Toggle - Destacado */}
       <div>
         <button
           onClick={() => onCombosChange(!showCombos)}
@@ -165,7 +157,6 @@ export function ProductFilters({
         </div>
       </div>
 
-      {/* Lista de Categorías */}
       <div className="space-y-2">
         {categories.map((category) => {
           const isExpanded = expandedCategories.includes(category.id);
@@ -176,9 +167,7 @@ export function ProductFilters({
 
           return (
             <div key={category.id} className="space-y-1">
-              {/* Categoría Principal */}
               <div className="flex items-center gap-2">
-                {/* Checkbox */}
                 <button
                   onClick={() => handleCategoryToggle(category.id)}
                   className={`flex-shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
@@ -217,7 +206,6 @@ export function ProductFilters({
                     const isSubSelected = selectedSubcategories.includes(subcategory.id);
                     return (
                       <div key={subcategory.id} className="flex items-center gap-2">
-                        {/* Checkbox */}
                         <button
                           onClick={() => handleSubcategoryToggle(category.id, subcategory.id)}
                           className={`flex-shrink-0 w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${
@@ -253,7 +241,6 @@ export function ProductFilters({
         })}
       </div>
 
-      {/* Filtros Activos - Chips */}
       {hasActiveFilters && (
         <div className="pt-4 border-t border-gray-100">
           <div className="text-xs font-medium text-gray-500 mb-3">{t('filters.applied').toUpperCase()}</div>

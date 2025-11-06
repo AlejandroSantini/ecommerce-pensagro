@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardImage, CardContent } from '@/components/ui/card';
-import { ShoppingCart, Filter } from 'lucide-react';
+import { ShoppingCart, Filter, Loader2 } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
 import { ProductFilters } from '@/components/products/ProductFilters';
+import { productService } from '@/services/productService';
 
 // Categorías con subcategorías - Sector Agro
 const CATEGORIES = [
@@ -63,182 +64,10 @@ const CATEGORIES = [
   },
 ];
 
-// Datos de muestra con categorías del sector agro
-const SAMPLE_PRODUCTS = [
-  {
-    id: 1,
-    nombre: 'Boyero Electrificador PEL 418',
-    descripcion: 'Boyero eléctrico de alto rendimiento para cercas de hasta 200km',
-    precio: 85000,
-    sku: 'BOY-418',
-    stock: 15,
-    iva: 21,
-    destacado: true,
-    activo: true,
-    imagen: '/mock/pel 418.png',
-    categoryId: 2,
-    subcategoryId: null,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 2,
-    nombre: 'Boyero Electrificador PEL S1000',
-    descripcion: 'Boyero eléctrico solar de alta potencia para cercas extensas',
-    precio: 125000,
-    sku: 'BOY-S1000',
-    stock: 10,
-    iva: 21,
-    destacado: true,
-    activo: true,
-    imagen: '/mock/PEL S1000 (F).png',
-    categoryId: 2,
-    subcategoryId: null,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 3,
-    nombre: 'Boyero Electrificador 86000W',
-    descripcion: 'Boyero de máxima potencia para cercas de gran extensión',
-    precio: 180000,
-    sku: 'BOY-86000',
-    stock: 8,
-    iva: 21,
-    destacado: true,
-    activo: true,
-    imagen: '/mock/86000 w portada.png',
-    categoryId: 2,
-    subcategoryId: null,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 4,
-    nombre: 'Varillas Fibra de Vidrio x12',
-    descripcion: 'Pack de 12 varillas de fibra de vidrio para sostén de cerca eléctrica',
-    precio: 28000,
-    sku: 'VAR-12',
-    stock: 40,
-    iva: 21,
-    destacado: false,
-    activo: true,
-    imagen: '/mock/varillas_12.png',
-    categoryId: 1,
-    subcategoryId: 17,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 5,
-    nombre: 'Carretel Standard con Manija',
-    descripcion: 'Carretel portátil para enrollar y transportar cable de cerca',
-    precio: 15500,
-    sku: 'CARR-001',
-    stock: 25,
-    iva: 21,
-    destacado: false,
-    activo: true,
-    imagen: '/mock/carrretel con manija.png',
-    categoryId: 1,
-    subcategoryId: 12,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 6,
-    nombre: 'Carretel Standard con Alambre',
-    descripcion: 'Carretel con alambre conductor incluido para cerca eléctrica',
-    precio: 22500,
-    sku: 'CARR-002',
-    stock: 20,
-    iva: 21,
-    destacado: false,
-    activo: true,
-    imagen: '/mock/Carretel_foto_alambre_1.jpg',
-    categoryId: 1,
-    subcategoryId: 12,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 7,
-    nombre: 'Control Remoto para Boyero',
-    descripcion: 'Control remoto inalámbrico para activar/desactivar boyero a distancia',
-    precio: 35000,
-    sku: 'REM-001',
-    stock: 15,
-    iva: 21,
-    destacado: false,
-    activo: true,
-    imagen: '/mock/PEL_REMOTE_YELLOW_A_JPG_BLANCO.jpg',
-    categoryId: 9,
-    subcategoryId: null,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 8,
-    nombre: 'Manija Aislante para Cerca',
-    descripcion: 'Manija con mango aislante para apertura segura de cerca eléctrica',
-    precio: 4500,
-    sku: 'MAN-001',
-    stock: 50,
-    iva: 21,
-    destacado: false,
-    activo: true,
-    imagen: '/mock/manija .jpg',
-    categoryId: 1,
-    subcategoryId: 14,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 9,
-    nombre: 'Punta para Varilla',
-    descripcion: 'Punta metálica para varillas de cerca eléctrica',
-    precio: 2500,
-    sku: 'PUN-001',
-    stock: 100,
-    iva: 21,
-    destacado: false,
-    activo: true,
-    imagen: '/mock/punta varilla.webp',
-    categoryId: 1,
-    subcategoryId: 17,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-  {
-    id: 10,
-    nombre: 'Super Kit Jeringa Telescópica',
-    descripcion: 'Kit completo de jeringa telescópica para tratamiento veterinario',
-    precio: 48000,
-    sku: 'JER-001',
-    stock: 12,
-    iva: 21,
-    destacado: true,
-    activo: true,
-    imagen: '/mock/Super_Kit_Jeringa_Telescopica.jpg',
-    categoryId: 6,
-    subcategoryId: null,
-    isCombo: false,
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
-  },
-];
-
 export default function ProductsPage() {
-  const [products] = useState(SAMPLE_PRODUCTS);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { addItem } = useCart();
   
   // Estados de filtros
@@ -259,6 +88,33 @@ export default function ProductsPage() {
     
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Cargar productos desde la API
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const filters = {
+          destacado: undefined, // Cargar todos los productos
+          activo: true,
+          categoria: selectedCategories.length > 0 ? selectedCategories[0] : undefined
+        };
+        
+        const productsData = await productService.getAll(filters);
+        setProducts(productsData);
+      } catch (err) {
+        console.error('Error loading products:', err);
+        setError('Error al cargar los productos. Usando datos de prueba.');
+        // Los productos de fallback ya están cargados desde SAMPLE_PRODUCTS
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, [selectedCategories]); // Recargar cuando cambien las categorías seleccionadas
 
   // Filtrar productos
   const filteredProducts = products.filter((product) => {
@@ -361,7 +217,26 @@ export default function ProductsPage() {
 
         {/* Grid de productos */}
         <div className="lg:col-span-3">
-          {filteredProducts.length === 0 ? (
+          {loading ? (
+            <div className="text-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-[#003c6f]" />
+              <p className="text-gray-600">Cargando productos...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12 bg-red-50 rounded-lg border border-red-200">
+              <div className="text-red-400 mb-4">
+                <ShoppingCart className="h-16 w-16 mx-auto" />
+              </div>
+              <h3 className="text-xl font-semibold text-red-700 mb-2">Error al cargar productos</h3>
+              <p className="text-red-600 mb-4">{error}</p>
+              <Button
+                onClick={() => window.location.reload()}
+                className="bg-red-600 hover:bg-red-700 text-white"
+              >
+                Reintentar
+              </Button>
+            </div>
+          ) : filteredProducts.length === 0 ? (
             <div className="text-center py-12">
               <div className="text-gray-400 mb-4">
                 <ShoppingCart className="h-16 w-16 mx-auto" />

@@ -10,4 +10,4 @@ export { couponService } from './couponService';
 export { configService } from './configService';
 
 // Re-export API utilities
-export { fetchApi, ApiError } from '@/lib/api';
+export { api, ApiError } from '@/lib/api';

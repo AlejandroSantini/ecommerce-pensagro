@@ -1,65 +1,133 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import Cookies from 'js-cookie';
-
-import { User } from '@/types/user';
-
-// Interface is imported from types/user.ts
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { User, AuthResponse } from '@/types';
+import { api, ApiResponse } from '@/lib/api';
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (token: string, userData: User) => void;
-  logout: () => void;
-  updateUser: (userData: User) => void;
+  isLoading: boolean;
+  login: (email: string, password: string) => Promise<AuthResponse>;
+  register: (userData: { name: string; email: string; phone: string; password: string; dni: string }) => Promise<AuthResponse>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const login = async (email: string, password: string): Promise<AuthResponse> => {
+    setIsLoading(true);
+    try {
+      const response = await api.post<ApiResponse<AuthResponse>>('/users/login', {
+        email,
+        password
+      });
+      
+      if (response.status && response.data) {
+        const authData = response.data;
+        localStorage.setItem('token', authData.token);
+        localStorage.setItem('user', JSON.stringify({
+          name: authData.user.name,
+          email: authData.user.email
+        }));
+        setUser(authData.user);
+        return authData;
+      } else {
+        throw new Error(response.message || 'Error en el login');
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Error de conexión');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const register = async (userData: { name: string; email: string; phone: string; password: string; dni: string }): Promise<AuthResponse> => {
+    setIsLoading(true);
+    try {
+      const response = await api.post<ApiResponse<AuthResponse>>('/users/register', userData);
+      
+      if (response.status && response.data) {
+        const authData = response.data;
+        localStorage.setItem('token', authData.token);
+        localStorage.setItem('user', JSON.stringify({
+          name: authData.user.name,
+          email: authData.user.email
+        }));
+        setUser(authData.user);
+        window.location.href = '/login'; 
+        return authData;
+      } else {
+        throw new Error(response.message || 'Error en el registro');
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Error de conexión');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const logout = async (): Promise<void> => {
+    try {
+      await api.post('/users/logout');
+    } catch (error) {
+      console.warn('Error al hacer logout en el servidor:', error);
+    } finally {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setUser(null);
+    }
+  };
+
+  const getCurrentUser = (): AuthResponse | null => {
+    if (typeof window === 'undefined') return null;
+    
+    try {
+      const userData = localStorage.getItem('user');
+      const token = localStorage.getItem('token');
+      
+      if (userData && token) {
+        return {
+          user: JSON.parse(userData),
+          token: token
+        };
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
+
 
   useEffect(() => {
-    // Check for existing token and user data on mount
-    const token = Cookies.get('auth_token');
-    const userData = localStorage.getItem('user_data');
-    
-    if (token && userData) {
-      try {
-        const parsedUser = JSON.parse(userData);
-        setUser(parsedUser);
-        setIsAuthenticated(true);
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-        Cookies.remove('auth_token');
-        localStorage.removeItem('user_data');
-      }
+    const savedUser = getCurrentUser();
+    if (savedUser && savedUser.token) {
+      setUser(savedUser.user);
     }
   }, []);
 
-  const login = (token: string, userData: User) => {
-    Cookies.set('auth_token', token, { expires: 7 }); // 7 days
-    localStorage.setItem('user_data', JSON.stringify(userData));
-    setUser(userData);
-    setIsAuthenticated(true);
-  };
-
-  const logout = () => {
-    Cookies.remove('auth_token');
-    localStorage.removeItem('user_data');
-    setUser(null);
-    setIsAuthenticated(false);
-  };
-
-  const updateUser = (userData: User) => {
-    localStorage.setItem('user_data', JSON.stringify(userData));
-    setUser(userData);
+  const value: AuthContextType = {
+    user,
+    isAuthenticated: !!user,
+    isLoading,
+    login,
+    register,
+    logout,
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout, updateUser }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,4 +1,4 @@
-import { fetchApi } from '@/lib/api';
+import { api, axiosInstance } from '@/lib/api';
 import type {
   Sale,
   CreateSaleDto,
@@ -22,35 +22,27 @@ export const saleService = {
     }
 
     const queryString = params.toString();
-    return fetchApi(`/sales${queryString ? `?${queryString}` : ''}`);
+    return api.get<Sale[]>(`/sales${queryString ? `?${queryString}` : ''}`);
   },
 
   // GET /sales/:id - Obtener venta por ID
   getById: async (id: number): Promise<Sale> => {
-    return fetchApi(`/sales/${id}`);
+    return api.get<Sale>(`/sales/${id}`);
   },
 
   // POST /sales - Crear nueva venta
   create: async (data: CreateSaleDto): Promise<Sale> => {
-    return fetchApi('/sales', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    return api.post<Sale>('/sales', data);
   },
 
   // PUT /sales/:id - Actualizar venta
   update: async (id: number, data: UpdateSaleDto): Promise<Sale> => {
-    return fetchApi(`/sales/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
+    return api.put<Sale>(`/sales/${id}`, data);
   },
 
   // DELETE /sales/:id - Soft delete de venta
   delete: async (id: number): Promise<void> => {
-    return fetchApi(`/sales/${id}`, {
-      method: 'DELETE',
-    });
+    return api.delete<void>(`/sales/${id}`);
   },
 
   // POST /sales/export - Exportar historial de ventas a CSV
@@ -68,14 +60,11 @@ export const saleService = {
     }
 
     const queryString = params.toString();
-    const response = await fetch(`/sales/export${queryString ? `?${queryString}` : ''}`, {
-      method: 'POST',
+    // Para obtener Blob, usamos axiosInstance directamente con responseType
+    const response = await axiosInstance.post(`/sales/export${queryString ? `?${queryString}` : ''}`, {}, {
+      responseType: 'blob'
     });
 
-    if (!response.ok) {
-      throw new Error('Error al exportar ventas');
-    }
-
-    return response.blob();
+    return response.data as Blob;
   },
 };

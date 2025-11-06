@@ -3,6 +3,7 @@
 // User types
 export type {
   User,
+  AuthResponse,
   RegisterUserDto,
   LoginDto,
   LoginResponse,
@@ -18,6 +19,11 @@ export type {
 // Product types
 export type {
   Product,
+  ApiProduct,
+  ApiProductsResponse,
+  ProductVariant,
+  ProductCategory,
+  RelatedProduct,
   CreateProductDto,
   UpdateProductDto,
   ProductFilters,

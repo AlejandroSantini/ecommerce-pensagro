@@ -1,4 +1,4 @@
-import { fetchApi } from '@/lib/api';
+import { api } from '@/lib/api';
 import type {
   Category,
   CreateCategoryDto,
@@ -55,7 +55,7 @@ export const categoryService = {
   // GET /categories - Listar categorías
   getAll: async (): Promise<Category[]> => {
     try {
-      return await fetchApi('/categories');
+      return await api.get<Category[]>('/categories');
     } catch (error) {
       console.warn('Error fetching categories, using sample data:', error);
       return SAMPLE_CATEGORIES;
@@ -64,51 +64,37 @@ export const categoryService = {
 
   // GET /categories/:id - Obtener categoría por ID
   getById: async (id: number): Promise<Category> => {
-    return fetchApi(`/categories/${id}`);
+    return api.get<Category>(`/categories/${id}`);
   },
 
   // POST /categories - Crear categoría
   create: async (data: CreateCategoryDto): Promise<Category> => {
-    
-    return fetchApi('/categories', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    return api.post<Category>('/categories', data);
   },
 
   // PUT /categories/:id - Actualizar categoría
   update: async (id: number, data: UpdateCategoryDto): Promise<Category> => {
-    return fetchApi(`/categories/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
+    return api.put<Category>(`/categories/${id}`, data);
   },
 
   // DELETE /categories/:id - Eliminar categoría (soft delete)
   delete: async (id: number): Promise<void> => {
-    return fetchApi(`/categories/${id}`, {
-      method: 'DELETE',
-    });
+    return api.delete<void>(`/categories/${id}`);
   },
 
   // POST /categories/link - Asociar producto a categoría
   linkProduct: async (data: LinkProductCategoryDto): Promise<void> => {
-    return fetchApi('/categories/link', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    return api.post<void>('/categories/link', data);
   },
 
   // GET /categories/product/:product_id - Obtener categorías de un producto
   getByProductId: async (productId: number): Promise<Category[]> => {
-    return fetchApi(`/categories/product/${productId}`);
+    return api.get<Category[]>(`/categories/product/${productId}`);
   },
 
   // DELETE /categories/unlink - Quitar producto de categoría
   unlinkProduct: async (data: UnlinkProductCategoryDto): Promise<void> => {
-    return fetchApi('/categories/unlink', {
-      method: 'DELETE',
-      body: JSON.stringify(data),
-    });
+    // Para DELETE con body, usamos POST con método personalizado o query params
+    return api.post<void>('/categories/unlink', data);
   },
 };
