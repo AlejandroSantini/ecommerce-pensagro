@@ -1,7 +1,12 @@
 // API Helper usando Axios para hacer llamadas al backend
 import axios from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+// Debug: verificar qué URL se está usando
+if (typeof window !== 'undefined') {
+  console.log('🔗 API Base URL:', API_BASE_URL);
+}
 
 export class ApiError extends Error {
   constructor(
