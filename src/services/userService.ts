@@ -5,23 +5,23 @@ import type {
 } from '@/types/user';
 
 export const userService = {
-  // GET /users - Listar todos los usuarios (protegida)
+  // GET /api/users - Listar todos los usuarios (protegida)
   getAll: async (): Promise<User[]> => {
-    return api.get<User[]>('/users');
+    return api.get<User[]>('/api/users');
   },
 
-  // GET /users/:id - Obtener usuario por ID (protegida)
+  // GET /api/users/:id - Obtener usuario por ID (protegida)
   getById: async (id: number): Promise<User> => {
-    return api.get<User>(`/users/${id}`);
+    return api.get<User>(`/api/users/${id}`);
   },
 
-  // PUT /users/:id - Actualizar datos de usuario (protegida)
+  // PUT /api/users/:id - Actualizar datos de usuario (protegida)
   update: async (id: number, data: UpdateUserDto): Promise<User> => {
-    return api.put<User>(`/users/${id}`, data);
+    return api.put<User>(`/api/users/${id}`, data);
   },
 
-  // DELETE /users/:id - Eliminar usuario (protegida)
+  // DELETE /api/users/:id - Eliminar usuario (protegida)
   delete: async (id: number): Promise<void> => {
-    return api.delete<void>(`/users/${id}`);
+    return api.delete<void>(`/api/users/${id}`);
   },
 };

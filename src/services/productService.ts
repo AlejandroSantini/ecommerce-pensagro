@@ -36,7 +36,7 @@ const mapApiProductToProduct = (apiProduct: ApiProduct): Product => {
 };
 
 export const productService = {
-  // GET /products - Listar productos (con filtros)
+  // GET /api/products - Listar productos (con filtros)
   getAll: async (filters?: ProductFilters): Promise<Product[]> => {
     const params = new URLSearchParams();
     
@@ -50,37 +50,37 @@ export const productService = {
     }
 
     const queryString = params.toString();
-    const response = await api.get<ApiProductsResponse>(`/products${queryString ? `?${queryString}` : ''}`);
+    const response = await api.get<ApiProductsResponse>(`/api/products${queryString ? `?${queryString}` : ''}`);
     
     return response.data.map(mapApiProductToProduct);
   },
 
-  // GET /products/:id - Obtener producto por ID
+  // GET /api/products/:id - Obtener producto por ID
   getById: async (id: number): Promise<Product> => {
-    const response = await api.get<{ status: boolean; data: ApiProduct }>(`/products/${id}`);
+    const response = await api.get<{ status: boolean; data: ApiProduct }>(`/api/products/${id}`);
     return mapApiProductToProduct(response.data);
   },
 
-  // POST /products - Crear producto
+  // POST /api/products - Crear producto
   create: async (data: CreateProductDto): Promise<Product> => {
-    const response = await api.post<{ status: boolean; data: ApiProduct }>('/products', data);
+    const response = await api.post<{ status: boolean; data: ApiProduct }>('/api/products', data);
     return mapApiProductToProduct(response.data);
   },
 
-  // PUT /products/:id - Actualizar producto
+  // PUT /api/products/:id - Actualizar producto
   update: async (id: number, data: UpdateProductDto): Promise<Product> => {
-    const response = await api.put<{ status: boolean; data: ApiProduct }>(`/products/${id}`, data);
+    const response = await api.put<{ status: boolean; data: ApiProduct }>(`/api/products/${id}`, data);
     return mapApiProductToProduct(response.data);
   },
 
-  // DELETE /products/:id - Archivar producto (soft delete)
+  // DELETE /api/products/:id - Archivar producto (soft delete)
   delete: async (id: number): Promise<void> => {
-    await api.delete<{ status: boolean; message: string }>(`/products/${id}`);
+    await api.delete<{ status: boolean; message: string }>(`/api/products/${id}`);
   },
 
-  // GET /products/search?q= - Buscador
+  // GET /api/products/search?q= - Buscador
   search: async (query: string): Promise<Product[]> => {
-    const response = await api.get<ApiProductsResponse>(`/products/search?q=${encodeURIComponent(query)}`);
+    const response = await api.get<ApiProductsResponse>(`/api/products/search?q=${encodeURIComponent(query)}`);
     return response.data.map(mapApiProductToProduct);
   },
 };

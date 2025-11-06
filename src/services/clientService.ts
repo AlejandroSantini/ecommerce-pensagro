@@ -2,18 +2,18 @@ import { api } from '@/lib/api';
 import type { Client, UpdateClientDto } from '@/types/client';
 
 export const clientService = {
-  // GET /clients - Listar clientes
+  // GET /api/clients - Listar clientes
   getAll: async (): Promise<Client[]> => {
-    return api.get<Client[]>('/clients');
+    return api.get<Client[]>('/api/clients');
   },
 
-  // GET /clients/:id - Obtener cliente por ID
+  // GET /api/clients/:id - Obtener cliente por ID
   getById: async (id: number): Promise<Client> => {
-    return api.get<Client>(`/clients/${id}`);
+    return api.get<Client>(`/api/clients/${id}`);
   },
 
-  // PUT /clients/:id - Actualizar cliente
+  // PUT /api/clients/:id - Actualizar cliente
   update: async (id: number, data: UpdateClientDto): Promise<Client> => {
-    return api.put<Client>(`/clients/${id}`, data);
+    return api.put<Client>(`/api/clients/${id}`, data);
   },
 };

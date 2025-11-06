@@ -8,33 +8,33 @@ import type {
 } from '@/types/coupon';
 
 export const couponService = {
-  // GET /coupons - Listar cupones
+  // GET /api/coupons - Listar cupones
   getAll: async (): Promise<Coupon[]> => {
-    return api.get<Coupon[]>('/coupons');
+    return api.get<Coupon[]>('/api/coupons');
   },
 
-  // GET /coupons/:id - Obtener cupón
+  // GET /api/coupons/:id - Obtener cupón
   getById: async (id: number): Promise<Coupon> => {
-    return api.get<Coupon>(`/coupons/${id}`);
+    return api.get<Coupon>(`/api/coupons/${id}`);
   },
 
-  // POST /coupons - Crear cupón
+  // POST /api/coupons - Crear cupón
   create: async (data: CreateCouponDto): Promise<Coupon> => {
-    return api.post<Coupon>('/coupons', data);
+    return api.post<Coupon>('/api/coupons', data);
   },
 
-  // PUT /coupons/:id - Actualizar cupón
+  // PUT /api/coupons/:id - Actualizar cupón
   update: async (id: number, data: UpdateCouponDto): Promise<Coupon> => {
-    return api.put<Coupon>(`/coupons/${id}`, data);
+    return api.put<Coupon>(`/api/coupons/${id}`, data);
   },
 
-  // DELETE /coupons/:id - Eliminar cupón
+  // DELETE /api/coupons/:id - Eliminar cupón
   delete: async (id: number): Promise<void> => {
-    return api.delete<void>(`/coupons/${id}`);
+    return api.delete<void>(`/api/coupons/${id}`);
   },
 
-  // POST /coupons/validate - Validar cupón para una venta
+  // POST /api/coupons/validate - Validar cupón para una venta
   validate: async (data: ValidateCouponDto): Promise<ValidateCouponResponse> => {
-    return api.post<ValidateCouponResponse>('/coupons/validate', data);
+    return api.post<ValidateCouponResponse>('/api/coupons/validate', data);
   },
 };

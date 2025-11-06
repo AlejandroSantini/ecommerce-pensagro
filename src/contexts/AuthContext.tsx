@@ -22,7 +22,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string): Promise<AuthResponse> => {
     setIsLoading(true);
     try {
-      const response = await api.post<ApiResponse<AuthResponse>>('/users/login', {
+      const response = await api.post<ApiResponse<AuthResponse>>('/api/users/login', {
         email,
         password
       });
@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = async (userData: { name: string; email: string; phone: string; password: string; dni: string }): Promise<AuthResponse> => {
     setIsLoading(true);
     try {
-      const response = await api.post<ApiResponse<AuthResponse>>('/users/register', userData);
+      const response = await api.post<ApiResponse<AuthResponse>>('/api/users/register', userData);
       
       if (response.status && response.data) {
         const authData = response.data;
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async (): Promise<void> => {
     try {
-      await api.post('/users/logout');
+      await api.post('/api/users/logout');
     } catch (error) {
       console.warn('Error al hacer logout en el servidor:', error);
     } finally {
