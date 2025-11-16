@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from '@/hooks/useTranslation';
+import { shippingService } from '@/services';
+import ShippingOptions, { ShippingQuoteApiResponse, ShippingOption } from './ShippingOptions';
 
 interface ShippingData {
   shippingMethod: 'standard' | 'pickup';
@@ -46,6 +48,9 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
   const [postalCode, setPostalCode] = useState('');
   const [shippingCost, setShippingCost] = useState<number | null>(null);
   const [calculatingShipping, setCalculatingShipping] = useState(false);
+  const [shippingQuoteResponse, setShippingQuoteResponse] = useState<ShippingQuoteApiResponse | null>(null);
+  const [selectedShippingOption, setSelectedShippingOption] = useState<ShippingOption | null>(null);
+  const [selectedPickupPoint, setSelectedPickupPoint] = useState<number | null>(null);
   const [addressData, setAddressData] = useState({
     nombre: '',
     apellido: '',
@@ -61,7 +66,6 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
     {
       id: 'standard',
       name: t('checkout.homeDelivery'),
-      description: t('checkout.homeDeliveryDescription'),
       price: null,
       icon: Truck,
     },
@@ -75,8 +79,6 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
   ];
 
   useEffect(() => {
-    // TODO: Implementar validación de dirección cuando se complete el User type
-    // const hasAddress = user?.direccion && user?.ciudad && user?.provincia;
     if (selectedMethod !== 'pickup') {
       setNeedsAddress(true);
     } else {
@@ -99,7 +101,7 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const calculateShipping = () => {
+  const calculateShipping = async () => {
     if (!postalCode) {
       setErrors(prev => ({ ...prev, postalCode: t('checkout.zipCodeRequired') }));
       return;
@@ -107,31 +109,44 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
 
     setCalculatingShipping(true);
     setErrors(prev => ({ ...prev, postalCode: '' }));
+    setShippingQuoteResponse(null);
+    setSelectedShippingOption(null);
+    setShippingCost(null);
 
-    setTimeout(() => {
-      const code = parseInt(postalCode);
-      let cost = 0;
-      
-      if (code >= 1000 && code <= 1499) {
-        cost = 2500;
-      } else if (code >= 1500 && code <= 1999) {
-        cost = 3500;
-      } else {
-        cost = 5000;
-      }
-
-      setShippingCost(cost);
+    try {
+      const response = await shippingService.quote({ postal_code: postalCode });
+      setShippingQuoteResponse(response);
       setCalculatingShipping(false);
-    }, 800);
+    } catch (error) {
+      console.error('Error calculating shipping:', error);
+      setErrors(prev => ({ ...prev, postalCode: 'Error al calcular el envío. Intenta nuevamente.' }));
+      setCalculatingShipping(false);
+    }
+  };
+
+  const handleSelectShippingOption = (option: ShippingOption) => {
+    setSelectedShippingOption(option);
+    setShippingCost(option.price_incl_tax);
+    setSelectedPickupPoint(null); 
+    
+    const isHomeDelivery = option.pickup_points.length === 0;
+    setNeedsAddress(isHomeDelivery);
   };
 
   const handleContinue = () => {
-    if (selectedMethod === 'standard' && shippingCost === null) {
+    if (selectedMethod === 'standard' && !selectedShippingOption) {
       setErrors(prev => ({ ...prev, postalCode: t('checkout.calculateFirst') }));
       return;
     }
 
-    if (needsAddress && selectedMethod !== 'pickup') {
+    if (selectedShippingOption && selectedShippingOption.pickup_points.length > 0 && !needsAddress) {
+      if (!selectedPickupPoint) {
+        setErrors(prev => ({ ...prev, pickupPoint: 'Por favor selecciona un punto de retiro' }));
+        return;
+      }
+    }
+
+    if (needsAddress) {
       if (!validateAddress()) {
         return;
       }
@@ -141,7 +156,7 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
       shippingMethod: selectedMethod,
       shippingAddress: needsAddress 
         ? addressData 
-        : undefined, // TODO: Usar dirección del usuario cuando esté disponible
+        : undefined,
       shippingCost: selectedMethod === 'standard' ? (shippingCost ?? undefined) : 0,
     });
   };
@@ -234,10 +249,20 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
             </Button>
           </div>
           
-          {shippingCost !== null && (
+          {shippingQuoteResponse && (
+            <div className="mt-4">
+              <ShippingOptions
+                response={shippingQuoteResponse}
+                onSelect={handleSelectShippingOption}
+                selectedOption={selectedShippingOption}
+              />
+            </div>
+          )}
+
+          {selectedShippingOption && shippingCost !== null && (
             <div className="mt-4 p-3 bg-white rounded-lg border border-green-200">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-700">{t('checkout.shippingCost')}</span>
+                <span className="text-sm text-gray-700">{t('checkout.selectedOption')}: {selectedShippingOption.carrier} - {selectedShippingOption.service_type}</span>
                 <span className="text-lg font-bold text-[#003c6f]">
                   ${shippingCost.toLocaleString('es-AR')}
                 </span>
@@ -247,7 +272,70 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
         </div>
       )}
 
-      {needsAddress && selectedMethod !== 'pickup' && (
+      {selectedShippingOption && selectedShippingOption.pickup_points.length > 0 && !needsAddress && (
+        <div className="space-y-4 pt-4 border-t">
+          <div className="flex items-center gap-2 text-[#003c6f] mb-2">
+            <Store className="w-5 h-5" />
+            <h3 className="font-semibold">Selecciona un punto de retiro</h3>
+          </div>
+
+          {errors.pickupPoint && (
+            <p className="text-sm text-red-500">{errors.pickupPoint}</p>
+          )}
+
+          <div className="space-y-3">
+            {selectedShippingOption.pickup_points.map((point) => {
+              const isSelected = selectedPickupPoint === point.point_id;
+              return (
+                <button
+                  key={point.point_id}
+                  onClick={() => {
+                    setSelectedPickupPoint(point.point_id);
+                    setErrors(prev => ({ ...prev, pickupPoint: '' }));
+                  }}
+                  className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+                    isSelected
+                      ? 'border-[#003c6f] bg-[#003c6f]/5'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900 mb-1">{point.description}</h4>
+                      <div className="flex items-start gap-1 text-sm text-gray-600 mb-1">
+                        <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <span>
+                          {point.location.street} {point.location.street_number}
+                          {point.location.street_extras && ` ${point.location.street_extras}`}
+                          <br />
+                          {point.location.city}, {point.location.state} - CP: {point.location.zipcode}
+                        </span>
+                      </div>
+                      {point.phone && (
+                        <div className="flex items-center gap-1 text-sm text-gray-600">
+                          <span>📞 {point.phone}</span>
+                        </div>
+                      )}
+                      {point.open_hours && (
+                        <div className="flex items-center gap-1 text-sm text-gray-600 mt-1">
+                          <span>🕐 {point.open_hours}</span>
+                        </div>
+                      )}
+                    </div>
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-1 ${
+                      isSelected ? 'border-[#003c6f]' : 'border-gray-300'
+                    }`}>
+                      {isSelected && <div className="w-3 h-3 rounded-full bg-[#003c6f]" />}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {needsAddress && selectedMethod !== 'pickup' && selectedShippingOption && (
         <div className="space-y-4 pt-4 border-t">
           <div className="flex items-center gap-2 text-[#003c6f] mb-2">
             <MapPin className="w-5 h-5" />

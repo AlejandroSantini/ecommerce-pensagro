@@ -2,82 +2,31 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardImage, CardContent } from '@/components/ui/card';
+import { Pagination } from '@/components/ui/pagination';
 import { ShoppingCart, Filter, Loader2 } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
 import { ProductFilters } from '@/components/products/ProductFilters';
 import { productService } from '@/services/productService';
-
-// Categorías con subcategorías - Sector Agro
-const CATEGORIES = [
-  {
-    id: 1,
-    nombre: 'Cercas Eléctrificadas',
-    subcategorias: [
-      { id: 11, nombre: 'Aisladores' },
-      { id: 12, nombre: 'Carreteles' },
-      { id: 13, nombre: 'Hilos, cintas y cuerdas eléctricas' },
-      { id: 14, nombre: 'Manijas mango aislante/conector' },
-      { id: 15, nombre: 'Medición y control' },
-      { id: 16, nombre: 'Redes eléctricas plásticas' },
-      { id: 17, nombre: 'Varillas y postes' },
-    ]
-  },
-  {
-    id: 2,
-    nombre: 'Boyeros Eléctricos',
-    subcategorias: []
-  },
-  {
-    id: 3,
-    nombre: 'Sistema de Pesaje',
-    subcategorias: []
-  },
-  {
-    id: 4,
-    nombre: 'Identificación',
-    subcategorias: []
-  },
-  {
-    id: 5,
-    nombre: 'Tranqueras y Velas Automáticas',
-    subcategorias: []
-  },
-  {
-    id: 6,
-    nombre: 'Sanidad y Tratamiento',
-    subcategorias: []
-  },
-  {
-    id: 7,
-    nombre: 'Bebederos',
-    subcategorias: []
-  },
-  {
-    id: 8,
-    nombre: 'Libros',
-    subcategorias: []
-  },
-  {
-    id: 9,
-    nombre: 'Accesorios y Repuestos',
-    subcategorias: []
-  },
-];
+import { categoryService } from '@/services/categoryService';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0
+  });
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { addItem } = useCart();
   
-  // Estados de filtros
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedSubcategories, setSelectedSubcategories] = useState([]);
   const [showCombos, setShowCombos] = useState(false);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Detectar tamaño de pantalla
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -89,7 +38,20 @@ export default function ProductsPage() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Cargar productos desde la API
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const categoriesData = await categoryService.getAll();
+        setCategories(categoriesData);
+      } catch (err) {
+        console.error('Error loading categories:', err);
+        setCategories([]);
+      }
+    };
+
+    loadCategories();
+  }, []);
+
   useEffect(() => {
     const loadProducts = async () => {
       try {
@@ -99,41 +61,43 @@ export default function ProductsPage() {
         const filters = {
           destacado: undefined, // Cargar todos los productos
           activo: true,
-          categoria: selectedCategories.length > 0 ? selectedCategories[0] : undefined
+          categoria: selectedCategories.length > 0 ? selectedCategories[0] : undefined,
+          page: pagination.currentPage,
+          limit: 6 // 6 productos por página para probar paginación
         };
         
-        const productsData = await productService.getAll(filters);
-        setProducts(productsData);
+        const response = await productService.getAll(filters);
+        setProducts(response.products);
+        setPagination(response.pagination);
       } catch (err) {
         console.error('Error loading products:', err);
-        setError('Error al cargar los productos. Usando datos de prueba.');
-        // Los productos de fallback ya están cargados desde SAMPLE_PRODUCTS
+        setError('Error al cargar los productos. Intente nuevamente.');
+        setProducts([]);
       } finally {
         setLoading(false);
       }
     };
 
     loadProducts();
-  }, [selectedCategories]); // Recargar cuando cambien las categorías seleccionadas
+  }, [selectedCategories, pagination.currentPage]);
 
-  // Filtrar productos
   const filteredProducts = products.filter((product) => {
-    // Filtro de combos
     if (showCombos && !product.isCombo) return false;
     
-    // Filtro de categorías - Si hay categorías seleccionadas, el producto debe estar en alguna
     if (selectedCategories.length > 0) {
-      const productMatchesCategory = selectedCategories.includes(product.categoryId);
+      const productCategoryIds = product.categories?.map(cat => cat.id) || [];
+      const hasMatchingCategory = selectedCategories.some(catId => productCategoryIds.includes(catId));
       
-      // Si no está en las categorías seleccionadas, verificar subcategorías
-      if (!productMatchesCategory && selectedSubcategories.length === 0) {
+      if (!hasMatchingCategory && selectedSubcategories.length === 0) {
         return false;
       }
     }
     
-    // Filtro de subcategorías - Si hay subcategorías seleccionadas, el producto debe estar en alguna
     if (selectedSubcategories.length > 0) {
-      if (!selectedSubcategories.includes(product.subcategoryId)) {
+      const productSubcategoryIds = product.subcategories?.map(sub => sub.id) || [];
+      const hasMatchingSubcategory = selectedSubcategories.some(subId => productSubcategoryIds.includes(subId));
+      
+      if (!hasMatchingSubcategory) {
         return false;
       }
     }
@@ -141,10 +105,16 @@ export default function ProductsPage() {
     return true;
   });
 
+  const handlePageChange = (page) => {
+    setPagination(prev => ({ ...prev, currentPage: page }));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleClearFilters = () => {
     setSelectedCategories([]);
     setSelectedSubcategories([]);
     setShowCombos(false);
+    setPagination(prev => ({ ...prev, currentPage: 1 }));
   };
 
   const handleAddToCart = (product) => {
@@ -159,17 +129,15 @@ export default function ProductsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Header */}
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold mb-2">Todos los Productos</h1>
           <p className="text-gray-600">
-            {filteredProducts.length} {filteredProducts.length === 1 ? 'producto' : 'productos'} 
+            {pagination.totalItems} {pagination.totalItems === 1 ? 'producto' : 'productos'} 
             {(selectedCategories.length > 0 || selectedSubcategories.length > 0 || showCombos) && ' encontrados'}
           </p>
         </div>
         
-        {/* Botón flotante para mobile - solo visible en pantallas pequeñas */}
         {isMobile && (
           <Button
             onClick={() => setMobileFiltersOpen(true)}
@@ -181,13 +149,11 @@ export default function ProductsPage() {
         )}
       </div>
       
-      {/* Layout con filtros */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Filtros - Sidebar izquierdo (desktop) o Drawer (mobile) */}
         <div className="lg:col-span-1">
           <div className="hidden lg:block">
             <ProductFilters
-              categories={CATEGORIES}
+              categories={categories}
               selectedCategories={selectedCategories}
               selectedSubcategories={selectedSubcategories}
               showCombos={showCombos}
@@ -199,9 +165,8 @@ export default function ProductsPage() {
             />
           </div>
           
-          {/* Mobile Drawer */}
           <ProductFilters
-            categories={CATEGORIES}
+            categories={categories}
             selectedCategories={selectedCategories}
             selectedSubcategories={selectedSubcategories}
             showCombos={showCombos}
@@ -215,7 +180,6 @@ export default function ProductsPage() {
           />
         </div>
 
-        {/* Grid de productos */}
         <div className="lg:col-span-3">
           {loading ? (
             <div className="text-center py-12">
@@ -256,61 +220,72 @@ export default function ProductsPage() {
               </Button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {filteredProducts.map((product) => (
-                <Card key={product.id} className="flex flex-col h-full">
-                  <CardImage className="aspect-[4/3]">
-                    <img
-                      src={product.imagen}
-                      alt={product.nombre}
-                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
-                      onError={(e) => {
-                        e.target.src = 'https://via.placeholder.com/300x300?text=Producto';
-                      }}
-                    />
-                    {product.destacado && (
-                      <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 px-2 py-1 rounded text-xs font-semibold z-10">
-                        Destacado
-                      </span>
-                    )}
-                    {product.isCombo && (
-                      <span className="absolute top-2 left-2 bg-[#003c6f] text-white px-2 py-1 rounded text-xs font-semibold z-10">
-                        Combo
-                      </span>
-                    )}
-                    {/* Blue top line */}
-                    <div className="absolute top-0 left-0 w-full h-1 bg-[#003c6f]"></div>
-                  </CardImage>
-                  
-                  <CardContent className="flex flex-col flex-grow">
-                    <h3 className="font-medium text-lg text-gray-800 mb-2 line-clamp-2">{product.nombre}</h3>
-                    <p className="text-gray-600 text-sm mb-3 line-clamp-2 flex-grow">{product.descripcion}</p>
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {filteredProducts.map((product) => (
+                  <Card key={product.id} className="flex flex-col h-full">
+                    <CardImage className="aspect-[4/3]">
+                      <img
+                        src={product.imagen}
+                        alt={product.nombre}
+                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                        onError={(e) => {
+                          e.target.src = 'https://via.placeholder.com/300x300?text=Producto';
+                        }}
+                      />
+                      {product.destacado && (
+                        <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 px-2 py-1 rounded text-xs font-semibold z-10">
+                          Destacado
+                        </span>
+                      )}
+                      {product.isCombo && (
+                        <span className="absolute top-2 left-2 bg-[#003c6f] text-white px-2 py-1 rounded text-xs font-semibold z-10">
+                          Combo
+                        </span>
+                      )}
+                      {/* Blue top line */}
+                      <div className="absolute top-0 left-0 w-full h-1 bg-[#003c6f]"></div>
+                    </CardImage>
                     
-                    <div className="mb-3">
-                      <span className="text-2xl font-bold text-green-600">
-                        ${product.precio.toLocaleString('es-AR')}
-                      </span>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-2">
-                      <Button 
-                        variant="outline" 
-                        className="border-[#003c6f] text-[#003c6f] hover:bg-[#003c6f] hover:text-white"
-                        onClick={() => handleAddToCart(product)}
-                      >
-                        <ShoppingCart className="h-4 w-4 mr-1" />
-                        Agregar
-                      </Button>
-                      <Button asChild className="bg-[#003c6f] hover:bg-[#002b50]">
-                        <Link href={`/products/${product.id}`}>
-                          Ver Detalles
-                        </Link>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                    <CardContent className="flex flex-col flex-grow">
+                      <h3 className="font-medium text-lg text-gray-800 mb-2 line-clamp-2">{product.nombre}</h3>
+                      <p className="text-gray-600 text-sm mb-3 line-clamp-2 flex-grow">{product.descripcion}</p>
+                      
+                      <div className="mb-3">
+                        <span className="text-2xl font-bold text-green-600">
+                          ${product.precio.toLocaleString('es-AR')}
+                        </span>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-2">
+                        <Button 
+                          variant="outline" 
+                          className="border-[#003c6f] text-[#003c6f] hover:bg-[#003c6f] hover:text-white"
+                          onClick={() => handleAddToCart(product)}
+                        >
+                          <ShoppingCart className="h-4 w-4 mr-1" />
+                          Agregar
+                        </Button>
+                        <Button asChild className="bg-[#003c6f] hover:bg-[#002b50]">
+                          <Link href={`/products/${product.id}`}>
+                            Ver Detalles
+                          </Link>
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              
+              {/* Pagination - Always show */}
+              <div className="mt-8 flex justify-center">
+                <Pagination
+                  currentPage={pagination.currentPage}
+                  totalPages={pagination.totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </div>
+            </>
           )}
         </div>
       </div>

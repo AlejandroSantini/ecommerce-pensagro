@@ -58,7 +58,7 @@ export function RegisterForm() {
         phone: data.phone,
         dni: data.dni,
       });
-      
+      //redirigir al login
       reset();
     } catch (error) {
       console.error('Error en registro:', error);

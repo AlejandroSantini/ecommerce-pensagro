@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,6 +21,7 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
+  const router = useRouter();
   const { login: authLogin, isLoading } = useAuth();
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
@@ -42,6 +44,7 @@ export function LoginForm() {
 
     try {
       await authLogin(data.email, data.password);
+      router.push('/');
     } catch (err: unknown) {
       if (err instanceof Error) {
         if (err.message.includes('401') || err.message.includes('Unauthorized')) {

@@ -16,7 +16,7 @@ export function OrderSummary({ showTitle = true, compact = false, shippingCost =
   const getTotal = useCart((state) => state.getTotal);
   
   const subtotal = getTotal();
-  const envio: number = shippingCost || 0;
+  const envio: number = shippingCost !== null ? shippingCost : 0;
   const total = subtotal + envio;
 
   if (compact) {
@@ -48,9 +48,13 @@ export function OrderSummary({ showTitle = true, compact = false, shippingCost =
           
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">{t('checkout.shipping')}</span>
-            <span className={`font-medium ${envio === 0 ? 'text-green-600' : 'text-gray-900'}`}>
-              {shippingCost === null ? t('checkout.toCalculate') : envio === 0 ? t('checkout.free') : `$${envio.toLocaleString('es-AR')}`}
-            </span>
+            {shippingCost === null ? (
+              <span className="font-medium text-green-600">{t('checkout.toCalculate')}</span>
+            ) : envio === 0 ? (
+              <span className="font-medium text-green-600">{t('checkout.free')}</span>
+            ) : (
+              <span className="font-medium text-gray-900">${envio.toLocaleString('es-AR')}</span>
+            )}
           </div>
 
           <div className="border-t border-gray-200 pt-2 mt-2" />
@@ -122,9 +126,13 @@ export function OrderSummary({ showTitle = true, compact = false, shippingCost =
             <Truck className="h-4 w-4 text-gray-500" />
             <span className="text-gray-600">{t('checkout.shipping')}</span>
           </div>
-          <span className={`font-medium ${envio === 0 ? 'text-green-600' : 'text-gray-900'}`}>
-            {shippingCost === null ? t('checkout.toCalculate') : envio === 0 ? t('checkout.free') : `$${envio.toFixed(2)}`}
-          </span>
+          {shippingCost === null ? (
+            <span className="font-medium text-green-600">{t('checkout.toCalculate')}</span>
+          ) : envio === 0 ? (
+            <span className="font-medium text-green-600">{t('checkout.free')}</span>
+          ) : (
+            <span className="font-medium text-gray-900">${envio.toFixed(2)}</span>
+          )}
         </div>
 
         <div className="border-t border-gray-200 pt-3" />

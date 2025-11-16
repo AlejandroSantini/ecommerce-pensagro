@@ -55,14 +55,6 @@ export default function ProductDetail() {
       } catch (err) {
         console.error('Error loading product:', err);
         setError('Error al cargar el producto');
-        
-        // Fallback a datos de muestra
-        const foundProduct = SAMPLE_PRODUCTS.find(p => p.id === parseInt(id));
-        if (foundProduct) {
-          setProduct(foundProduct);
-          const related = SAMPLE_PRODUCTS.filter(p => p.id !== parseInt(id)).slice(0, 6);
-          setRelatedProducts(related);
-        }
       } finally {
         setLoading(false);
       }

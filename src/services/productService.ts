@@ -3,6 +3,7 @@ import type {
   Product,
   ApiProduct,
   ApiProductsResponse,
+  PaginatedProductsResponse,
   CreateProductDto,
   UpdateProductDto,
   ProductFilters,
@@ -36,8 +37,8 @@ const mapApiProductToProduct = (apiProduct: ApiProduct): Product => {
 };
 
 export const productService = {
-  // GET /api/products - Listar productos (con filtros)
-  getAll: async (filters?: ProductFilters): Promise<Product[]> => {
+  // GET /api/products - Listar productos (con filtros y paginación)
+  getAll: async (filters?: ProductFilters): Promise<PaginatedProductsResponse> => {
     const params = new URLSearchParams();
     
     if (filters) {
@@ -47,12 +48,17 @@ export const productService = {
       if (filters.precioMin) params.append('priceMin', String(filters.precioMin));
       if (filters.precioMax) params.append('priceMax', String(filters.precioMax));
       if (filters.search) params.append('search', filters.search);
+      if (filters.page) params.append('page', String(filters.page));
+      if (filters.limit) params.append('limit', String(filters.limit));
     }
 
     const queryString = params.toString();
     const response = await api.get<ApiProductsResponse>(`/api/products${queryString ? `?${queryString}` : ''}`);
     
-    return response.data.map(mapApiProductToProduct);
+    return {
+      products: response.data.map(mapApiProductToProduct),
+      pagination: response.meta
+    };
   },
 
   // GET /api/products/:id - Obtener producto por ID

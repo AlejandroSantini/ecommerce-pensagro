@@ -71,3 +71,10 @@ export type {
   TaxRate,
   UpdateTaxDto,
 } from './config';
+
+// Popup types
+export type {
+  Popup,
+  ApiPopup,
+  ApiPopupsResponse,
+} from './popup';

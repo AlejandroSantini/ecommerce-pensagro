@@ -36,12 +36,28 @@ const axiosInstance = axios.create({
   },
 });
 
+// Lista de endpoints públicos que no requieren autenticación
+const PUBLIC_ENDPOINTS = [
+  '/api/products',
+  '/api/categories',
+  '/api/combos',
+  '/api/popups',
+  '/api/shipping/quote',
+  '/api/config',
+];
+
+// Función para verificar si un endpoint es público
+const isPublicEndpoint = (url: string): boolean => {
+  return PUBLIC_ENDPOINTS.some(endpoint => url.includes(endpoint));
+};
+
 // Interceptor para agregar token automáticamente
 axiosInstance.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('token');
-      if (token) {
+      // Solo agregar token si existe Y el endpoint no es público
+      if (token && config.url && !isPublicEndpoint(config.url)) {
         config.headers = config.headers || {};
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -59,17 +75,31 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    // Si es error 401, limpiar token
-    if (error.response?.status === 401) {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-      }
-    }
-
     const status = error.response?.status || 0;
     const statusText = error.response?.statusText || 'Network Error';
     const errorData = error.response?.data || error.message;
+    const requestUrl = error.config?.url || '';
+
+    // Si es error 401 en un endpoint protegido (no público), limpiar token
+    if (status === 401 && !isPublicEndpoint(requestUrl)) {
+      if (typeof window !== 'undefined') {
+        console.warn('🔒 Token inválido o expirado. Limpiando sesión...');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        // Opcional: redirigir al login solo si estamos en una página protegida
+        // window.location.href = '/login';
+      }
+    }
+
+    // Log para debugging (solo en desarrollo)
+    if (process.env.NODE_ENV === 'development') {
+      console.error(`❌ API Error [${status}]:`, {
+        url: requestUrl,
+        status,
+        statusText,
+        data: errorData
+      });
+    }
 
     throw new ApiError(status, statusText, errorData);
   }

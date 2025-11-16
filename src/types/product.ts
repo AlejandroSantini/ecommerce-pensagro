@@ -46,6 +46,16 @@ export interface ApiProductsResponse {
   };
 }
 
+// New paginated response type
+export interface PaginatedProductsResponse {
+  products: Product[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+  };
+}
+
 // Product Types - Internal App Structure (legacy compatibility)
 export interface Product {
   id: number;
@@ -116,4 +126,6 @@ export interface ProductFilters {
   precioMin?: number;
   precioMax?: number;
   search?: string;
+  page?: number;
+  limit?: number;
 }

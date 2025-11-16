@@ -8,6 +8,8 @@ export { comboService } from './comboService';
 export { saleService } from './saleService';
 export { couponService } from './couponService';
 export { configService } from './configService';
+export { popupService } from './popupService';
+export { shippingService } from './shippingService';
 
 // Re-export API utilities
 export { api, ApiError } from '@/lib/api';

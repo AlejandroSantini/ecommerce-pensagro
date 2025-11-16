@@ -1,4 +1,22 @@
-// Category Types
+export interface ApiSubcategory {
+  id: number;
+  nombre: string;
+  categoria_id: number;
+}
+
+export interface ApiCategory {
+  id: string;
+  name: string;
+  active: boolean;
+  subcategories: ApiSubcategory[];
+}
+
+export interface Subcategory {
+  id: number;
+  nombre: string;
+  categoriaId: number;
+}
+
 export interface Category {
   id: number;
   nombre: string;
@@ -10,6 +28,7 @@ export interface Category {
   parentId?: number;
   createdAt: string;
   updatedAt: string;
+  subcategorias?: Subcategory[];
 }
 
 export interface CreateCategoryDto {
