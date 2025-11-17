@@ -18,17 +18,27 @@ interface CheckoutStepsProps {
 }
 
 export interface CheckoutData {
-  shippingMethod: 'standard' | 'pickup';
+  shippingMethod: 'standard' | 'pickup' | 'coordinate';
   shippingCost?: number;
   shippingAddress?: {
-    nombre: string;
-    apellido: string;
-    direccion: string;
-    ciudad: string;
-    provincia: string;
-    codigoPostal: string;
-    telefono: string;
+    firstName: string;
+    lastName: string;
+    address: string;
+    city: string;
+    province: string;
+    zipCode: string;
+    phone: string;
   };
+  // allow snake_case fields coming from ShippingStep
+  client_id?: number;
+  first_name?: string;
+  last_name?: string;
+  address?: string;
+  apartment?: string;
+  city?: string;
+  province?: string;
+  postal_code?: string;
+  phone?: string;
   paymentMethod: 'transfer' | 'mercadopago' | 'cash';
   paymentDetails?: {
     cbuSelected?: string;
@@ -37,17 +47,24 @@ export interface CheckoutData {
 }
 
 interface ShippingData {
-  shippingMethod: 'standard' | 'pickup';
+  shippingMethod: 'standard' | 'pickup' | 'coordinate';
   shippingCost?: number;
-  nombre?: string;
-  apellido?: string;
+  firstName?: string;
+  lastName?: string;
   email?: string;
-  telefono?: string;
-  direccion?: string;
-  ciudad?: string;
-  provincia?: string;
-  codigoPostal?: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  province?: string;
+  zipCode?: string;
   notas?: string;
+  // snake_case compatibility
+  client_id?: number;
+  first_name?: string;
+  last_name?: string;
+  postal_code?: string;
+  apartment?: string;
+  comment?: string;
 }
 
 interface PaymentData {

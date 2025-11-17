@@ -11,26 +11,35 @@ import { shippingService } from '@/services';
 import ShippingOptions, { ShippingQuoteApiResponse, ShippingOption } from './ShippingOptions';
 
 interface ShippingData {
-  shippingMethod: 'standard' | 'pickup';
+  shippingMethod: 'standard' | 'pickup' | 'coordinate';
   shippingCost?: number;
-  nombre?: string;
-  apellido?: string;
+  firstName?: string;
+  lastName?: string;
   email?: string;
-  telefono?: string;
-  direccion?: string;
-  ciudad?: string;
-  provincia?: string;
-  codigoPostal?: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  province?: string;
+  zipCode?: string;
   notas?: string;
   shippingAddress?: {
-    nombre: string;
-    apellido: string;
-    direccion: string;
-    ciudad: string;
-    provincia: string;
-    codigoPostal: string;
-    telefono: string;
+    firstName: string;
+    lastName: string;
+    address: string;
+    city: string;
+    province: string;
+    zipCode: string;
+    floor?: string;
+    apartment?: string;
+    phone: string;
   };
+  // legacy/snake_case fields expected by backend or external consumers
+  client_id?: number;
+  first_name?: string;
+  last_name?: string;
+  postal_code?: string;
+  apartment?: string;
+  comment?: string;
 }
 
 interface ShippingStepProps {
@@ -41,8 +50,8 @@ interface ShippingStepProps {
 export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
   const { user } = useAuth();
   const { t } = useTranslation();
-  const [selectedMethod, setSelectedMethod] = useState<'standard' | 'pickup'>(
-    initialData?.shippingMethod || 'standard'
+  const [selectedMethod, setSelectedMethod] = useState<'standard' | 'pickup' | 'coordinate'>(
+    (initialData?.shippingMethod as 'standard' | 'pickup' | 'coordinate') || 'standard'
   );
   const [needsAddress, setNeedsAddress] = useState(false);
   const [postalCode, setPostalCode] = useState('');
@@ -52,13 +61,16 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
   const [selectedShippingOption, setSelectedShippingOption] = useState<ShippingOption | null>(null);
   const [selectedPickupPoint, setSelectedPickupPoint] = useState<number | null>(null);
   const [addressData, setAddressData] = useState({
-    nombre: '',
-    apellido: '',
-    direccion: '',
-    ciudad: '',
-    provincia: '',
-    codigoPostal: '',
-    telefono: '',
+    firstName: '',
+    lastName: '',
+    address: '',
+    city: '',
+    province: '',
+    zipCode: '',
+    phone: '',
+    floor: '',
+    apartment: '',
+    comment: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -76,6 +88,13 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
       price: t('checkout.free'),
       icon: Store,
     },
+    {
+      id: 'coordinate',
+      name: t('checkout.coordinateDelivery'),
+      description: t('checkout.coordinateDeliveryDescription'),
+      price: null,
+      icon: MapPin,
+    },
   ];
 
   useEffect(() => {
@@ -86,16 +105,47 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
     }
   }, [selectedMethod, user]);
 
+  // Initialize form from any provided initialData (supports both camelCase and snake_case/legacy keys)
+  useEffect(() => {
+    if (!initialData) return;
+    const raw = initialData as unknown as Record<string, unknown>;
+    const src = (initialData.shippingAddress as unknown) as Record<string, unknown> | undefined;
+
+    setAddressData(prev => ({
+      firstName: (src?.['firstName'] as string) ?? (raw['first_name'] as string) ?? (raw['firstName'] as string) ?? prev.firstName,
+      lastName: (src?.['lastName'] as string) ?? (raw['last_name'] as string) ?? (raw['lastName'] as string) ?? prev.lastName,
+      address: (src?.['address'] as string) ?? (raw['address'] as string) ?? prev.address,
+      city: (src?.['city'] as string) ?? (raw['city'] as string) ?? (raw['ciudad'] as string) ?? prev.city,
+      province: (src?.['province'] as string) ?? (raw['province'] as string) ?? (raw['provincia'] as string) ?? prev.province,
+      zipCode: (src?.['zipCode'] as string) ?? (raw['postal_code'] as string) ?? (raw['zipCode'] as string) ?? (raw['codigoPostal'] as string) ?? prev.zipCode,
+      phone: (src?.['phone'] as string) ?? (raw['phone'] as string) ?? prev.phone,
+      floor: (src?.['floor'] as string) ?? prev.floor,
+      apartment: (src?.['apartment'] as string) ?? (raw['apartment'] as string) ?? prev.apartment,
+      comment: (src?.['comment'] as string) ?? (raw['comment'] as string) ?? (raw['notas'] as string) ?? prev.comment,
+    }));
+
+    const postal = (raw['postal_code'] as string) ?? (raw['zipCode'] as string) ?? '';
+    if (postal) setPostalCode(postal);
+
+    if (initialData.shippingCost !== undefined) {
+      setShippingCost(initialData.shippingCost as number);
+    }
+
+    if (initialData.shippingMethod) {
+      setSelectedMethod(initialData.shippingMethod as 'standard' | 'pickup');
+    }
+  }, [initialData]);
+
   const validateAddress = () => {
     const newErrors: Record<string, string> = {};
     
-    if (!addressData.nombre) newErrors.nombre = t('checkout.firstNameRequired');
-    if (!addressData.apellido) newErrors.apellido = t('checkout.lastNameRequired');
-    if (!addressData.direccion) newErrors.direccion = t('checkout.addressRequired');
-    if (!addressData.ciudad) newErrors.ciudad = t('checkout.cityRequired');
-    if (!addressData.provincia) newErrors.provincia = t('checkout.provinceRequired');
-    if (!addressData.codigoPostal) newErrors.codigoPostal = t('checkout.zipCodeRequired');
-    if (!addressData.telefono) newErrors.telefono = t('checkout.phoneRequired');
+    if (!addressData.firstName) newErrors.firstName = t('checkout.firstNameRequired');
+    if (!addressData.lastName) newErrors.lastName = t('checkout.lastNameRequired');
+    if (!addressData.address) newErrors.address = t('checkout.addressRequired');
+    if (!addressData.city) newErrors.city = t('checkout.cityRequired');
+    if (!addressData.province) newErrors.province = t('checkout.provinceRequired');
+    if (!addressData.zipCode) newErrors.zipCode = t('checkout.zipCodeRequired');
+    if (!addressData.phone) newErrors.phone = t('checkout.phoneRequired');
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -154,10 +204,18 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
 
     onNext({
       shippingMethod: selectedMethod,
-      shippingAddress: needsAddress 
-        ? addressData 
-        : undefined,
+      shippingAddress: needsAddress ? addressData : undefined,
       shippingCost: selectedMethod === 'standard' ? (shippingCost ?? undefined) : 0,
+      client_id: user ? Number(user.id) : undefined,
+      first_name: addressData.firstName,
+      last_name: addressData.lastName,
+      address: addressData.address,
+      apartment: addressData.apartment,
+      city: addressData.city,
+      province: addressData.province,
+      postal_code: addressData.zipCode,
+      phone: addressData.phone,
+      comment: addressData.comment,
     });
   };
 
@@ -183,7 +241,7 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
           return (
             <button
               key={method.id}
-              onClick={() => setSelectedMethod(method.id as 'standard' | 'pickup')}
+              onClick={() => setSelectedMethod(method.id as 'standard' | 'pickup' | 'coordinate')}
               className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
                 isSelected
                   ? 'border-[#003c6f] bg-[#003c6f]/5'
@@ -344,91 +402,125 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="nombre">{t('checkout.firstNameRequired')}</Label>
+              <Label htmlFor="firstName">{t('checkout.firstNameRequired')}</Label>
               <Input
-                id="nombre"
-                value={addressData.nombre}
-                onChange={(e) => handleChange('nombre', e.target.value)}
+                id="firstName"
+                value={addressData.firstName}
+                onChange={(e) => handleChange('firstName', e.target.value)}
                 placeholder={t('checkout.firstNamePlaceholder')}
-                className={errors.nombre ? 'border-red-500' : ''}
+                className={errors.firstName ? 'border-red-500' : ''}
               />
-              {errors.nombre && <p className="text-sm text-red-500">{errors.nombre}</p>}
+              {errors.firstName && <p className="text-sm text-red-500">{errors.firstName}</p>}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="apellido">{t('checkout.lastNameRequired')}</Label>
+              <Label htmlFor="lastName">{t('checkout.lastNameRequired')}</Label>
               <Input
-                id="apellido"
-                value={addressData.apellido}
-                onChange={(e) => handleChange('apellido', e.target.value)}
+                id="lastName"
+                value={addressData.lastName}
+                onChange={(e) => handleChange('lastName', e.target.value)}
                 placeholder={t('checkout.lastNamePlaceholder')}
-                className={errors.apellido ? 'border-red-500' : ''}
+                className={errors.lastName ? 'border-red-500' : ''}
               />
-              {errors.apellido && <p className="text-sm text-red-500">{errors.apellido}</p>}
+              {errors.lastName && <p className="text-sm text-red-500">{errors.lastName}</p>}
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="direccion">{t('checkout.addressRequired')}</Label>
+            <Label htmlFor="address">{t('checkout.addressRequired')}</Label>
             <Input
-              id="direccion"
-              value={addressData.direccion}
-              onChange={(e) => handleChange('direccion', e.target.value)}
+              id="address"
+              value={addressData.address}
+              onChange={(e) => handleChange('address', e.target.value)}
               placeholder={t('checkout.addressPlaceholder')}
-              className={errors.direccion ? 'border-red-500' : ''}
+              className={errors.address ? 'border-red-500' : ''}
             />
-            {errors.direccion && <p className="text-sm text-red-500">{errors.direccion}</p>}
+            {errors.address && <p className="text-sm text-red-500">{errors.address}</p>}
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="floor">{t('checkout.floor')}</Label>
+              <Input
+                id="floor"
+                value={addressData.floor}
+                onChange={(e) => handleChange('floor', e.target.value)}
+                placeholder={t('checkout.floorPlaceholder')}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="apartment">{t('checkout.apartment')}</Label>
+              <Input
+                id="apartment"
+                value={addressData.apartment}
+                onChange={(e) => handleChange('apartment', e.target.value)}
+                placeholder={t('checkout.apartmentPlaceholder')}
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="ciudad">{t('checkout.cityRequired')}</Label>
+              <Label htmlFor="city">{t('checkout.cityRequired')}</Label>
               <Input
-                id="ciudad"
-                value={addressData.ciudad}
-                onChange={(e) => handleChange('ciudad', e.target.value)}
+                id="city"
+                value={addressData.city}
+                onChange={(e) => handleChange('city', e.target.value)}
                 placeholder={t('checkout.cityPlaceholder')}
-                className={errors.ciudad ? 'border-red-500' : ''}
+                className={errors.city ? 'border-red-500' : ''}
               />
-              {errors.ciudad && <p className="text-sm text-red-500">{errors.ciudad}</p>}
+              {errors.city && <p className="text-sm text-red-500">{errors.city}</p>}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="provincia">{t('checkout.provinceRequired')}</Label>
+              <Label htmlFor="province">{t('checkout.provinceRequired')}</Label>
               <Input
-                id="provincia"
-                value={addressData.provincia}
-                onChange={(e) => handleChange('provincia', e.target.value)}
+                id="province"
+                value={addressData.province}
+                onChange={(e) => handleChange('province', e.target.value)}
                 placeholder={t('checkout.provincePlaceholder')}
-                className={errors.provincia ? 'border-red-500' : ''}
+                className={errors.province ? 'border-red-500' : ''}
               />
-              {errors.provincia && <p className="text-sm text-red-500">{errors.provincia}</p>}
+              {errors.province && <p className="text-sm text-red-500">{errors.province}</p>}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="codigoPostal">{t('checkout.zipCodeRequired')}</Label>
+              <Label htmlFor="zipCode">{t('checkout.zipCodeRequired')}</Label>
               <Input
-                id="codigoPostal"
-                value={addressData.codigoPostal}
-                onChange={(e) => handleChange('codigoPostal', e.target.value)}
+                id="zipCode"
+                value={addressData.zipCode}
+                onChange={(e) => handleChange('zipCode', e.target.value)}
                 placeholder={t('checkout.zipCodePlaceholder')}
-                className={errors.codigoPostal ? 'border-red-500' : ''}
+                className={errors.zipCode ? 'border-red-500' : ''}
               />
-              {errors.codigoPostal && <p className="text-sm text-red-500">{errors.codigoPostal}</p>}
+              {errors.zipCode && <p className="text-sm text-red-500">{errors.zipCode}</p>}
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="telefono">{t('checkout.phoneRequired')}</Label>
+            <Label htmlFor="phone">{t('checkout.phoneRequired')}</Label>
             <Input
-              id="telefono"
+              id="phone"
               type="tel"
-              value={addressData.telefono}
-              onChange={(e) => handleChange('telefono', e.target.value)}
+              value={addressData.phone}
+              onChange={(e) => handleChange('phone', e.target.value)}
               placeholder={t('checkout.phonePlaceholder')}
-              className={errors.telefono ? 'border-red-500' : ''}
+              className={errors.phone ? 'border-red-500' : ''}
             />
-            {errors.telefono && <p className="text-sm text-red-500">{errors.telefono}</p>}
+            {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="comment">{t('checkout.comment') ?? 'Comentarios'}</Label>
+            <textarea
+              id="comment"
+              value={addressData.comment}
+              onChange={(e) => handleChange('comment', e.target.value)}
+              placeholder={t('checkout.commentPlaceholder') ?? ''}
+              className="w-full rounded-md border border-gray-200 p-2 text-sm"
+              rows={3}
+            />
           </div>
         </div>
       )}

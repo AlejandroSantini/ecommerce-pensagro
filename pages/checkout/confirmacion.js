@@ -150,23 +150,23 @@ export default function ConfirmacionPage() {
                   <MapPin className="h-5 w-5 text-gray-400 mt-0.5" />
                   <div>
                     <p className="text-sm font-medium text-gray-900">
-                      {order.nombre} {order.apellido}
+                      {order.first_name ?? order.firstName ?? order.nombre} {order.last_name ?? order.lastName ?? order.apellido}
                     </p>
-                    <p className="text-sm text-gray-600">{order.direccion}</p>
-                    <p className="text-sm text-gray-600">
-                      {order.ciudad}, {order.provincia} {order.codigoPostal}
-                    </p>
+                      <p className="text-sm text-gray-600">{order.address ?? order.direccion}</p>
+                      <p className="text-sm text-gray-600">
+                        {order.city ?? order.ciudad ?? ''}{order.city || order.ciudad ? ', ' : ''}{order.province ?? order.provincia} {order.postal_code ?? order.zipCode ?? order.codigoPostal}
+                      </p>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-3">
                   <Mail className="h-5 w-5 text-gray-400" />
-                  <p className="text-sm text-gray-600">{order.email}</p>
+                    <p className="text-sm text-gray-600">{order.email}</p>
                 </div>
 
                 <div className="flex items-center space-x-3">
                   <Phone className="h-5 w-5 text-gray-400" />
-                  <p className="text-sm text-gray-600">{order.telefono}</p>
+                    <p className="text-sm text-gray-600">{order.phone ?? order.telefono ?? ''}</p>
                 </div>
               </>
             )}
