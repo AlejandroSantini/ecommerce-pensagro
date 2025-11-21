@@ -122,6 +122,7 @@
     "title": "Checkout",
     "backToStore": "Back to store",
     "securePay": "Secure payment",
+    "notLoggedIn": "You need to be logged in to perform this action",
     "steps": {
       "shipping": "Shipping",
       "payment": "Payment",
@@ -220,7 +221,8 @@
       "processingOrder": "There was an error processing your order. Please try again.",
       "emailInvalid": "Please enter a valid email",
       "phoneInvalid": "Please enter a valid phone number",
-      "fieldRequired": "This field is required"
+      "fieldRequired": "This field is required",
+      "notLoggedIn": "You need to be logged in to perform this action"
     },
     "benefits": {
       "freeShipping": "Free Shipping",
@@ -431,8 +433,12 @@
     "back": "Back",
     "featured": "Featured Product",
     "quantity": "Quantity",
+    "variant": "Variant",
+    "selectVariant": "Select a variant",
+    "scrollHint": "Scroll to see more variants",
+    "inStock": "In stock",
+    "outOfStock": "Out of stock",
     "addToCart": "Add to Cart",
-    "outOfStock": "Out of Stock",
     "description": "Product Description",
     "related": "Related Products",
     "additionalInfo": "Additional Information",

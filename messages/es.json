@@ -122,6 +122,7 @@
     "title": "Checkout",
     "backToStore": "Volver a la tienda",
     "securePay": "Pago seguro",
+    "notLoggedIn": "Necesitas estar logueado para realizar esta acción",
     "steps": {
       "shipping": "Envío",
       "payment": "Pago",
@@ -220,7 +221,8 @@
       "processingOrder": "Hubo un error al procesar tu pedido. Por favor, intenta nuevamente.",
       "emailInvalid": "Por favor, ingresá un email válido",
       "phoneInvalid": "Por favor, ingresá un teléfono válido",
-      "fieldRequired": "Este campo es requerido"
+      "fieldRequired": "Este campo es requerido",
+      "notLoggedIn": "Necesitas estar logueado para realizar esta acción"
     },
     "benefits": {
       "freeShipping": "Envío Gratis",
@@ -431,8 +433,12 @@
     "back": "Volver",
     "featured": "Producto Destacado",
     "quantity": "Cantidad",
+    "variant": "Variante",
+    "selectVariant": "Selecciona una variante",
+    "scrollHint": "Desliza para ver más variantes",
+    "inStock": "En stock",
+    "outOfStock": "Sin stock",
     "addToCart": "Agregar al Carrito",
-    "outOfStock": "Sin Stock",
     "description": "Descripción del Producto",
     "related": "Productos Relacionados",
     "additionalInfo": "Información adicional",
@@ -441,4 +447,3 @@
     "technicalSupport": "Asesoramiento técnico incluido"
   }
 }
-

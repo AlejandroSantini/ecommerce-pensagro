@@ -84,8 +84,11 @@ export default function ConfirmacionPage() {
           </p>
           
           <div className="bg-gray-50 rounded-lg p-4 inline-block">
-            <p className="text-sm text-gray-600">Número de pedido</p>
-            <p className="text-2xl font-bold text-[#003c6f]">#{order.id}</p>
+            <p className="text-sm text-gray-600">Número de Compra</p>
+            <p className="text-2xl font-bold text-[#003c6f]">#{order.saleId || order.id}</p>
+            {order.saleNumber && (
+              <p className="text-xs text-gray-500 mt-1">Comprobante: {order.saleNumber}</p>
+            )}
           </div>
         </div>
 

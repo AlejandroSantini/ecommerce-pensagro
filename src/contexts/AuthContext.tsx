@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, AuthResponse } from '@/types';
-import { api, ApiResponse } from '@/lib/api';
+import { api, ApiResponse, ApiError } from '@/lib/api';
 
 interface AuthContextType {
   user: User | null;
@@ -31,8 +31,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const authData = response.data;
         localStorage.setItem('token', authData.token);
         localStorage.setItem('user', JSON.stringify({
+          id: authData.user.id,
           name: authData.user.name,
-          email: authData.user.email
+          email: authData.user.email,
+          client_id: authData.user.client_id
         }));
         setUser(authData.user);
         return authData;
@@ -40,6 +42,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error(response.message || 'Error en el login');
       }
     } catch (error) {
+      if (error instanceof ApiError && error.status === 401) {
+        throw new Error(error.message || 'Credenciales incorrectas');
+      }
       if (error instanceof Error) {
         throw error;
       }
@@ -50,19 +55,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const register = async (userData: { name: string; email: string; phone: string; password: string; dni: string }): Promise<AuthResponse> => {
+    if (isLoading) {
+      throw new Error('Ya hay un registro en proceso');
+    }
+    
     setIsLoading(true);
     try {
-      const response = await api.post<ApiResponse<AuthResponse>>('/api/users/register', userData);
+      interface RegisterData {
+        id: string;
+        name: string;
+        email: string;
+        client_id: string;
+      }
+      const response = await api.post<ApiResponse<RegisterData>>('/api/users/register', userData);
       
       if (response.status && response.data) {
-        const authData = response.data;
-        localStorage.setItem('token', authData.token);
-        localStorage.setItem('user', JSON.stringify({
-          name: authData.user.name,
-          email: authData.user.email
-        }));
-        setUser(authData.user);
-        window.location.href = '/login'; 
+        const user: User = {
+          id: response.data.id,
+          name: response.data.name,
+          email: response.data.email,
+          client_id: parseInt(response.data.client_id)
+        };
+        
+        const authData: AuthResponse = {
+          user,
+          token: ''
+        };
+        
+        setUser(user);
+        
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 100);
+        
         return authData;
       } else {
         throw new Error(response.message || 'Error en el registro');

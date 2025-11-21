@@ -48,9 +48,16 @@ export function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormData, e?: React.BaseSyntheticEvent) => {
     e?.preventDefault();
+    
+    // Prevenir múltiples envíos
+    if (isLoading) {
+      return;
+    }
+    
     setError(null);
     
     try {
+      console.log('📝 Enviando formulario de registro...');
       await authRegister({
         name: data.fullName,
         email: data.email,

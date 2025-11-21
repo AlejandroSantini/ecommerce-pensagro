@@ -14,7 +14,7 @@ export class ApiError extends Error {
     public statusText: string,
     public data?: unknown
   ) {
-    super(`API Error: ${status} ${statusText}`);
+    super(statusText);
     this.name = 'ApiError';
   }
 }
@@ -80,25 +80,18 @@ axiosInstance.interceptors.response.use(
     const errorData = error.response?.data || error.message;
     const requestUrl = error.config?.url || '';
 
-    // Si es error 401 en un endpoint protegido (no público), limpiar token
+    // Si es error 401 en un endpoint protegido (no público), limpiar token y mostrar mensaje amigable
     if (status === 401 && !isPublicEndpoint(requestUrl)) {
       if (typeof window !== 'undefined') {
-        console.warn('🔒 Token inválido o expirado. Limpiando sesión...');
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        // Opcional: redirigir al login solo si estamos en una página protegida
-        // window.location.href = '/login';
       }
-    }
-
-    // Log para debugging (solo en desarrollo)
-    if (process.env.NODE_ENV === 'development') {
-      console.error(`❌ API Error [${status}]:`, {
-        url: requestUrl,
-        status,
-        statusText,
-        data: errorData
-      });
+      
+      throw new ApiError(
+        401, 
+        'Necesitas estar logueado para realizar esta acción',
+        { message: 'Necesitas estar logueado para realizar esta acción' }
+      );
     }
 
     throw new ApiError(status, statusText, errorData);

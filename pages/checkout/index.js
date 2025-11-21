@@ -3,13 +3,16 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { ArrowLeft, Lock } from 'lucide-react';
 import { useCart } from '../../src/hooks/useCart';
+import { useAuth } from '../../src/contexts/AuthContext';
 import { CheckoutSteps } from '../../src/components/checkout/CheckoutSteps';
 import { OrderSummary } from '../../src/components/checkout/OrderSummary';
 import { Button } from '../../src/components/ui/button';
 import { useTranslation } from '../../src/hooks/useTranslation';
+import { saleService } from '../../src/services/saleService';
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const items = useCart((state) => state.items);
   const clearCart = useCart((state) => state.clearCart);
   const [isLoading, setIsLoading] = useState(false);
@@ -29,10 +32,44 @@ export default function CheckoutPage() {
   }, [mounted, items, isCheckingOut, router]);
 
   const handleCheckout = async (checkoutData) => {
-    setIsLoading(true);
-    setIsCheckingOut(true); // Indicar que estamos procesando el checkout
-    
     try {
+      setIsLoading(true);
+      setIsCheckingOut(true);
+      
+      const clientId = user?.client_id || 1;
+      
+      const paymentDiscounts = {
+        'transfer': { id: 2, percent: 10 },
+        'mercadopago': { id: 3, percent: 0 },
+        'cash': { id: 1, percent: 0 }
+      };
+      
+      const paymentDiscount = paymentDiscounts[checkoutData.paymentMethod] || paymentDiscounts['mercadopago'];
+      
+      const products = items.map(item => ({
+        product_id: parseInt(item.id),
+        variant_id: item.variantId ? parseInt(item.variantId) : null,
+        quantity: item.quantity
+      }));
+      
+      const salePayload = {
+        client_id: clientId,
+        payment_method: checkoutData.paymentMethod,
+        payment_status: 'pending',
+        products: products,
+        coupon_id: null,
+        discount_payment_method_id: paymentDiscount.id,
+        payment_method_discount_percent: paymentDiscount.percent,
+        coupon_discount_percent: null,
+        channel: 'local',
+        comment: checkoutData.apartment || checkoutData.comment || '',
+        cbu_destination: checkoutData.paymentMethod === 'transfer' ? checkoutData.paymentDetails?.cbuSelected : undefined,
+        invoice_number: null,
+        shipping_id: checkoutData.shipping_id || null
+      };
+
+      const saleResponse = await saleService.create(salePayload);
+      
       const finalTotal = items.reduce((sum, item) => sum + (item.precio * item.quantity), 0) + (checkoutData.shippingCost || 0);
       
       const orderData = {
@@ -42,22 +79,38 @@ export default function CheckoutPage() {
         total: finalTotal,
         fecha: new Date().toISOString(),
         estado: 'pendiente',
+        saleId: saleResponse?.id,
+        saleNumber: saleResponse?.sale_number,
       };
 
       const orders = JSON.parse(localStorage.getItem('pensagro-orders') || '[]');
-      const orderId = Date.now();
+      const orderId = saleResponse?.id || Date.now();
       orders.push({ id: orderId, ...orderData });
       localStorage.setItem('pensagro-orders', JSON.stringify(orders));
 
-      // Limpiar el carrito
       clearCart();
-
-      // Redirigir inmediatamente
+      
       window.location.href = `/checkout/confirmacion?orderId=${orderId}`;
     } catch (error) {
       console.error('Error al procesar el pedido:', error);
-      alert(t('checkout.errors.processingOrder') || 'Hubo un error al procesar tu pedido. Por favor, intenta nuevamente.');
-      setIsCheckingOut(false); // Resetear en caso de error
+      
+      let errorMessage = 'Hubo un error al procesar tu pedido.';
+      
+      if (error.status === 401) {
+        errorMessage = error.message || t('checkout.errors.notLoggedIn') || 'Necesitas estar logueado para realizar esta acción';
+        alert(errorMessage);
+        router.push('/login');
+        return;
+      }
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      alert(errorMessage);
+      setIsCheckingOut(false);
     } finally {
       setIsLoading(false);
     }

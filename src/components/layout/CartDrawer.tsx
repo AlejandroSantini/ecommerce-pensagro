@@ -71,7 +71,7 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
             ) : (
               <div className="space-y-4">
                 {items.map((item) => (
-                  <div key={item.id} className="flex space-x-4 border-b pb-4">
+                  <div key={`${item.id}-${item.variantId ?? '0'}`} className="flex space-x-4 border-b pb-4">
                     <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border bg-white flex items-center justify-center">
                       {item.imagen && (
                         <img
@@ -85,19 +85,22 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
                       <div className="flex justify-between">
                         <h3 className="text-sm font-medium">{item.nombre}</h3>
                         <button
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeItem(item.id, item.variantId)}
                           className="text-gray-400 hover:text-red-500"
                           aria-label="Remove item"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
+                      {item.variantName && (
+                        <p className="text-xs text-gray-500 mt-1">{item.variantName}</p>
+                      )}
                       <p className="mt-1 text-sm text-gray-500">
                         ${item.precio.toFixed(2)}
                       </p>
                       <div className="mt-2 flex items-center space-x-2">
                         <button
-                          onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                          onClick={() => updateQuantity(item.id, item.variantId, Math.max(1, item.quantity - 1))}
                           className="rounded-md border p-1 hover:bg-gray-100"
                           disabled={item.quantity <= 1}
                         >
@@ -105,9 +108,8 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
                         </button>
                         <span className="w-8 text-center text-sm">{item.quantity}</span>
                         <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.id, item.variantId, item.quantity + 1)}
                           className="rounded-md border p-1 hover:bg-gray-100"
-                          disabled={item.quantity >= item.stock}
                         >
                           <Plus className="h-3 w-3" />
                         </button>

@@ -118,12 +118,20 @@ export default function ProductsPage() {
   };
 
   const handleAddToCart = (product) => {
+    const variants = product.variants || product.variantes || [];
+    
+    // Si tiene variantes, redirigir al detalle
+    if (variants.length > 0) {
+      router.push(`/products/${product.id}`);
+      return;
+    }
+
+    // Si no tiene variantes, agregar directamente
     addItem({
       id: product.id,
       nombre: product.nombre,
       precio: product.precio,
       imagen: product.imagen,
-      stock: product.stock
     }, 1);
   };
 
@@ -223,50 +231,75 @@ export default function ProductsPage() {
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredProducts.map((product) => (
-                  <Card key={product.id} className="flex flex-col h-full">
-                    <CardImage className="aspect-[4/3]">
+                  <Card key={product.id} className="flex flex-col h-full hover:shadow-xl transition-shadow duration-300 overflow-hidden border-2 border-gray-100">
+                    <CardImage className="aspect-[4/3] relative overflow-hidden">
                       <img
                         src={product.imagen}
                         alt={product.nombre}
-                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                         onError={(e) => {
                           e.target.src = 'https://via.placeholder.com/300x300?text=Producto';
                         }}
                       />
                       {product.destacado && (
-                        <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 px-2 py-1 rounded text-xs font-semibold z-10">
-                          Destacado
+                        <span className="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 px-3 py-1.5 rounded-full text-xs font-bold shadow-lg z-10">
+                          ⭐ Destacado
                         </span>
                       )}
                       {product.isCombo && (
-                        <span className="absolute top-2 left-2 bg-[#003c6f] text-white px-2 py-1 rounded text-xs font-semibold z-10">
-                          Combo
+                        <span className="absolute top-3 left-3 bg-gradient-to-r from-[#003c6f] to-[#002b50] text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg z-10">
+                          🎁 Combo
                         </span>
                       )}
-                      {/* Blue top line */}
-                      <div className="absolute top-0 left-0 w-full h-1 bg-[#003c6f]"></div>
+                      {/* Blue top accent */}
+                      <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#003c6f] to-[#0056a3]"></div>
                     </CardImage>
                     
-                    <CardContent className="flex flex-col flex-grow">
-                      <h3 className="font-medium text-lg text-gray-800 mb-2 line-clamp-2">{product.nombre}</h3>
-                      <p className="text-gray-600 text-sm mb-3 line-clamp-2 flex-grow">{product.descripcion}</p>
+                    <CardContent className="flex flex-col flex-grow p-5">
+                      <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-2 leading-tight">{product.nombre}</h3>
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow leading-relaxed">{product.descripcion}</p>
                       
-                      <div className="mb-3">
-                        <span className="text-2xl font-bold text-green-600">
+                      <div className="mb-4 flex items-baseline gap-2">
+                        <span className="text-3xl font-bold text-[#003c6f]">
                           ${product.precio.toLocaleString('es-AR')}
                         </span>
+                        {(product.variants || product.variantes) && (product.variants || product.variantes).length > 0 && (
+                          <span className="text-xs text-green-600 font-semibold bg-green-50 px-2 py-1 rounded-full">
+                            {(product.variants || product.variantes).length} variante{(product.variants || product.variantes).length > 1 ? 's' : ''}
+                          </span>
+                        )}
                       </div>
                       
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-2">
+                        {(product.variants || product.variantes) && (product.variants || product.variantes).length > 0 ? (
+                          <Button 
+                            size="lg"
+                            className="w-full bg-gray-400 hover:bg-gray-400 text-white cursor-default opacity-60 relative"
+                            onClick={() => handleAddToCart(product)}
+                            title="Este producto tiene variantes. Haz clic para seleccionar."
+                          >
+                            <ShoppingCart className="h-4 w-4" />
+                            Agregar al Carrito
+                            <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                              {(product.variants || product.variantes).length}
+                            </span>
+                          </Button>
+                        ) : (
+                          <Button 
+                            size="lg"
+                            className="w-full bg-[#003c6f] hover:bg-[#002b50] text-white"
+                            onClick={() => handleAddToCart(product)}
+                          >
+                            <ShoppingCart className="h-4 w-4" />
+                            Agregar al Carrito
+                          </Button>
+                        )}
                         <Button 
-                          variant="outline" 
-                          className="border-[#003c6f] text-[#003c6f] hover:bg-[#003c6f] hover:text-white"
-                          onClick={() => handleAddToCart(product)}
+                          asChild 
+                          variant="outline"
+                          size="lg"
+                          className="w-full"
                         >
-                          <ShoppingCart className="h-4 w-4 mr-1" />
-                          Agregar
-                        </Button>
-                        <Button asChild className="bg-[#003c6f] hover:bg-[#002b50]">
                           <Link href={`/products/${product.id}`}>
                             Ver Detalles
                           </Link>
