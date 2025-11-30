@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Button } from '@/components/ui/button';
 import { Card, CardImage, CardContent } from '@/components/ui/card';
 import { Pagination } from '@/components/ui/pagination';
 import { ShoppingCart, Filter, Loader2 } from 'lucide-react';
-import { useCart } from '@/hooks/useCart';
 import { ProductFilters } from '@/components/products/ProductFilters';
 import { productService } from '@/services/productService';
 import { categoryService } from '@/services/categoryService';
@@ -19,7 +18,7 @@ export default function ProductsPage() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { addItem } = useCart();
+  const router = useRouter();
   
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedSubcategories, setSelectedSubcategories] = useState([]);
@@ -115,24 +114,6 @@ export default function ProductsPage() {
     setSelectedSubcategories([]);
     setShowCombos(false);
     setPagination(prev => ({ ...prev, currentPage: 1 }));
-  };
-
-  const handleAddToCart = (product) => {
-    const variants = product.variants || product.variantes || [];
-    
-    // Si tiene variantes, redirigir al detalle
-    if (variants.length > 0) {
-      router.push(`/products/${product.id}`);
-      return;
-    }
-
-    // Si no tiene variantes, agregar directamente
-    addItem({
-      id: product.id,
-      nombre: product.nombre,
-      precio: product.precio,
-      imagen: product.imagen,
-    }, 1);
   };
 
   return (
@@ -231,7 +212,11 @@ export default function ProductsPage() {
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {filteredProducts.map((product) => (
-                  <Card key={product.id} className="flex flex-col h-full hover:shadow-xl transition-shadow duration-300 overflow-hidden border-2 border-gray-100">
+                  <Card 
+                    key={product.id} 
+                    className="flex flex-col h-full hover:shadow-xl transition-all duration-300 overflow-hidden border-2 border-gray-100 cursor-pointer hover:border-[#003c6f]/30 hover:-translate-y-1"
+                    onClick={() => router.push(`/products/${product.id}`)}
+                  >
                     <CardImage className="aspect-[4/3] relative overflow-hidden">
                       <img
                         src={product.imagen}
@@ -259,7 +244,7 @@ export default function ProductsPage() {
                       <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-2 leading-tight">{product.nombre}</h3>
                       <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow leading-relaxed">{product.descripcion}</p>
                       
-                      <div className="mb-4 flex items-baseline gap-2">
+                      <div className="flex items-end justify-between gap-2">
                         <span className="text-3xl font-bold text-[#003c6f]">
                           ${product.precio.toLocaleString('es-AR')}
                         </span>
@@ -268,42 +253,6 @@ export default function ProductsPage() {
                             {(product.variants || product.variantes).length} variante{(product.variants || product.variantes).length > 1 ? 's' : ''}
                           </span>
                         )}
-                      </div>
-                      
-                      <div className="space-y-2">
-                        {(product.variants || product.variantes) && (product.variants || product.variantes).length > 0 ? (
-                          <Button 
-                            size="lg"
-                            className="w-full bg-gray-400 hover:bg-gray-400 text-white cursor-default opacity-60 relative"
-                            onClick={() => handleAddToCart(product)}
-                            title="Este producto tiene variantes. Haz clic para seleccionar."
-                          >
-                            <ShoppingCart className="h-4 w-4" />
-                            Agregar al Carrito
-                            <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                              {(product.variants || product.variantes).length}
-                            </span>
-                          </Button>
-                        ) : (
-                          <Button 
-                            size="lg"
-                            className="w-full bg-[#003c6f] hover:bg-[#002b50] text-white"
-                            onClick={() => handleAddToCart(product)}
-                          >
-                            <ShoppingCart className="h-4 w-4" />
-                            Agregar al Carrito
-                          </Button>
-                        )}
-                        <Button 
-                          asChild 
-                          variant="outline"
-                          size="lg"
-                          className="w-full"
-                        >
-                          <Link href={`/products/${product.id}`}>
-                            Ver Detalles
-                          </Link>
-                        </Button>
                       </div>
                     </CardContent>
                   </Card>

@@ -1,17 +1,27 @@
-import { ReactNode } from 'react';
+import { ReactNode, MouseEventHandler } from 'react';
 
 interface CardProps {
   children: ReactNode;
   className?: string;
   hover?: boolean;
+  onClick?: MouseEventHandler<HTMLDivElement>;
 }
 
-export function Card({ children, className = '', hover = true }: CardProps) {
+export function Card({ children, className = '', hover = true, onClick }: CardProps) {
   return (
     <div
       className={`bg-white border border-gray-200 rounded-lg overflow-hidden ${
         hover ? 'hover:shadow-md transition-shadow' : ''
       } ${className}`}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick(e as unknown as React.MouseEvent<HTMLDivElement>);
+        }
+      } : undefined}
     >
       {children}
     </div>

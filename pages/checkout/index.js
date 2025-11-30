@@ -126,32 +126,34 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header del checkout */}
       <div className="bg-white border-b sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <Link href="/">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  {t('checkout.backToStore')}
+                <Button variant="ghost" size="sm" className="px-2 sm:px-3">
+                  <ArrowLeft className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">{t('checkout.backToStore')}</span>
                 </Button>
               </Link>
               <div className="hidden sm:block h-6 w-px bg-gray-300" />
-              <h1 className="hidden sm:block text-xl font-bold text-gray-900">{t('checkout.title')}</h1>
+              <h1 className="text-base sm:text-xl font-bold text-gray-900">{t('checkout.title')}</h1>
             </div>
-            <div className="flex items-center space-x-2 text-sm text-gray-600">
-              <Lock className="h-4 w-4" />
-              <span className="hidden sm:inline">{t('checkout.securePay')}</span>
+            <div className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-gray-600">
+              <Lock className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden xs:inline sm:inline">{t('checkout.securePay')}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content - Checkout Steps */}
-          <div className="lg:col-span-2">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <div className="lg:hidden mb-4">
+          <OrderSummary compact shippingCost={shippingCost} />
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
+          <div className="lg:col-span-2 order-2 lg:order-1">
             <CheckoutSteps 
               onComplete={handleCheckout} 
               isLoading={isLoading}
@@ -159,7 +161,7 @@ export default function CheckoutPage() {
             />
           </div>
 
-          <div className="lg:col-span-1">
+          <div className="hidden lg:block lg:col-span-1 order-1 lg:order-2">
             <div className="lg:sticky lg:top-24">
               <OrderSummary compact shippingCost={shippingCost} />
             </div>

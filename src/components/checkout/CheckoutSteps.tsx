@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Check, Truck, CreditCard, Package } from 'lucide-react';
 import { ShippingStep } from './ShippingStep';
 import { PaymentStep } from './PaymentStep';
@@ -80,6 +80,10 @@ export function CheckoutSteps({ onComplete, isLoading = false, onShippingChange 
   const [checkoutData, setCheckoutData] = useState<Partial<CheckoutData>>({});
   const { t } = useTranslation();
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentStep]);
+
   const steps = [
     { number: 1, title: t('checkout.steps.shipping'), icon: Truck },
     { number: 2, title: t('checkout.steps.payment'), icon: CreditCard },
@@ -145,7 +149,7 @@ export function CheckoutSteps({ onComplete, isLoading = false, onShippingChange 
                   )}
                 </div>
                 
-                <span className={`mt-2 text-xs sm:text-sm font-medium ${
+                <span className={`mt-2 text-[10px] sm:text-sm font-medium text-center leading-tight ${
                   isCurrent ? 'text-[#003c6f]' : isCompleted ? 'text-green-600' : 'text-gray-500'
                 }`}>
                   {step.title}
@@ -156,7 +160,7 @@ export function CheckoutSteps({ onComplete, isLoading = false, onShippingChange 
         </div>
       </div>
 
-      <div className="bg-white rounded-lg border p-6">
+      <div className="bg-white rounded-lg border p-4 sm:p-6">
         {currentStep === 1 && (
           <ShippingStep
             onNext={handleShippingComplete}

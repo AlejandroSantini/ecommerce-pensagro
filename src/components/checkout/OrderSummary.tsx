@@ -21,32 +21,32 @@ export function OrderSummary({ showTitle = true, compact = false, shippingCost =
 
   if (compact) {
     return (
-      <div className="bg-white rounded-lg border p-4 lg:sticky lg:top-24">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('checkout.summary')}</h2>
+      <div className="bg-white rounded-lg border p-3 sm:p-4 lg:sticky lg:top-24">
+        <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">{t('checkout.summary')}</h2>
         
-        <div className="space-y-2 mb-4">
+        <div className="space-y-2 mb-3 sm:mb-4 max-h-32 sm:max-h-48 overflow-y-auto">
           {items.map((item) => (
-            <div key={item.id} className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-2 flex-1 min-w-0">
+            <div key={item.id} className="flex items-center justify-between text-xs sm:text-sm">
+              <div className="flex items-center gap-1 sm:gap-2 flex-1 min-w-0">
                 <span className="font-medium text-gray-600">{item.quantity}x</span>
                 <span className="text-gray-900 truncate">{item.nombre}</span>
               </div>
-              <span className="font-medium text-gray-900 ml-2">
+              <span className="font-medium text-gray-900 ml-2 whitespace-nowrap">
                 ${(item.precio * item.quantity).toLocaleString('es-AR')}
               </span>
             </div>
           ))}
         </div>
 
-        <div className="border-t border-gray-200 my-3" />
+        <div className="border-t border-gray-200 my-2 sm:my-3" />
 
-        <div className="space-y-2">
-          <div className="flex justify-between text-sm">
+        <div className="space-y-1 sm:space-y-2">
+          <div className="flex justify-between text-xs sm:text-sm">
             <span className="text-gray-600">{t('checkout.subtotal')}</span>
             <span className="font-medium text-gray-900">${subtotal.toLocaleString('es-AR')}</span>
           </div>
           
-          <div className="flex justify-between text-sm">
+          <div className="flex justify-between text-xs sm:text-sm">
             <span className="text-gray-600">{t('checkout.shipping')}</span>
             {shippingCost === null ? (
               <span className="font-medium text-green-600">{t('checkout.toCalculate')}</span>
@@ -59,7 +59,7 @@ export function OrderSummary({ showTitle = true, compact = false, shippingCost =
 
           <div className="border-t border-gray-200 pt-2 mt-2" />
 
-          <div className="flex justify-between text-base font-semibold">
+          <div className="flex justify-between text-sm sm:text-base font-semibold">
             <span className="text-gray-900">{t('checkout.total')}</span>
             <span className="text-[#003c6f]">${total.toLocaleString('es-AR')}</span>
           </div>

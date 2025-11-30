@@ -143,34 +143,67 @@ export default function ConfirmacionPage() {
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
               <p className="text-sm font-medium text-gray-900 mb-1">Tipo de envío</p>
               <p className="text-sm text-gray-600">
-                {order.shippingMethod === 'pickup' ? '🏪 Retiro en Sucursal' : '🚚 Envío a Domicilio'}
+                {order.shippingMethod === 'pickup' 
+                  ? '🏪 Retiro en Sucursal' 
+                  : order.shippingMethod === 'coordinate'
+                    ? '📞 Envío a coordinar con Pensagro'
+                    : '🚚 Envío a Domicilio'}
               </p>
+              {/* Mostrar costo de envío si existe */}
+              {order.shippingCost > 0 && (
+                <p className="text-sm text-[#003c6f] font-semibold mt-1">
+                  Costo de envío: ${order.shippingCost.toLocaleString('es-AR')}
+                </p>
+              )}
             </div>
 
-            {order.shippingMethod !== 'pickup' && (
+            {/* Información de dirección para envío standard y coordinate */}
+            {(order.shippingMethod === 'standard' || order.shippingMethod === 'coordinate') && (
               <>
-                <div className="flex items-start space-x-3">
-                  <MapPin className="h-5 w-5 text-gray-400 mt-0.5" />
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">
-                      {order.first_name ?? order.firstName ?? order.nombre} {order.last_name ?? order.lastName ?? order.apellido}
-                    </p>
-                      <p className="text-sm text-gray-600">{order.address ?? order.direccion}</p>
-                      <p className="text-sm text-gray-600">
-                        {order.city ?? order.ciudad ?? ''}{order.city || order.ciudad ? ', ' : ''}{order.province ?? order.provincia} {order.postal_code ?? order.zipCode ?? order.codigoPostal}
+                {/* Dirección */}
+                {(order.address || order.shippingAddress?.address || order.direccion || order.first_name || order.shippingAddress?.firstName) && (
+                  <div className="flex items-start space-x-3">
+                    <MapPin className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">
+                        {order.shippingAddress?.firstName || order.first_name || order.firstName || order.nombre || ''} {order.shippingAddress?.lastName || order.last_name || order.lastName || order.apellido || ''}
                       </p>
+                      <p className="text-sm text-gray-600">
+                        {order.shippingAddress?.address || order.address || order.direccion || ''}
+                        {(order.shippingAddress?.apartment || order.apartment) && ` - ${order.shippingAddress?.apartment || order.apartment}`}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        {order.shippingAddress?.city || order.city || order.ciudad || ''}{(order.shippingAddress?.city || order.city || order.ciudad) ? ', ' : ''}
+                        {order.shippingAddress?.province || order.province || order.provincia || ''} {order.shippingAddress?.zipCode || order.postal_code || order.zipCode || order.codigoPostal || ''}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="flex items-center space-x-3">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                    <p className="text-sm text-gray-600">{order.email}</p>
-                </div>
+                {/* Email */}
+                {(order.email || order.shippingAddress?.email) && (
+                  <div className="flex items-center space-x-3">
+                    <Mail className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                    <p className="text-sm text-gray-600">{order.email || order.shippingAddress?.email}</p>
+                  </div>
+                )}
 
-                <div className="flex items-center space-x-3">
-                  <Phone className="h-5 w-5 text-gray-400" />
-                    <p className="text-sm text-gray-600">{order.phone ?? order.telefono ?? ''}</p>
-                </div>
+                {/* Teléfono */}
+                {(order.phone || order.shippingAddress?.phone || order.telefono) && (
+                  <div className="flex items-center space-x-3">
+                    <Phone className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                    <p className="text-sm text-gray-600">{order.shippingAddress?.phone || order.phone || order.telefono}</p>
+                  </div>
+                )}
+
+                {/* Mensaje especial para coordinate */}
+                {order.shippingMethod === 'coordinate' && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
+                    <p className="text-sm text-blue-800">
+                      <strong>📞 Envío a coordinar:</strong> Nos pondremos en contacto contigo para acordar la fecha y condiciones de entrega.
+                    </p>
+                  </div>
+                )}
               </>
             )}
 
@@ -209,14 +242,40 @@ export default function ConfirmacionPage() {
               <span className="font-semibold mr-2">1.</span>
               <span>Recibirás un email de confirmación con los detalles de tu pedido.</span>
             </li>
-            <li className="flex items-start">
-              <span className="font-semibold mr-2">2.</span>
-              <span>Te notificaremos cuando tu pedido sea enviado con el número de seguimiento.</span>
-            </li>
-            <li className="flex items-start">
-              <span className="font-semibold mr-2">3.</span>
-              <span>Tu pedido llegará en 3-5 días hábiles.</span>
-            </li>
+            {order.shippingMethod === 'pickup' ? (
+              <>
+                <li className="flex items-start">
+                  <span className="font-semibold mr-2">2.</span>
+                  <span>Te notificaremos cuando tu pedido esté listo para retirar.</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="font-semibold mr-2">3.</span>
+                  <span>Pasá a retirar tu pedido por nuestra sucursal en el horario indicado.</span>
+                </li>
+              </>
+            ) : order.shippingMethod === 'coordinate' ? (
+              <>
+                <li className="flex items-start">
+                  <span className="font-semibold mr-2">2.</span>
+                  <span>Nos contactaremos contigo para coordinar la fecha y horario de entrega.</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="font-semibold mr-2">3.</span>
+                  <span>Una vez acordada la entrega, recibirás la confirmación final.</span>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="flex items-start">
+                  <span className="font-semibold mr-2">2.</span>
+                  <span>Te notificaremos cuando tu pedido sea enviado con el número de seguimiento.</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="font-semibold mr-2">3.</span>
+                  <span>Tu pedido llegará en 3-5 días hábiles.</span>
+                </li>
+              </>
+            )}
           </ol>
         </div>
 

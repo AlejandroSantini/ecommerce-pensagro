@@ -83,9 +83,10 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
             style={{ scrollbarWidth: 'none' }}
           >
             {products.map(product => (
-              <div
+              <Link
                 key={product.id}
-                className="flex-none w-60 border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                href={`/products/${product.id}`}
+                className="flex-none w-60 border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-all hover:border-[#003c6f]/30 hover:-translate-y-1 cursor-pointer block"
               >
                 <div className="w-full h-48 bg-white flex items-center justify-center overflow-hidden">
                   {product.imagen ? (
@@ -108,14 +109,9 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
                 
                 <div className="p-4">
                   <h3 className="font-medium text-sm mb-1 line-clamp-2 h-10">{product.nombre}</h3>
-                  <p className="text-lg font-semibold mb-2">${product.precio.toLocaleString()}</p>
-                  <Button asChild className="w-full bg-[#003c6f] hover:bg-[#002b50]" size="sm">
-                    <Link href={`/products/${product.id}`}>
-                      {t('products.viewDetails')}
-                    </Link>
-                  </Button>
+                  <p className="text-lg font-semibold text-[#003c6f]">${product.precio.toLocaleString()}</p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
           

@@ -1,9 +1,11 @@
-import { api } from '@/lib/api';
+import { api, ApiResponse } from '@/lib/api';
+import type {
+  ShippingAddress,
+  CreateShippingAddressPayload,
+  ShippingQuotePayload,
+} from '@/types';
 
-interface ShippingQuotePayload {
-  postal_code: string;
-}
-
+// Mantener la interfaz interna para la respuesta específica del quote
 interface ShippingQuoteApiResponse {
   status: boolean;
   postal_code?: string;
@@ -43,5 +45,18 @@ export const shippingService = {
   quote: async (payload: ShippingQuotePayload): Promise<ShippingQuoteApiResponse> => {
     const response = await api.post<ShippingQuoteApiResponse>('/api/shipping/quote', payload);
     return response;
+  },
+
+  // GET /api/shipping/client/:clientId - Obtener direcciones del cliente
+  getByClient: async (clientId: number): Promise<ShippingAddress[]> => {
+    const response = await api.get<ApiResponse<ShippingAddress[]>>(`/api/shipping/client/${clientId}`);
+    
+    return response.data;
+  },
+
+  // POST /api/shipping - Crear nueva dirección
+  create: async (payload: CreateShippingAddressPayload): Promise<ShippingAddress> => {
+    const response = await api.post<ApiResponse<ShippingAddress>>('/api/shipping', payload);
+    return response.data;
   },
 };

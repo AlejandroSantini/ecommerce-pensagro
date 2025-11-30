@@ -78,3 +78,13 @@ export type {
   ApiPopup,
   ApiPopupsResponse,
 } from './popup';
+
+// Shipping types
+export type {
+  ShippingAddress,
+  CreateShippingAddressPayload,
+  ShippingQuotePayload,
+  PickupPoint,
+  ShippingOption,
+  ShippingQuoteResponse,
+} from './shipping';
