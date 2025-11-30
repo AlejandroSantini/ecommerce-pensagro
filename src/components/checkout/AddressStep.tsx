@@ -69,7 +69,8 @@ export function AddressStep({
   const [savedAddresses, setSavedAddresses] = useState<ShippingAddress[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(initialSelectedAddressId || null);
   const [showNewAddressForm, setShowNewAddressForm] = useState(false);
-  const [loadingAddresses, setLoadingAddresses] = useState(false);
+  const [loadingAddresses, setLoadingAddresses] = useState(true); // Empieza en true para usuarios logueados
+  const [hasLoadedAddresses, setHasLoadedAddresses] = useState(false); // Si ya terminó la carga inicial
   const [generalError, setGeneralError] = useState<string | null>(null);
 
   // React Hook Form con Zod
@@ -101,7 +102,11 @@ export function AddressStep({
 
   useEffect(() => {
     const loadAddresses = async () => {
-      if (!user?.client_id) return;
+      if (!user?.client_id) {
+        setLoadingAddresses(false);
+        setHasLoadedAddresses(true);
+        return;
+      }
       
       setLoadingAddresses(true);
       try {
@@ -111,6 +116,7 @@ export function AddressStep({
         console.error('Error loading addresses:', error);
       } finally {
         setLoadingAddresses(false);
+        setHasLoadedAddresses(true);
       }
     };
 
@@ -297,8 +303,8 @@ export function AddressStep({
           <p className="text-sm text-red-500">{generalError}</p>
         )}
 
-        {/* Loading state */}
-        {loadingAddresses && savedAddresses.length === 0 && (
+        {/* Loading state - solo mientras carga y tiene usuario */}
+        {user && loadingAddresses && savedAddresses.length === 0 && (
           <div className="text-center py-4 text-gray-500">
             Cargando direcciones...
           </div>
@@ -349,7 +355,8 @@ export function AddressStep({
         )}
 
         {/* Formulario de nueva dirección */}
-        {(!user || savedAddresses.length === 0 || showNewAddressForm) && (
+        {/* Mostrar si: no hay usuario, o (ya cargó y no hay direcciones), o está en modo nueva dirección */}
+        {(!user || (hasLoadedAddresses && savedAddresses.length === 0) || showNewAddressForm) && (
           <div className="space-y-4">
             {showNewAddressForm && user && savedAddresses.length > 0 && (
               <div className="flex items-center justify-between pb-2 border-b">

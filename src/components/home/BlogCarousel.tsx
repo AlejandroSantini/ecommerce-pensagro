@@ -56,10 +56,10 @@ export function BlogCarousel({ posts }: BlogCarouselProps) {
           </Link>
         </div>
 
-        <div className="relative">
+        <div className="relative px-0 md:px-14">
           <button
             onClick={() => scroll('left')}
-            className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-50 rounded-full p-3 shadow-lg border border-gray-200 transition-all"
+            className="hidden md:flex absolute -left-2 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-50 rounded-full p-3 shadow-lg border border-gray-200 transition-all"
             aria-label="Previous"
           >
             <ChevronLeft className="h-6 w-6 text-gray-600" />
@@ -67,7 +67,7 @@ export function BlogCarousel({ posts }: BlogCarouselProps) {
           
           <button
             onClick={() => scroll('right')}
-            className="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-50 rounded-full p-3 shadow-lg border border-gray-200 transition-all"
+            className="hidden md:flex absolute -right-2 top-1/2 -translate-y-1/2 z-10 bg-white hover:bg-gray-50 rounded-full p-3 shadow-lg border border-gray-200 transition-all"
             aria-label="Next"
           >
             <ChevronRight className="h-6 w-6 text-gray-600" />
@@ -83,8 +83,8 @@ export function BlogCarousel({ posts }: BlogCarouselProps) {
                 href={`/news/${post.id}`}
                 className="flex-none w-[85%] sm:w-[45%] lg:w-[calc(33.333%-1rem)] snap-center"
               >
-                <Card className="group h-full cursor-pointer">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-[#003c6f] z-10"></div>
+                <Card className="group h-full cursor-pointer overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-[#003c6f] z-10 rounded-t-lg"></div>
                   
                   <CardImage>
                     <div className="relative aspect-[16/9] overflow-hidden bg-gray-50">

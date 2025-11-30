@@ -214,6 +214,8 @@
     "processing": "Processing...",
     "notes": "Additional notes (optional)",
     "notesPlaceholder": "Additional information about your order...",
+    "comment": "Comments (optional)",
+    "commentPlaceholder": "Delivery instructions, references, etc.",
     "placeOrder": "Place Order",
     "terms": "By clicking 'Place Order' you agree to our Terms and Conditions.",
     "orderSummary": "Order Summary",

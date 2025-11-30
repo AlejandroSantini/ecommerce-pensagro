@@ -79,7 +79,7 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
           
           <div
             ref={containerRef}
-            className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide scroll-smooth"
+            className="flex overflow-x-auto gap-4 pt-2 pb-4 scrollbar-hide scroll-smooth"
             style={{ scrollbarWidth: 'none' }}
           >
             {products.map(product => (

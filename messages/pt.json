@@ -184,6 +184,8 @@
     "confirmOrder": "Confirmar Pedido",
     "processing": "Processando...",
     "notes": "Notas adicionais (opcional)",
+    "comment": "Comentários (opcional)",
+    "commentPlaceholder": "Instruções de entrega, referências, etc.",
     "notesPlaceholder": "Informações adicionais sobre seu pedido...",
     "placeOrder": "Finalizar Pedido",
     "terms": "Ao clicar em 'Finalizar Pedido' você aceita nossos Termos e Condições.",

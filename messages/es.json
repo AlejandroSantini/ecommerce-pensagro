@@ -214,6 +214,8 @@
     "processing": "Procesando...",
     "notes": "Notas adicionales (opcional)",
     "notesPlaceholder": "Información adicional sobre tu pedido...",
+    "comment": "Comentarios (opcional)",
+    "commentPlaceholder": "Indicaciones para la entrega, referencias, etc.",
     "placeOrder": "Finalizar Compra",
     "terms": "Al hacer clic en 'Finalizar Compra' aceptás nuestros Términos y Condiciones.",
     "orderSummary": "Resumen del Pedido",

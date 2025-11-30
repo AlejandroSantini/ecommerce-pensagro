@@ -103,6 +103,11 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
     // Para standard, needsAddress se setea en handleSelectShippingOption
   }, [selectedMethod]);
 
+  // Scroll to top when internal step changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentStep]);
+
   // Initialize form from any provided initialData
   useEffect(() => {
     if (!initialData) return;
