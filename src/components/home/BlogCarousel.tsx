@@ -83,9 +83,7 @@ export function BlogCarousel({ posts }: BlogCarouselProps) {
                 href={`/news/${post.id}`}
                 className="flex-none w-[85%] sm:w-[45%] lg:w-[calc(33.333%-1rem)] snap-center"
               >
-                <Card className="group h-full cursor-pointer overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-[#003c6f] z-10 rounded-t-lg"></div>
-                  
+                <Card className="group h-full cursor-pointer overflow-hidden border-t-4 border-t-[#003c6f]">
                   <CardImage>
                     <div className="relative aspect-[16/9] overflow-hidden bg-gray-50">
                       <img
