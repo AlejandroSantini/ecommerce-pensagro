@@ -121,6 +121,18 @@
   }
 }
 
+/* Estilos de selección de texto */
+::selection {
+  background-color: #003c6f;
+  color: white;
+}
+
+input::selection,
+textarea::selection {
+  background-color: #003c6f;
+  color: white;
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;

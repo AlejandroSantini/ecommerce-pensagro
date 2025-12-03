@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from '@/hooks/useTranslation';
+import { useProvinces } from '@/hooks/useProvinces';
 import { shippingService } from '@/services';
 import type { ShippingAddress } from '@/types';
 
@@ -65,6 +66,7 @@ export function AddressStep({
 }: AddressStepProps) {
   const { user } = useAuth();
   const { t } = useTranslation();
+  const { provinces, loading: loadingProvinces } = useProvinces();
   
   const [savedAddresses, setSavedAddresses] = useState<ShippingAddress[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(initialSelectedAddressId || null);
@@ -122,20 +124,6 @@ export function AddressStep({
 
     loadAddresses();
   }, [user]);
-
-  const getErrorMessage = (field: keyof AddressFormData) => {
-    if (!errors[field]) return null;
-    const fieldLabels: Record<string, string> = {
-      firstName: t('checkout.firstNameRequired'),
-      lastName: t('checkout.lastNameRequired'),
-      address: t('checkout.addressRequired'),
-      city: t('checkout.cityRequired'),
-      province: t('checkout.provinceRequired'),
-      zipCode: t('checkout.zipCodeRequired'),
-      phone: t('checkout.phoneRequired'),
-    };
-    return fieldLabels[field] || t('checkout.errors.fieldRequired');
-  };
 
   const handleSaveAddress = async () => {
     // Trigger validation first
@@ -384,7 +372,6 @@ export function AddressStep({
                   placeholder={t('checkout.firstNamePlaceholder')}
                   className={`text-sm sm:text-base ${errors.firstName ? 'border-red-500' : ''}`}
                 />
-                {errors.firstName && <p className="text-xs sm:text-sm text-red-500">{getErrorMessage('firstName')}</p>}
               </div>
 
               <div className="space-y-1 sm:space-y-2">
@@ -395,7 +382,6 @@ export function AddressStep({
                   placeholder={t('checkout.lastNamePlaceholder')}
                   className={`text-sm sm:text-base ${errors.lastName ? 'border-red-500' : ''}`}
                 />
-                {errors.lastName && <p className="text-xs sm:text-sm text-red-500">{getErrorMessage('lastName')}</p>}
               </div>
             </div>
 
@@ -407,7 +393,6 @@ export function AddressStep({
                 placeholder={t('checkout.addressPlaceholder')}
                 className={`text-sm sm:text-base ${errors.address ? 'border-red-500' : ''}`}
               />
-              {errors.address && <p className="text-xs sm:text-sm text-red-500">{getErrorMessage('address')}</p>}
             </div>
 
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
@@ -441,18 +426,25 @@ export function AddressStep({
                   placeholder={t('checkout.cityPlaceholder')}
                   className={`text-sm sm:text-base ${errors.city ? 'border-red-500' : ''}`}
                 />
-                {errors.city && <p className="text-xs sm:text-sm text-red-500">{getErrorMessage('city')}</p>}
               </div>
 
               <div className="space-y-1 sm:space-y-2">
                 <Label htmlFor="addr-province" className="text-sm">{t('checkout.provinceRequired')}</Label>
-                <Input
+                <select
                   id="addr-province"
                   {...register('province')}
-                  placeholder={t('checkout.provincePlaceholder')}
-                  className={`text-sm sm:text-base ${errors.province ? 'border-red-500' : ''}`}
-                />
-                {errors.province && <p className="text-xs sm:text-sm text-red-500">{getErrorMessage('province')}</p>}
+                  disabled={loadingProvinces}
+                  className={`w-full h-10 px-3 py-2 text-sm sm:text-base rounded-md border bg-white ${errors.province ? 'border-red-500' : 'border-input'} focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50`}
+                >
+                  <option value="">
+                    {loadingProvinces ? 'Cargando...' : t('checkout.selectProvince')}
+                  </option>
+                  {provinces.map((province) => (
+                    <option key={province.value} value={province.label}>
+                      {province.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="space-y-1 sm:space-y-2">
@@ -463,7 +455,6 @@ export function AddressStep({
                   placeholder={t('checkout.zipCodePlaceholder')}
                   className={`text-sm sm:text-base ${errors.zipCode ? 'border-red-500' : ''}`}
                 />
-                {errors.zipCode && <p className="text-xs sm:text-sm text-red-500">{getErrorMessage('zipCode')}</p>}
               </div>
             </div>
 
@@ -476,7 +467,6 @@ export function AddressStep({
                 placeholder={t('checkout.phonePlaceholder')}
                 className={`text-sm sm:text-base ${errors.phone ? 'border-red-500' : ''}`}
               />
-              {errors.phone && <p className="text-xs sm:text-sm text-red-500">{getErrorMessage('phone')}</p>}
             </div>
 
             <div className="space-y-1 sm:space-y-2">

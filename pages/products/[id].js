@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { useCart } from '@/hooks/useCart';
+import { useCartDrawer } from '@/hooks/useCartDrawer';
 import { useTranslation } from '@/hooks/useTranslation';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Minus, Plus, Loader2 } from 'lucide-react';
+import { ArrowLeft, Minus, Plus, Loader2, Check, ShoppingCart } from 'lucide-react';
 import { ProductCarousel } from '@/components/home/ProductCarousel';
 import { ProductImageCarousel } from '@/components/products/ProductImageCarousel';
 import { VariantCard } from '@/components/products/VariantCard';
@@ -13,6 +14,7 @@ export default function ProductDetail() {
   const router = useRouter();
   const { id } = router.query;
   const { addItem } = useCart();
+  const { openCart } = useCartDrawer();
   const { t } = useTranslation();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -20,6 +22,8 @@ export default function ProductDetail() {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [addingToCart, setAddingToCart] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(false);
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -70,7 +74,9 @@ export default function ProductDetail() {
   }, [id]);
 
   const handleAddToCart = () => {
-    if (product) {
+    if (product && !addingToCart) {
+      setAddingToCart(true);
+      
       const variants = product.variants || product.variantes || [];
       const variant = variants.find(v => String(v.id) === String(selectedVariantId));
       const price = variant?.price_retail_usd ? Number(variant.price_retail_usd) : product.precio;
@@ -83,6 +89,16 @@ export default function ProductDetail() {
         variantId: variant?.id ? String(variant.id) : undefined,
         variantName: variant?.name || variant?.nombre || undefined,
       }, quantity);
+
+      setTimeout(() => {
+        setAddingToCart(false);
+        setAddedToCart(true);
+        openCart();
+        
+        setTimeout(() => {
+          setAddedToCart(false);
+        }, 2000);
+      }, 500);
     }
   };
 
@@ -269,11 +285,30 @@ export default function ProductDetail() {
 
               <Button
                 onClick={handleAddToCart}
-                className="w-full bg-[#003c6f] hover:bg-[#002b50] text-white font-semibold py-3 rounded-lg transition-colors"
+                className={`w-full font-semibold py-3 rounded-lg transition-all duration-300 ${
+                  addedToCart 
+                    ? 'bg-green-500 hover:bg-green-600' 
+                    : 'bg-[#003c6f] hover:bg-[#002b50]'
+                } text-white`}
                 size="lg"
-                disabled={product.stock === 0}
+                disabled={product.stock === 0 || addingToCart}
               >
-                {product.stock > 0 ? t('productDetail.addToCart') : t('productDetail.outOfStock')}
+                {addingToCart ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                    {t('productDetail.adding') || 'Agregando...'}
+                  </>
+                ) : addedToCart ? (
+                  <>
+                    <Check className="h-5 w-5 mr-2" />
+                    {t('productDetail.added') || '¡Agregado!'}
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="h-5 w-5 mr-2" />
+                    {product.stock > 0 ? t('productDetail.addToCart') : t('productDetail.outOfStock')}
+                  </>
+                )}
               </Button>
             </div>
           </div>

@@ -4,6 +4,7 @@ import { ShoppingCart, User, Menu, Search, LogOut, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { useCart } from '@/hooks/useCart';
+import { useCartDrawer } from '@/hooks/useCartDrawer';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
 import { CartDrawer } from './CartDrawer';
@@ -15,8 +16,8 @@ export function Header() {
   const { t } = useTranslation();
   
   const totalItems = useCart((state) => state.getTotalItems());
+  const { isOpen: isCartOpen, openCart, closeCart } = useCartDrawer();
   
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   
@@ -76,7 +77,7 @@ export function Header() {
 
             <button
               className="relative inline-flex h-10 w-10 items-center justify-center rounded-md text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
-              onClick={() => setIsCartOpen(true)}
+              onClick={openCart}
               aria-label="Cart"
               type="button"
             >
@@ -186,7 +187,7 @@ export function Header() {
         </div>
       </header>
 
-      <CartDrawer open={isCartOpen} onOpenChange={setIsCartOpen} />
+      <CartDrawer open={isCartOpen} onOpenChange={(open) => open ? openCart() : closeCart()} />
     </>
   );
 }

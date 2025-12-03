@@ -44,6 +44,7 @@ const PUBLIC_ENDPOINTS = [
   '/api/popups',
   '/api/shipping/quote',
   '/api/config',
+  '/api/sales',
 ];
 
 // Función para verificar si un endpoint es público

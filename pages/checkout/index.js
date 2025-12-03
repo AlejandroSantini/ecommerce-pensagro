@@ -36,8 +36,6 @@ export default function CheckoutPage() {
       setIsLoading(true);
       setIsCheckingOut(true);
       
-      const clientId = user?.client_id || 1;
-      
       const paymentDiscounts = {
         'transfer': { id: 2, percent: 10 },
         'mercadopago': { id: 3, percent: 0 },
@@ -52,8 +50,11 @@ export default function CheckoutPage() {
         quantity: item.quantity
       }));
       
+      const addr = checkoutData.shippingAddress || {};
+      
       const salePayload = {
-        client_id: clientId,
+        client_id: user?.client_id || null,
+        shipping_id: checkoutData.shipping_id || null,
         payment_method: checkoutData.paymentMethod,
         payment_status: 'pending',
         products: products,
@@ -61,11 +62,18 @@ export default function CheckoutPage() {
         discount_payment_method_id: paymentDiscount.id,
         payment_method_discount_percent: paymentDiscount.percent,
         coupon_discount_percent: null,
-        channel: 'local',
+        channel: 'ecommerce',
         comment: checkoutData.apartment || checkoutData.comment || '',
         cbu_destination: checkoutData.paymentMethod === 'transfer' ? checkoutData.paymentDetails?.cbuSelected : undefined,
         invoice_number: null,
-        shipping_id: checkoutData.shipping_id || null
+        first_name: checkoutData.first_name || addr.firstName || null,
+        last_name: checkoutData.last_name || addr.lastName || null,
+        address: checkoutData.address || addr.address || null,
+        apartment: checkoutData.apartment || addr.apartment || null,
+        city: checkoutData.city || addr.city || null,
+        province: checkoutData.province || addr.province || null,
+        postal_code: checkoutData.postal_code || addr.zipCode || null,
+        phone: checkoutData.phone || addr.phone || null,
       };
 
       const saleResponse = await saleService.create(salePayload);
@@ -95,13 +103,6 @@ export default function CheckoutPage() {
       console.error('Error al procesar el pedido:', error);
       
       let errorMessage = 'Hubo un error al procesar tu pedido.';
-      
-      if (error.status === 401) {
-        errorMessage = error.message || t('checkout.errors.notLoggedIn') || 'Necesitas estar logueado para realizar esta acción';
-        alert(errorMessage);
-        router.push('/login');
-        return;
-      }
       
       if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
