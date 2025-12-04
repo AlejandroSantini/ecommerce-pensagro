@@ -93,19 +93,16 @@ export function OrderSummary({ showTitle = true, compact = false, shippingCost =
                     className="w-full h-full object-cover"
                   />
                 )}
-                <div className="absolute -top-2 -right-2 bg-[#003c6f] text-white text-xs font-semibold rounded-full h-6 w-6 flex items-center justify-center">
-                  {item.quantity}
-                </div>
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-sm font-medium text-gray-900 truncate">
                   {item.nombre}
                 </h3>
                 <p className="text-sm text-gray-500 mt-1">
-                  ${item.precio.toFixed(2)} x {item.quantity}
+                  ${item.precio.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} x {item.quantity}
                 </p>
                 <p className="text-sm font-semibold text-gray-900 mt-1">
-                  ${(item.precio * item.quantity).toFixed(2)}
+                  ${(item.precio * item.quantity).toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
               </div>
             </div>
@@ -118,7 +115,7 @@ export function OrderSummary({ showTitle = true, compact = false, shippingCost =
       <div className="space-y-3">
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">{t('checkout.subtotal')}</span>
-          <span className="font-medium text-gray-900">${subtotal.toFixed(2)}</span>
+          <span className="font-medium text-gray-900">${subtotal.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
         </div>
         
         <div className="flex justify-between text-sm">
@@ -131,7 +128,7 @@ export function OrderSummary({ showTitle = true, compact = false, shippingCost =
           ) : envio === 0 ? (
             <span className="font-medium text-green-600">{t('checkout.free')}</span>
           ) : (
-            <span className="font-medium text-gray-900">${envio.toFixed(2)}</span>
+            <span className="font-medium text-gray-900">${envio.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
           )}
         </div>
 
@@ -139,7 +136,7 @@ export function OrderSummary({ showTitle = true, compact = false, shippingCost =
 
         <div className="flex justify-between text-lg font-semibold">
           <span className="text-gray-900">{t('checkout.total')}</span>
-          <span className="text-[#003c6f]">${total.toFixed(2)}</span>
+          <span className="text-[#003c6f]">${total.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
         </div>
       </div>
 

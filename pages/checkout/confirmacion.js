@@ -51,9 +51,9 @@ export default function ConfirmacionPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center bg-white rounded-lg shadow-sm p-8 max-w-md">
-          <p className="text-gray-900 font-semibold text-lg mb-2">No se encontró el pedido</p>
+          <p className="text-gray-900 font-semibold text-lg mb-2">No se encontró la compra</p>
           <p className="text-gray-600 mb-4">
-            El pedido #{orderId || 'desconocido'} no pudo ser cargado.
+            La compra #{orderId || 'desconocida'} no pudo ser cargada.
           </p>
           <Link href="/">
             <Button className="bg-[#003c6f] hover:bg-[#002b50]">
@@ -77,10 +77,10 @@ export default function ConfirmacionPage() {
           </div>
           
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            ¡Pedido Confirmado!
+            ¡Compra Confirmada!
           </h1>
           <p className="text-gray-600 mb-6">
-            Tu pedido ha sido recibido y está siendo procesado.
+            Tu compra ha sido recibida y está siendo procesada.
           </p>
           
           <div className="bg-gray-50 rounded-lg p-4 inline-block">
@@ -95,7 +95,7 @@ export default function ConfirmacionPage() {
         <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
           <div className="flex items-center space-x-2 mb-6">
             <Package className="h-5 w-5 text-gray-700" />
-            <h2 className="text-xl font-semibold text-gray-900">Detalles del Pedido</h2>
+            <h2 className="text-xl font-semibold text-gray-900">Detalles de la Compra</h2>
           </div>
 
           <div className="space-y-4 mb-6 pb-6 border-b">
@@ -109,18 +109,15 @@ export default function ConfirmacionPage() {
                       className="w-full h-full object-cover"
                     />
                   )}
-                  <div className="absolute -top-2 -right-2 bg-[#003c6f] text-white text-xs font-semibold rounded-full h-6 w-6 flex items-center justify-center">
-                    {item.quantity}
-                  </div>
                 </div>
                 <div className="flex-1">
                   <h3 className="text-sm font-medium text-gray-900">{item.nombre}</h3>
                   <p className="text-sm text-gray-500 mt-1">
-                    ${item.precio.toFixed(2)} x {item.quantity}
+                    ${item.precio.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} x {item.quantity}
                   </p>
                 </div>
                 <div className="text-sm font-semibold text-gray-900">
-                  ${(item.precio * item.quantity).toFixed(2)}
+                  ${(item.precio * item.quantity).toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
               </div>
             ))}
@@ -128,7 +125,7 @@ export default function ConfirmacionPage() {
 
           <div className="flex justify-between items-center text-lg font-semibold">
             <span className="text-gray-900">Total</span>
-            <span className="text-[#003c6f]">${order.total.toFixed(2)}</span>
+            <span className="text-[#003c6f]">${order.total.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
           </div>
         </div>
 
@@ -210,7 +207,7 @@ export default function ConfirmacionPage() {
             {order.shippingMethod === 'pickup' && (
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                 <p className="text-sm text-yellow-800 mb-2">
-                  <strong>Importante:</strong> Recordá pasar a retirar tu pedido por nuestra sucursal:
+                  <strong>Importante:</strong> Recordá pasar a retirar tu compra por nuestra sucursal:
                 </p>
                 <div className="flex items-start space-x-2 mt-2">
                   <MapPin className="h-4 w-4 text-yellow-700 mt-0.5 flex-shrink-0" />
@@ -240,17 +237,17 @@ export default function ConfirmacionPage() {
           <ol className="space-y-2 text-sm text-gray-700">
             <li className="flex items-start">
               <span className="font-semibold mr-2">1.</span>
-              <span>Recibirás un email de confirmación con los detalles de tu pedido.</span>
+              <span>Recibirás un email de confirmación con los detalles de tu compra.</span>
             </li>
             {order.shippingMethod === 'pickup' ? (
               <>
                 <li className="flex items-start">
                   <span className="font-semibold mr-2">2.</span>
-                  <span>Te notificaremos cuando tu pedido esté listo para retirar.</span>
+                  <span>Te notificaremos cuando tu compra esté lista para retirar.</span>
                 </li>
                 <li className="flex items-start">
                   <span className="font-semibold mr-2">3.</span>
-                  <span>Pasá a retirar tu pedido por nuestra sucursal en el horario indicado.</span>
+                  <span>Pasá a retirar tu compra por nuestra sucursal en el horario indicado.</span>
                 </li>
               </>
             ) : order.shippingMethod === 'coordinate' ? (
@@ -268,11 +265,11 @@ export default function ConfirmacionPage() {
               <>
                 <li className="flex items-start">
                   <span className="font-semibold mr-2">2.</span>
-                  <span>Te notificaremos cuando tu pedido sea enviado con el número de seguimiento.</span>
+                  <span>Te notificaremos cuando tu compra sea enviada con el número de seguimiento.</span>
                 </li>
                 <li className="flex items-start">
                   <span className="font-semibold mr-2">3.</span>
-                  <span>Tu pedido llegará en 3-5 días hábiles.</span>
+                  <span>Tu compra llegará en 3-5 días hábiles.</span>
                 </li>
               </>
             )}
@@ -300,7 +297,7 @@ export default function ConfirmacionPage() {
         </div>
 
         <div className="mt-8 text-center text-sm text-gray-600">
-          <p>¿Necesitas ayuda con tu pedido?</p>
+          <p>¿Necesitas ayuda con tu compra?</p>
           <p className="mt-1">
             Contáctanos en{' '}
             <a href="mailto:ventas@pensagro.com" className="text-[#003c6f] hover:underline">

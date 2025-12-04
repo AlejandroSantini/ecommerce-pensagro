@@ -354,16 +354,7 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
               </div>
             )}
 
-            {selectedShippingOption && shippingCost !== null && (
-              <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-white rounded-lg border border-green-200">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0">
-                  <span className="text-xs sm:text-sm text-gray-700">{t('checkout.selectedOption')}: {selectedShippingOption.carrier} - {selectedShippingOption.service_type}</span>
-                  <span className="text-base sm:text-lg font-bold text-[#003c6f]">
-                    ${shippingCost.toLocaleString('es-AR')}
-                  </span>
-                </div>
-              </div>
-            )}
+
           </div>
 
           {/* Puntos de retiro si la opción seleccionada los tiene */}
@@ -371,7 +362,7 @@ export function ShippingStep({ onNext, initialData }: ShippingStepProps) {
             <div className="space-y-3 sm:space-y-4 bg-white border border-gray-200 rounded-lg p-3 sm:p-4">
               <div className="flex items-center gap-2 text-[#003c6f] mb-2">
                 <Store className="w-4 h-4 sm:w-5 sm:h-5" />
-                <h3 className="font-semibold text-sm sm:text-base">Selecciona un punto de retiro</h3>
+                <h3 className="font-semibold text-sm sm:text-base">Puntos de retiro</h3>
               </div>
 
               {errors.pickupPoint && (

@@ -56,6 +56,13 @@ const formatCurrency = (value: number) => {
   }
 };
 
+const formatServiceType = (serviceType: string) => {
+  if (serviceType.toLowerCase().includes('entrega punto de entrega')) {
+    return serviceType.replace(/entrega punto de entrega/i, 'Retiro en punto de entrega');
+  }
+  return serviceType;
+};
+
 const ShippingOptions: FC<Props> = ({ response, onSelect, selectedOption }) => {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState<Record<number, boolean>>({});
@@ -95,10 +102,9 @@ const ShippingOptions: FC<Props> = ({ response, onSelect, selectedOption }) => {
                 {/* Mobile: Stack vertical, Desktop: horizontal */}
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
                   <div className="flex-1 min-w-0">
-                    {/* Header con carrier, tags y precio en mobile */}
-                    <div className="flex items-start justify-between gap-2 mb-1 sm:mb-2">
+                    <div className="flex items-start justify-between gap-2 mb-1">
                       <div className="flex flex-wrap items-center gap-1 sm:gap-2">
-                        <h4 className="font-semibold text-sm sm:text-base text-gray-900">{opt.carrier}</h4>
+                        <h4 className="font-bold text-sm sm:text-base text-gray-900">{formatServiceType(opt.service_type)}</h4>
                         {opt.tags && opt.tags.length > 0 && (
                           <div className="flex gap-1">
                             {opt.tags.map((tag) => (
@@ -115,7 +121,7 @@ const ShippingOptions: FC<Props> = ({ response, onSelect, selectedOption }) => {
                       </div>
                     </div>
                     
-                    <p className="text-xs sm:text-sm text-gray-600 mb-1">{opt.service_type}</p>
+                    <p className="text-xs sm:text-sm text-gray-500 mb-1">{opt.carrier}</p>
                     
                     <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500">
                       <span className="flex items-center gap-1">

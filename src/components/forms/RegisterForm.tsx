@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import Link from 'next/link';
 import { Eye, EyeOff, Loader2, ArrowLeft, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,15 +10,13 @@ import { Label } from '@/components/ui/label';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useAuth } from '@/contexts/AuthContext';
 
-const registerSchema = z.object({
-  fullName: z.string().min(2, 'El nombre completo debe tener al menos 2 caracteres').max(200, 'El nombre es demasiado largo'),
-  email: z.string().min(1, 'El email es requerido').email('Ingresa un email válido'),
-  password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres').max(100, 'La contraseña es demasiado larga'),
-  dni: z.string().min(7, 'El DNI/CUIT debe tener al menos 7 caracteres').max(20, 'El DNI/CUIT es demasiado largo').refine((val) => /^[\d\-]+$/.test(val), 'Solo se permiten números y guiones'),
-  phone: z.string().min(1, 'El teléfono es requerido').refine((val) => /^[\d\s\-\+\(\)]+$/.test(val), 'Ingresa un teléfono válido'),
-});
-
-type RegisterFormData = z.infer<typeof registerSchema>;
+interface RegisterFormData {
+  fullName: string;
+  email: string;
+  password: string;
+  dni: string;
+  phone: string;
+}
 
 export function RegisterForm() {
   const { t } = useTranslation();
@@ -36,7 +32,6 @@ export function RegisterForm() {
     reset,
     trigger,
   } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
     defaultValues: {
       fullName: '',
       email: '',
@@ -117,7 +112,13 @@ export function RegisterForm() {
                 id="email" 
                 type="email" 
                 placeholder={t('register.emailPlaceholder')} 
-                {...register('email')} 
+                {...register('email', { 
+                  required: 'El email es requerido',
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: 'Ingresa un email válido'
+                  }
+                })} 
                 className={errors.email ? 'border-red-500' : ''} 
                 disabled={isLoading}
                 autoFocus
@@ -132,7 +133,13 @@ export function RegisterForm() {
                   id="password" 
                   type={showPassword ? 'text' : 'password'} 
                   placeholder={t('register.passwordPlaceholder')} 
-                  {...register('password')} 
+                  {...register('password', { 
+                    required: 'La contraseña es requerida',
+                    minLength: {
+                      value: 6,
+                      message: 'La contraseña debe tener al menos 6 caracteres'
+                    }
+                  })} 
                   className={errors.password ? 'border-red-500 pr-10' : 'pr-10'} 
                   disabled={isLoading} 
                 />
@@ -167,7 +174,13 @@ export function RegisterForm() {
                 id="fullName" 
                 type="text" 
                 placeholder="Full Name" 
-                {...register('fullName')} 
+                {...register('fullName', { 
+                  required: 'El nombre completo es requerido',
+                  minLength: {
+                    value: 2,
+                    message: 'El nombre debe tener al menos 2 caracteres'
+                  }
+                })} 
                 className={errors.fullName ? 'border-red-500' : ''} 
                 disabled={isLoading}
                 autoFocus
@@ -181,7 +194,17 @@ export function RegisterForm() {
                 id="dni" 
                 type="text" 
                 placeholder="12345678 o 20123456789" 
-                {...register('dni')} 
+                {...register('dni', { 
+                  required: 'El DNI/CUIT es requerido',
+                  minLength: {
+                    value: 7,
+                    message: 'El DNI/CUIT debe tener al menos 7 caracteres'
+                  },
+                  pattern: {
+                    value: /^[\d\-]+$/,
+                    message: 'Solo se permiten números y guiones'
+                  }
+                })} 
                 className={errors.dni ? 'border-red-500' : ''} 
                 disabled={isLoading}
                 onKeyDown={(e) => {
@@ -199,7 +222,13 @@ export function RegisterForm() {
                 id="phone" 
                 type="tel" 
                 placeholder={t('register.phonePlaceholder')} 
-                {...register('phone')} 
+                {...register('phone', { 
+                  required: 'El teléfono es requerido',
+                  pattern: {
+                    value: /^[\d\s\-\+\(\)]+$/,
+                    message: 'Ingresa un teléfono válido'
+                  }
+                })} 
                 className={errors.phone ? 'border-red-500' : ''} 
                 disabled={isLoading} 
               />

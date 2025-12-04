@@ -225,7 +225,7 @@ export function CheckoutForm({ onSubmit, isLoading = false }: CheckoutFormProps)
             id="notas"
             value={formData.notas}
             onChange={(e) => handleChange('notas', e.target.value)}
-            placeholder="Información adicional sobre tu pedido..."
+            placeholder="Información adicional sobre tu compra..."
             className="w-full min-h-[100px] px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#003c6f] focus:border-transparent resize-none"
           />
         </div>

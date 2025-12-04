@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
@@ -13,12 +11,10 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from '@/hooks/useTranslation';
 
-const loginSchema = z.object({
-  email: z.string().min(1, 'Email is required').email('Invalid email format'),
-  password: z.string().min(1, 'Password is required'),
-});
-
-type LoginFormData = z.infer<typeof loginSchema>;
+interface LoginFormData {
+  email: string;
+  password: string;
+}
 
 export function LoginForm() {
   const router = useRouter();
@@ -32,7 +28,6 @@ export function LoginForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -74,7 +69,13 @@ export function LoginForm() {
             id="email" 
             type="email" 
             placeholder={t('login.emailPlaceholder')} 
-            {...register('email')} 
+            {...register('email', { 
+              required: 'El email es requerido',
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: 'Ingresa un email válido'
+              }
+            })} 
             className={errors.email ? 'border-red-500' : ''} 
             disabled={isLoading}
           />
@@ -93,7 +94,7 @@ export function LoginForm() {
               id="password" 
               type={showPassword ? 'text' : 'password'} 
               placeholder={t('login.passwordPlaceholder')} 
-              {...register('password')}
+              {...register('password', { required: 'La contraseña es requerida' })}
               className={errors.password ? 'border-red-500 pr-10' : 'pr-10'} 
               disabled={isLoading} 
             />

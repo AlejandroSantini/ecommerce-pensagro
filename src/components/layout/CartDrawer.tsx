@@ -96,7 +96,7 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
                         <p className="text-xs text-gray-500 mt-1">{item.variantName}</p>
                       )}
                       <p className="mt-1 text-sm text-gray-500">
-                        ${item.precio.toFixed(2)}
+                        ${item.precio.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </p>
                       <div className="mt-2 flex items-center space-x-2">
                         <button
@@ -125,7 +125,7 @@ export function CartDrawer({ open, onOpenChange }: CartDrawerProps) {
             <div className="border-t px-6 py-4 space-y-4">
               <div className="flex items-center justify-between text-lg font-semibold">
                 <span>{t('cart.total')}</span>
-                <span>${total.toFixed(2)}</span>
+                <span>${total.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
               </div>
               <Link href="/checkout" onClick={() => onOpenChange(false)}>
                 <Button 

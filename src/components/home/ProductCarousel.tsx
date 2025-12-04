@@ -109,7 +109,7 @@ export function ProductCarousel({ title, products }: ProductCarouselProps) {
                 
                 <div className="p-4">
                   <h3 className="font-medium text-sm mb-1 line-clamp-2 h-10">{product.nombre}</h3>
-                  <p className="text-lg font-semibold text-[#003c6f]">${product.precio.toLocaleString()}</p>
+                  <p className="text-lg font-semibold text-[#003c6f]">${product.precio.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 </div>
               </Link>
             ))}

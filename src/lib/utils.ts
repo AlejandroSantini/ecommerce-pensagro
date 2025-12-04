@@ -17,3 +17,10 @@ export const getClientId = (): number | null => {
     return null;
   }
 };
+
+export const formatPrice = (value: number): string => {
+  return value.toLocaleString('es-AR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};

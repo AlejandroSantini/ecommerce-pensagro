@@ -3,8 +3,6 @@
 import { useState, useEffect } from 'react';
 import { MapPin, ArrowLeft } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,21 +12,18 @@ import { useProvinces } from '@/hooks/useProvinces';
 import { shippingService } from '@/services';
 import type { ShippingAddress } from '@/types';
 
-// Schema de validación con Zod
-const addressSchema = z.object({
-  firstName: z.string().min(1, 'required'),
-  lastName: z.string().min(1, 'required'),
-  address: z.string().min(1, 'required'),
-  city: z.string().min(1, 'required'),
-  province: z.string().min(1, 'required'),
-  zipCode: z.string().min(1, 'required'),
-  phone: z.string().min(1, 'required'),
-  floor: z.string().optional(),
-  apartment: z.string().optional(),
-  comment: z.string().optional(),
-});
-
-type AddressFormData = z.infer<typeof addressSchema>;
+interface AddressFormData {
+  firstName: string;
+  lastName: string;
+  address: string;
+  city: string;
+  province: string;
+  zipCode: string;
+  phone: string;
+  floor?: string;
+  apartment?: string;
+  comment?: string;
+}
 
 interface AddressData {
   firstName: string;
@@ -71,11 +66,11 @@ export function AddressStep({
   const [savedAddresses, setSavedAddresses] = useState<ShippingAddress[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(initialSelectedAddressId || null);
   const [showNewAddressForm, setShowNewAddressForm] = useState(false);
-  const [loadingAddresses, setLoadingAddresses] = useState(true); // Empieza en true para usuarios logueados
-  const [hasLoadedAddresses, setHasLoadedAddresses] = useState(false); // Si ya terminó la carga inicial
+  const [loadingAddresses, setLoadingAddresses] = useState(true);
+  const [hasLoadedAddresses, setHasLoadedAddresses] = useState(false);
   const [generalError, setGeneralError] = useState<string | null>(null);
 
-  // React Hook Form con Zod
+  // React Hook Form sin Zod
   const {
     register,
     handleSubmit,
@@ -84,7 +79,6 @@ export function AddressStep({
     watch,
     formState: { errors }
   } = useForm<AddressFormData>({
-    resolver: zodResolver(addressSchema),
     defaultValues: {
       firstName: initialAddressData?.firstName || '',
       lastName: initialAddressData?.lastName || '',
@@ -368,20 +362,22 @@ export function AddressStep({
                 <Label htmlFor="addr-firstName" className="text-sm">{t('checkout.firstNameRequired')}</Label>
                 <Input
                   id="addr-firstName"
-                  {...register('firstName')}
+                  {...register('firstName', { required: true })}
                   placeholder={t('checkout.firstNamePlaceholder')}
                   className={`text-sm sm:text-base ${errors.firstName ? 'border-red-500' : ''}`}
                 />
+                {errors.firstName && <p className="text-xs text-red-500">Este campo es requerido</p>}
               </div>
 
               <div className="space-y-1 sm:space-y-2">
                 <Label htmlFor="addr-lastName" className="text-sm">{t('checkout.lastNameRequired')}</Label>
                 <Input
                   id="addr-lastName"
-                  {...register('lastName')}
+                  {...register('lastName', { required: true })}
                   placeholder={t('checkout.lastNamePlaceholder')}
                   className={`text-sm sm:text-base ${errors.lastName ? 'border-red-500' : ''}`}
                 />
+                {errors.lastName && <p className="text-xs text-red-500">Este campo es requerido</p>}
               </div>
             </div>
 
@@ -389,10 +385,11 @@ export function AddressStep({
               <Label htmlFor="addr-address" className="text-sm">{t('checkout.addressRequired')}</Label>
               <Input
                 id="addr-address"
-                {...register('address')}
+                {...register('address', { required: true })}
                 placeholder={t('checkout.addressPlaceholder')}
                 className={`text-sm sm:text-base ${errors.address ? 'border-red-500' : ''}`}
               />
+              {errors.address && <p className="text-xs text-red-500">Este campo es requerido</p>}
             </div>
 
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
@@ -422,17 +419,18 @@ export function AddressStep({
                 <Label htmlFor="addr-city" className="text-sm">{t('checkout.cityRequired')}</Label>
                 <Input
                   id="addr-city"
-                  {...register('city')}
+                  {...register('city', { required: true })}
                   placeholder={t('checkout.cityPlaceholder')}
                   className={`text-sm sm:text-base ${errors.city ? 'border-red-500' : ''}`}
                 />
+                {errors.city && <p className="text-xs text-red-500">Este campo es requerido</p>}
               </div>
 
               <div className="space-y-1 sm:space-y-2">
                 <Label htmlFor="addr-province" className="text-sm">{t('checkout.provinceRequired')}</Label>
                 <select
                   id="addr-province"
-                  {...register('province')}
+                  {...register('province', { required: true })}
                   disabled={loadingProvinces}
                   className={`w-full h-10 px-3 py-2 text-sm sm:text-base rounded-md border bg-white ${errors.province ? 'border-red-500' : 'border-input'} focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50`}
                 >
@@ -445,16 +443,18 @@ export function AddressStep({
                     </option>
                   ))}
                 </select>
+                {errors.province && <p className="text-xs text-red-500">Este campo es requerido</p>}
               </div>
 
               <div className="space-y-1 sm:space-y-2">
                 <Label htmlFor="addr-zipCode" className="text-sm">{t('checkout.zipCodeRequired')}</Label>
                 <Input
                   id="addr-zipCode"
-                  {...register('zipCode')}
+                  {...register('zipCode', { required: true })}
                   placeholder={t('checkout.zipCodePlaceholder')}
                   className={`text-sm sm:text-base ${errors.zipCode ? 'border-red-500' : ''}`}
                 />
+                {errors.zipCode && <p className="text-xs text-red-500">Este campo es requerido</p>}
               </div>
             </div>
 
@@ -463,10 +463,11 @@ export function AddressStep({
               <Input
                 id="addr-phone"
                 type="tel"
-                {...register('phone')}
+                {...register('phone', { required: true })}
                 placeholder={t('checkout.phonePlaceholder')}
                 className={`text-sm sm:text-base ${errors.phone ? 'border-red-500' : ''}`}
               />
+              {errors.phone && <p className="text-xs text-red-500">Este campo es requerido</p>}
             </div>
 
             <div className="space-y-1 sm:space-y-2">

@@ -109,9 +109,9 @@ export default function CheckoutPage() {
       
       window.location.href = `/checkout/confirmacion?orderId=${orderId}`;
     } catch (error) {
-      console.error('Error al procesar el pedido:', error);
+      console.error('Error al procesar la compra:', error);
       
-      let errorMessage = 'Hubo un error al procesar tu pedido.';
+      let errorMessage = 'Hubo un error al procesar tu compra.';
       
       if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
