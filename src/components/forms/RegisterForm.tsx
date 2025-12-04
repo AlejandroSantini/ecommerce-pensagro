@@ -16,7 +16,7 @@ const registerSchema = z.object({
   fullName: z.string().min(2, 'El nombre completo debe tener al menos 2 caracteres').max(200, 'El nombre es demasiado largo'),
   email: z.string().min(1, 'El email es requerido').email('Ingresa un email válido'),
   password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres').max(100, 'La contraseña es demasiado larga'),
-  dni: z.string().min(7, 'El DNI debe tener al menos 7 caracteres').max(20, 'El DNI es demasiado largo'),
+  dni: z.string().min(7, 'El DNI/CUIT debe tener al menos 7 caracteres').max(20, 'El DNI/CUIT es demasiado largo').refine((val) => /^[\d\-]+$/.test(val), 'Solo se permiten números y guiones'),
   phone: z.string().min(1, 'El teléfono es requerido').refine((val) => /^[\d\s\-\+\(\)]+$/.test(val), 'Ingresa un teléfono válido'),
 });
 
@@ -176,14 +176,19 @@ export function RegisterForm() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="dni" className="text-pensagro-dark">DNI</Label>
+              <Label htmlFor="dni" className="text-pensagro-dark">DNI o CUIT</Label>
               <Input 
                 id="dni" 
                 type="text" 
-                placeholder="12345678" 
+                placeholder="12345678 o 20123456789" 
                 {...register('dni')} 
                 className={errors.dni ? 'border-red-500' : ''} 
-                disabled={isLoading} 
+                disabled={isLoading}
+                onKeyDown={(e) => {
+                  if (!/[0-9\-]/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
               />
               {errors.dni && <p className="text-sm text-red-600">{errors.dni.message}</p>}
             </div>

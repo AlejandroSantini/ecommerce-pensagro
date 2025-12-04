@@ -159,21 +159,19 @@ export function PaymentStep({ onNext, onBack, initialData, isLoading = false }: 
         </div>
       )}
 
+      {selectedMethod === 'cash' && (
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 sm:p-4">
+          <p className="text-xs sm:text-sm text-amber-800">
+            <strong>Nota:</strong> {t('checkout.cashNote')}
+          </p>
+        </div>
+      )}
+
       {selectedMethod === 'mercadopago' && (
         <div className="pt-3 sm:pt-4 border-t">
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 sm:p-4">
             <p className="text-xs sm:text-sm text-gray-700">
               {t('checkout.mpRedirect')}
-            </p>
-          </div>
-        </div>
-      )}
-
-      {selectedMethod === 'cash' && (
-        <div className="pt-3 sm:pt-4 border-t">
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 sm:p-4">
-            <p className="text-xs sm:text-sm text-yellow-800">
-              <strong>Nota:</strong> {t('checkout.cashNote')}
             </p>
           </div>
         </div>

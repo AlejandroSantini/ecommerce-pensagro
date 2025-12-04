@@ -1,4 +1,5 @@
 import { api } from '@/lib/api';
+import { getClientId } from '@/lib/utils';
 import type {
   Product,
   ApiProduct,
@@ -41,6 +42,12 @@ export const productService = {
   getAll: async (filters?: ProductFilters): Promise<PaginatedProductsResponse> => {
     const params = new URLSearchParams();
     
+    // Agregar client_id si el usuario está logueado
+    const clientId = getClientId();
+    if (clientId) {
+      params.append('client_id', String(clientId));
+    }
+    
     if (filters) {
       if (filters.destacado !== undefined) params.append('featured', String(filters.destacado));
       if (filters.activo !== undefined) params.append('status', filters.activo ? 'active' : 'inactive');
@@ -63,7 +70,9 @@ export const productService = {
 
   // GET /api/products/:id - Obtener producto por ID
   getById: async (id: number): Promise<Product> => {
-    const response = await api.get<{ status: boolean; data: ApiProduct }>(`/api/products/${id}`);
+    const clientId = getClientId();
+    const queryString = clientId ? `?client_id=${clientId}` : '';
+    const response = await api.get<{ status: boolean; data: ApiProduct }>(`/api/products/${id}${queryString}`);
     return mapApiProductToProduct(response.data);
   },
 

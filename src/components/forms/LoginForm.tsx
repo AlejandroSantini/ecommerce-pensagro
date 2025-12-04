@@ -67,7 +67,7 @@ export function LoginForm() {
         <p className="text-sm text-gray-600">{t('login.description')}</p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         <div className="space-y-2">
           <Label htmlFor="email" className="text-pensagro-dark">{t('login.email')}</Label>
           <Input 

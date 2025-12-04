@@ -203,7 +203,7 @@
     "debit": "Debit",
     "debitSingle": "Single payment",
     "mpRedirect": "You will be redirected to Mercado Pago to complete the payment securely.",
-    "cashNote": "Note: Cash payment must be made upon delivery. Make sure you have the exact amount.",
+    "cashNote": "You must pay in cash at the store.",
     "back": "Back",
     "continue": "Continue",
     "confirmPickup": "Confirm store pickup",

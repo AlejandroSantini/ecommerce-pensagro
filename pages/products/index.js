@@ -172,8 +172,7 @@ export default function ProductsPage() {
         <div className="lg:col-span-3">
           {loading ? (
             <div className="text-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-[#003c6f]" />
-              <p className="text-gray-600">Cargando productos...</p>
+              <Loader2 className="h-8 w-8 animate-spin mx-auto text-[#003c6f]" />
             </div>
           ) : error ? (
             <div className="text-center py-12 bg-red-50 rounded-lg border border-red-200">

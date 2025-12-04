@@ -106,8 +106,7 @@ export default function ProductDetail() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-[#003c6f]" />
-          <p className="text-gray-600">{t('productDetail.loading')}</p>
+          <Loader2 className="h-12 w-12 animate-spin mx-auto text-[#003c6f]" />
         </div>
       </div>
     );
@@ -146,8 +145,7 @@ export default function ProductDetail() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">{t('productDetail.loading')}</p>
+          <Loader2 className="h-12 w-12 animate-spin mx-auto text-[#003c6f]" />
         </div>
       </div>
     );
@@ -155,24 +153,27 @@ export default function ProductDetail() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-              <Button
-          variant="ghost"
-          onClick={() => router.back()}
-          className="mb-8 flex items-center gap-2 hover:bg-gray-100"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          {t('productDetail.back')}
-        </Button>
+      <Button
+        variant="ghost"
+        onClick={() => router.back()}
+        className="mb-8 flex items-center gap-2 hover:bg-gray-100"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        {t('productDetail.back')}
+      </Button>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <ProductImageCarousel 
-          images={product.imagenes || []}
-          productName={product.nombre}
-          mainImage={product.imagen}
-        />
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-12 gap-6 xl:gap-8">
+        <div className="xl:col-span-5">
+          <ProductImageCarousel 
+            images={product.imagenes || []}
+            productName={product.nombre}
+            mainImage={product.imagen}
+          />
+        </div>
 
-        <div>
-          <h1 className="text-3xl font-bold mb-4">{product.nombre}</h1>
+        {/* Columna 2: Info y Variantes */}
+        <div className="xl:col-span-4">
+          <h1 className="text-2xl lg:text-3xl font-bold mb-4">{product.nombre}</h1>
           
           {product.destacado && (
             <span className="inline-block bg-yellow-400 text-yellow-900 px-3 py-1 rounded text-sm font-semibold mb-4">
@@ -191,22 +192,44 @@ export default function ProductDetail() {
             </p>
           </div>
 
-          <div className="mb-6">
-            {(product.variants || product.variantes) && (product.variants || product.variantes).length > 0 && (
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-4">{t('productDetail.selectVariant') ?? 'Selecciona una variante'}</h3>
-                
-                {(product.variants || product.variantes).length <= 4 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {(product.variants || product.variantes).map((v) => {
-                      const variantPrice = v.price_retail_usd ? Number(v.price_retail_usd) : product.precio;
-                      const variantStock = v.quantity ?? product.stock;
-                      const isSelected = String(selectedVariantId) === String(v.id);
-                      const isOutOfStock = variantStock <= 0;
+          {(product.variants || product.variantes) && (product.variants || product.variantes).length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold mb-4">{t('productDetail.selectVariant') ?? 'Selecciona una variante'}</h3>
+              
+              {(product.variants || product.variantes).length <= 4 ? (
+                <div className="grid grid-cols-1 gap-3">
+                  {(product.variants || product.variantes).map((v) => {
+                    const variantPrice = v.price_retail_usd ? Number(v.price_retail_usd) : product.precio;
+                    const variantStock = v.quantity ?? product.stock;
+                    const isSelected = String(selectedVariantId) === String(v.id);
+                    const isOutOfStock = variantStock <= 0;
 
-                      return (
+                    return (
+                      <VariantCard
+                        key={v.id}
+                        variant={v}
+                        variantPrice={variantPrice}
+                        isSelected={isSelected}
+                        onSelect={() => {
+                          if (!isOutOfStock) {
+                            setSelectedVariantId(v.id);
+                          }
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
+                  {(product.variants || product.variantes).map((v) => {
+                    const variantPrice = v.price_retail_usd ? Number(v.price_retail_usd) : product.precio;
+                    const variantStock = v.quantity ?? product.stock;
+                    const isSelected = String(selectedVariantId) === String(v.id);
+                    const isOutOfStock = variantStock <= 0;
+
+                    return (
+                      <div key={v.id} className="flex-shrink-0 w-full sm:w-80 snap-start">
                         <VariantCard
-                          key={v.id}
                           variant={v}
                           variantPrice={variantPrice}
                           isSelected={isSelected}
@@ -216,116 +239,161 @@ export default function ProductDetail() {
                             }
                           }}
                         />
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="relative">
-                    <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
-                      {(product.variants || product.variantes).map((v) => {
-                        const variantPrice = v.price_retail_usd ? Number(v.price_retail_usd) : product.precio;
-                        const variantStock = v.quantity ?? product.stock;
-                        const isSelected = String(selectedVariantId) === String(v.id);
-                        const isOutOfStock = variantStock <= 0;
-
-                        return (
-                          <div key={v.id} className="flex-shrink-0 w-full sm:w-80 snap-start">
-                            <VariantCard
-                              variant={v}
-                              variantPrice={variantPrice}
-                              isSelected={isSelected}
-                              onSelect={() => {
-                                if (!isOutOfStock) {
-                                  setSelectedVariantId(v.id);
-                                }
-                              }}
-                            />
-                          </div>
-                        );
-                      })}
-                    </div>
-                    <div className="text-xs text-gray-500 mt-2 text-center sm:hidden">
-                      {t('productDetail.scrollHint') ?? 'Desliza para ver más variantes'}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            <div className="space-y-4">
-              <div className="flex items-center gap-4 mb-4">
-                <label className="text-sm font-medium">{t('productDetail.quantity')}:</label>
-                <div className="flex items-center border rounded-md">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="h-10 w-10"
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <input
-                    type="number"
-                    min="1"
-                    max={product.stock}
-                    value={quantity}
-                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="w-16 text-center border-x py-2"
-                  />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                    className="h-10 w-10"
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
+                      </div>
+                    );
+                  })}
                 </div>
-              </div>
-
-              <Button
-                onClick={handleAddToCart}
-                className={`w-full font-semibold py-3 rounded-lg transition-all duration-300 ${
-                  addedToCart 
-                    ? 'bg-green-500 hover:bg-green-600' 
-                    : 'bg-[#003c6f] hover:bg-[#002b50]'
-                } text-white`}
-                size="lg"
-                disabled={product.stock === 0 || addingToCart}
-              >
-                {addingToCart ? (
-                  <>
-                    <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                    {t('productDetail.adding') || 'Agregando...'}
-                  </>
-                ) : addedToCart ? (
-                  <>
-                    <Check className="h-5 w-5 mr-2" />
-                    {t('productDetail.added') || '¡Agregado!'}
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart className="h-5 w-5 mr-2" />
-                    {product.stock > 0 ? t('productDetail.addToCart') : t('productDetail.outOfStock')}
-                  </>
-                )}
-              </Button>
+              )}
             </div>
+          )}
+
+          <div className="xl:hidden space-y-4 bg-white p-4 rounded-lg border">
+            <div className="flex items-center justify-between gap-4">
+              <label className="text-sm font-medium">{t('productDetail.quantity')}:</label>
+              <div className="flex items-center border rounded-md">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="h-10 w-10"
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <input
+                  type="number"
+                  min="1"
+                  max={product.stock}
+                  value={quantity}
+                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                  className="w-16 text-center border-x py-2"
+                />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                  className="h-10 w-10"
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+
+            <Button
+              onClick={handleAddToCart}
+              className={`w-full font-semibold py-3 rounded-lg transition-all duration-300 ${
+                addedToCart 
+                  ? 'bg-green-500 hover:bg-green-600' 
+                  : 'bg-[#003c6f] hover:bg-[#002b50]'
+              } text-white`}
+              size="lg"
+              disabled={product.stock === 0 || addingToCart}
+            >
+              {addingToCart ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                  {t('productDetail.adding')}
+                </>
+              ) : addedToCart ? (
+                <>
+                  <Check className="h-5 w-5 mr-2" />
+                  {t('productDetail.added')}
+                </>
+              ) : (
+                <>
+                  <ShoppingCart className="h-5 w-5 mr-2" />
+                  {product.stock > 0 ? t('productDetail.addToCart') : t('productDetail.outOfStock')}
+                </>
+              )}
+            </Button>
+            
+            {product.stock > 0 && (
+              <p className="text-sm text-center text-gray-500">
+                {product.stock} {t('productDetail.inStock')}
+              </p>
+            )}
           </div>
-
         </div>
-      </div>
 
-      <div className="mt-8 bg-white p-6 rounded-lg border">
-        <h2 className="text-2xl font-bold mb-4">{t('productDetail.description')}</h2>
-        <p className="text-gray-700 leading-relaxed">{product.descripcion}</p>
-        <div className="border-t pt-6 mt-6">
-          <h3 className="font-semibold mb-2">{t('productDetail.additionalInfo')}</h3>
-          <ul className="space-y-1 text-sm text-gray-600">
-            <li>• {t('productDetail.estimatedDelivery')}</li>
-            <li>• {t('productDetail.qualityGuarantee')}</li>
-            <li>• {t('productDetail.technicalSupport')}</li>
-          </ul>
+        <div className="hidden xl:block xl:col-span-3 xl:row-span-2">
+          <div className="xl:sticky xl:top-24 space-y-4 bg-white p-4 rounded-lg border">
+            <div className="flex items-center justify-between gap-4">
+              <label className="text-sm font-medium">{t('productDetail.quantity')}:</label>
+              <div className="flex items-center border rounded-md">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="h-10 w-10"
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <input
+                  type="number"
+                  min="1"
+                  max={product.stock}
+                  value={quantity}
+                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                  className="w-16 text-center border-x py-2"
+                />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                  className="h-10 w-10"
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+
+            <Button
+              onClick={handleAddToCart}
+              className={`w-full font-semibold py-3 rounded-lg transition-all duration-300 ${
+                addedToCart 
+                  ? 'bg-green-500 hover:bg-green-600' 
+                  : 'bg-[#003c6f] hover:bg-[#002b50]'
+              } text-white`}
+              size="lg"
+              disabled={product.stock === 0 || addingToCart}
+            >
+              {addingToCart ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                  {t('productDetail.adding')}
+                </>
+              ) : addedToCart ? (
+                <>
+                  <Check className="h-5 w-5 mr-2" />
+                  {t('productDetail.added')}
+                </>
+              ) : (
+                <>
+                  <ShoppingCart className="h-5 w-5 mr-2" />
+                  {product.stock > 0 ? t('productDetail.addToCart') : t('productDetail.outOfStock')}
+                </>
+              )}
+            </Button>
+            
+            {product.stock > 0 && (
+              <p className="text-sm text-center text-gray-500">
+                {product.stock} {t('productDetail.inStock')}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Descripción */}
+        <div className="lg:col-span-2 xl:col-span-9 bg-white p-6 rounded-lg border">
+          <h2 className="text-2xl font-bold mb-4">{t('productDetail.description')}</h2>
+          <p className="text-gray-700 leading-relaxed">{product.descripcion}</p>
+          <div className="border-t pt-6 mt-6">
+            <h3 className="font-semibold mb-2">{t('productDetail.additionalInfo')}</h3>
+            <ul className="space-y-1 text-sm text-gray-600">
+              <li>• {t('productDetail.estimatedDelivery')}</li>
+              <li>• {t('productDetail.qualityGuarantee')}</li>
+              <li>• {t('productDetail.technicalSupport')}</li>
+            </ul>
+          </div>
         </div>
       </div>
 

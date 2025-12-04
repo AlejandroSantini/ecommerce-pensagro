@@ -82,8 +82,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           token: ''
         };
         
-        setUser(user);
+        // Login automático después del registro
+        const loginResponse = await api.post<ApiResponse<AuthResponse>>('/api/users/login', {
+          email: userData.email,
+          password: userData.password
+        });
         
+        if (loginResponse.status && loginResponse.data) {
+          const loginData = loginResponse.data;
+          localStorage.setItem('token', loginData.token);
+          localStorage.setItem('user', JSON.stringify({
+            id: loginData.user.id,
+            name: loginData.user.name,
+            email: loginData.user.email,
+            client_id: loginData.user.client_id
+          }));
+          setUser(loginData.user);
+          
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 100);
+          
+          return loginData;
+        }
+        
+        // Si falla el login automático, redirigir al login
         setTimeout(() => {
           window.location.href = '/login';
         }, 100);
@@ -111,6 +134,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       setUser(null);
+      // Limpiar el carrito al cerrar sesión
+      const { useCart } = await import('@/hooks/useCart');
+      useCart.getState().clearCart();
     }
   };
 

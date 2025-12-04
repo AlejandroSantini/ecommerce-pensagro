@@ -54,7 +54,6 @@ export default function CheckoutPage() {
       
       const salePayload = {
         client_id: user?.client_id || null,
-        shipping_id: checkoutData.shipping_id || null,
         payment_method: checkoutData.paymentMethod,
         payment_status: 'pending',
         products: products,
@@ -63,18 +62,28 @@ export default function CheckoutPage() {
         payment_method_discount_percent: paymentDiscount.percent,
         coupon_discount_percent: null,
         channel: 'ecommerce',
-        comment: checkoutData.apartment || checkoutData.comment || '',
+        comment: checkoutData.comment || addr.comment || '',
         cbu_destination: checkoutData.paymentMethod === 'transfer' ? checkoutData.paymentDetails?.cbuSelected : undefined,
         invoice_number: null,
-        first_name: checkoutData.first_name || addr.firstName || null,
-        last_name: checkoutData.last_name || addr.lastName || null,
-        address: checkoutData.address || addr.address || null,
-        apartment: checkoutData.apartment || addr.apartment || null,
-        city: checkoutData.city || addr.city || null,
-        province: checkoutData.province || addr.province || null,
-        postal_code: checkoutData.postal_code || addr.zipCode || null,
-        phone: checkoutData.phone || addr.phone || null,
+        shipping_id: checkoutData.shipping_id || null,
+        shipping_price: checkoutData.shippingCost || 0,
       };
+
+      if (!user?.client_id) {
+        salePayload.shipping_data = {
+          client_id: null,
+          email: checkoutData.email || addr.email || null,
+          first_name: checkoutData.first_name || addr.firstName || null,
+          last_name: checkoutData.last_name || addr.lastName || null,
+          address: checkoutData.address || addr.address || null,
+          apartment: checkoutData.apartment || addr.apartment || null,
+          city: checkoutData.city || addr.city || null,
+          province: checkoutData.province || addr.province || null,
+          postal_code: checkoutData.postal_code || addr.zipCode || null,
+          phone: checkoutData.phone || addr.phone || null,
+          comment: checkoutData.comment || addr.comment || null,
+        };
+      }
 
       const saleResponse = await saleService.create(salePayload);
       
